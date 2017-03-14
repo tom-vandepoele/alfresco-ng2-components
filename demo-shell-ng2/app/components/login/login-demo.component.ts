@@ -37,6 +37,7 @@ export class LoginDemoComponent implements OnInit {
     disableCsrf: boolean = false;
     isECM: boolean = true;
     isBPM: boolean = false;
+    isOauth2: boolean = false;
     customMinLenght: number = 2;
 
     constructor(private router: Router,
@@ -67,7 +68,7 @@ export class LoginDemoComponent implements OnInit {
         } else if (this.providers === 'ECM') {
             this.isECM = true;
             this.isBPM = false;
-        } else if (this.providers === 'ALL') {
+        } else if (this.providers === 'OAUTH' || this.providers === 'ALL') {
             this.isECM = true;
             this.isBPM = true;
         }
@@ -91,6 +92,11 @@ export class LoginDemoComponent implements OnInit {
         this.storage.setItem('providers', this.updateProvider());
     }
 
+    toggleOAUTH() {
+        this.isOauth2 = !this.isOauth2;
+        this.storage.setItem('providers', this.updateProvider());
+    }
+
     toggleCSRF() {
         this.disableCsrf = !this.disableCsrf;
     }
@@ -98,6 +104,11 @@ export class LoginDemoComponent implements OnInit {
     updateProvider() {
         if (this.isBPM && this.isECM) {
             this.providers = 'ALL';
+            return this.providers;
+        }
+
+        if (this.isOauth2) {
+            this.providers = 'OAUTH';
             return this.providers;
         }
 

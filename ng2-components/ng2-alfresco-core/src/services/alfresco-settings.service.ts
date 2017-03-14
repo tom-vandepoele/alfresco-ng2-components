@@ -23,12 +23,14 @@ export class AlfrescoSettingsService {
 
     static DEFAULT_ECM_ADDRESS: string = 'http://' + window.location.hostname + ':8080';
     static DEFAULT_BPM_ADDRESS: string = 'http://' + window.location.hostname + ':9999';
+    static DEFAULT_OAUTH_ADDRESS: string = 'http://' + window.location.hostname + ':9191';
     static DEFAULT_CSRF_CONFIG: boolean = false;
 
     static DEFAULT_BPM_CONTEXT_PATH: string = '/activiti-app';
 
     private _ecmHost: string = AlfrescoSettingsService.DEFAULT_ECM_ADDRESS;
     private _bpmHost: string = AlfrescoSettingsService.DEFAULT_BPM_ADDRESS;
+    private _oauthHost: string = AlfrescoSettingsService.DEFAULT_OAUTH_ADDRESS;
     private _csrfDisabled: boolean = AlfrescoSettingsService.DEFAULT_CSRF_CONFIG;
 
     private _bpmContextPath = AlfrescoSettingsService.DEFAULT_BPM_CONTEXT_PATH;
@@ -37,6 +39,7 @@ export class AlfrescoSettingsService {
 
     public bpmHostSubject: Subject<string> = new Subject<string>();
     public ecmHostSubject: Subject<string> = new Subject<string>();
+    public oauthHostSubject: Subject<string> = new Subject<string>();
     public csrfSubject: Subject<boolean> = new Subject<boolean>();
     public providerSubject: Subject<string> = new Subject<string>();
 
@@ -61,6 +64,15 @@ export class AlfrescoSettingsService {
     public set bpmHost(bpmHostUrl: string) {
         this.bpmHostSubject.next(bpmHostUrl);
         this._bpmHost = bpmHostUrl;
+    }
+
+    public get oauthHost(): string {
+        return this._oauthHost;
+    }
+
+    public set oauthHost(oauthHostUrl: string) {
+        this.oauthHostSubject.next(oauthHostUrl);
+        this._oauthHost = oauthHostUrl;
     }
 
     public getBPMApiBaseUrl(): string {

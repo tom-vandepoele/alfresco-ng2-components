@@ -29,8 +29,9 @@ declare var document: any;
 export class AppComponent {
     searchTerm: string = '';
 
-    ecmHost: string = 'http://' + window.location.hostname + ':8080';
-    bpmHost: string = 'http://' + window.location.hostname + ':9999';
+    ecmHost: string = 'http://' + window.location.hostname + ':9191/ecm';
+    bpmHost: string = 'http://' + window.location.hostname + ':9191/bpm';
+    oauthHost: string = 'http://' + window.location.hostname + ':9191';
 
     constructor(private authService: AlfrescoAuthenticationService,
                 private router: Router,
@@ -40,6 +41,7 @@ export class AppComponent {
                 private logService: LogService) {
         this.setEcmHost();
         this.setBpmHost();
+        this.setOauthHost();
         this.setProvider();
 
         if (translateService) {
@@ -109,6 +111,15 @@ export class AppComponent {
             this.bpmHost = this.storage.getItem(`bpmHost`);
         } else {
             this.settingsService.bpmHost = this.bpmHost;
+        }
+    }
+
+    private setOauthHost() {
+        if (localStorage.getItem(`oauthHost`)) {
+            this.alfrescoSettingsService.oauthHost = localStorage.getItem(`oauthHost`);
+            this.oauthHost = localStorage.getItem(`oauthHost`);
+        } else {
+            this.alfrescoSettingsService.oauthHost = this.oauthHost;
         }
     }
 

@@ -17,7 +17,14 @@
     </p>
     <p class="toggle">
         <label for="switch3" class="mdl-switch mdl-js-switch mdl-js-ripple-effect">
-            <input type="checkbox" id="switch3" class="mdl-switch__input" [checked]="!disableCsrf" (click)="toggleCSRF()">
+            <input type="checkbox" id="switch3" [checked]="isBPM" class="mdl-switch__input"
+                   (click)="toggleOAUTH()">
+            <span class="mdl-switch__label">Oauth authentication</span>
+        </label>
+    </p>
+    <p class="toggle">
+        <label for="switch4" class="mdl-switch mdl-js-switch mdl-js-ripple-effect">
+            <input type="checkbox" id="switch4" class="mdl-switch__input" [checked]="!disableCsrf" (click)="toggleCSRF()">
             <span class="mdl-switch__label">CSRF</span>
         </label>
     </p>
@@ -61,7 +68,14 @@
         </p>
         <p>
             <label for="switch3-mobile" class="mdl-switch mdl-js-switch mdl-js-ripple-effect">
-                <input type="checkbox" id="switch3-mobile" class="mdl-switch__input" [checked]="!disableCsrf" (click)="toggleCSRF()">
+                <input type="checkbox" id="switch3-mobile" [checked]="isBPM" class="mdl-switch__input"
+                       (click)="toggleOAUTH()">
+                <span class="mdl-switch__label">Oauth authentication</span>
+            </label>
+        </p>
+        <p>
+            <label for="switch4-mobile" class="mdl-switch mdl-js-switch mdl-js-ripple-effect">
+                <input type="checkbox" id="switch4-mobile" class="mdl-switch__input" [checked]="!disableCsrf" (click)="toggleCSRF()">
                 <span class="mdl-switch__label">CSRF</span>
             </label>
         </p>

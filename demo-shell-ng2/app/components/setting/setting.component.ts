@@ -27,12 +27,15 @@ export class SettingComponent {
 
     ecmHost: string;
     bpmHost: string;
+    oauthHost: string;
+
 
     constructor(private settingsService: AlfrescoSettingsService,
                 private storage: StorageService,
                 private logService: LogService) {
         this.ecmHost = this.settingsService.ecmHost;
         this.bpmHost = this.settingsService.bpmHost;
+        this.oauthHost = this.settingsService.oauthHost;
     }
 
     public onChangeECMHost(event: KeyboardEvent): void {
@@ -52,6 +55,16 @@ export class SettingComponent {
             this.bpmHost = value;
             this.settingsService.bpmHost = value;
             this.storage.setItem(`bpmHost`, value);
+        }
+    }
+
+    public onChangeOauthHost(event: KeyboardEvent): void {
+        let value = (<HTMLInputElement>event.target).value.trim();
+        if (value) {
+            this.logService.info(`Oauth2 host: ${value}`);
+            this.oauthHost = value;
+            this.settingsService.oauthHost = value;
+            this.storage.setItem(`oauthHost`, value);
         }
     }
 

@@ -23,6 +23,15 @@
                     <input type="text" class="mdl-textfield__input" id="bpmHost" data-automation-id="bpmHost"
                            tabindex="1" (change)="onChangeBPMHost($event)" value="{{bpmHost}}"/>
                 </nav>
+
+                <div class="mdl-card__supporting-text">
+                    Oauth host URL configuration
+                </div>
+                <nav class="mdl-navigation">
+                    <div class="icon material-icons icon-margin">link</div>
+                    <input type="text" class="mdl-textfield__input" id="oauthHost" data-automation-id="oauthHost"
+                           tabindex="1" (change)="onChangeOauthHost($event)" value="{{oauthHost}}"/>
+                </nav>
             </div>
             <div class="mdl-card__actions mdl-card--border">
             <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" onclick="window.history.back()" >
