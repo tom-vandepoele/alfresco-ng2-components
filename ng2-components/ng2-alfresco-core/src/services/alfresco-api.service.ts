@@ -36,6 +36,10 @@ export class AlfrescoApiService {
 
     private hostBpm: string;
 
+    private oauthHost: string;
+    private clientId: string;
+    private secret: string;
+
     private contextRoot: string;
 
     private disableCsrf: boolean;
@@ -52,6 +56,11 @@ export class AlfrescoApiService {
         this.ticketBpm = this.getTicketBpm();
         this.hostEcm = this.settingsService.ecmHost;
         this.hostBpm = this.settingsService.bpmHost;
+
+        this.oauthHost = this.settingsService.oauthHost;
+        this.clientId = this.settingsService.clientId;
+        this.secret = this.settingsService.secret;
+
         this.contextRoot = 'alfresco';
         this.disableCsrf = false;
 
@@ -76,6 +85,21 @@ export class AlfrescoApiService {
             this.provider = provider;
             this.init();
         });
+
+        settingsService.oauthHostSubject.subscribe((oauthHost) => {
+            this.oauthHost = oauthHost;
+            this.init();
+        });
+
+        settingsService.clientIdSubject.subscribe((clientId) => {
+            this.clientId = clientId;
+            this.init();
+        });
+
+        settingsService.secretSubject.subscribe((secret) => {
+            this.secret = secret;
+            this.init();
+        });
     }
 
     private init() {
@@ -83,6 +107,7 @@ export class AlfrescoApiService {
             provider: this.provider,
             ticketEcm: this.ticketEcm,
             ticketBpm: this.ticketBpm,
+            oauth2: {host: this.oauthHost, secret: this.secret, clientId: this.clientId},
             hostEcm: this.hostEcm,
             hostBpm: this.hostBpm,
             contextRoot: this.contextRoot,

@@ -1,14 +1,14 @@
 <!--BPM, ECN AND CSRF TOGGLE-->
 
 <div class="settings">
-    <p class="toggle">
+    <p class="toggle" *ngIf="!isOauth2">
         <label for="switch1" class="mdl-switch mdl-js-switch mdl-js-ripple-effect">
             <input type="checkbox" id="switch1" [checked]="isECM" class="mdl-switch__input"
                    (click)="toggleECM()">
             <span class="mdl-switch__label">Content Services</span>
         </label>
     </p>
-    <p class="toggle">
+    <p class="toggle" *ngIf="!isOauth2" >
         <label for="switch2" class="mdl-switch mdl-js-switch mdl-js-ripple-effect">
             <input type="checkbox" id="switch2" [checked]="isBPM" class="mdl-switch__input"
                    (click)="toggleBPM()">
@@ -17,12 +17,12 @@
     </p>
     <p class="toggle">
         <label for="switch3" class="mdl-switch mdl-js-switch mdl-js-ripple-effect">
-            <input type="checkbox" id="switch3" [checked]="isBPM" class="mdl-switch__input"
+            <input type="checkbox" id="switch3" [checked]="isOauth2" class="mdl-switch__input"
                    (click)="toggleOAUTH()">
-            <span class="mdl-switch__label">Oauth authentication</span>
+            <span class="mdl-switch__label">Oauth Server</span>
         </label>
     </p>
-    <p class="toggle">
+    <p class="toggle" *ngIf="!isOauth2">
         <label for="switch4" class="mdl-switch mdl-js-switch mdl-js-ripple-effect">
             <input type="checkbox" id="switch4" class="mdl-switch__input" [checked]="!disableCsrf" (click)="toggleCSRF()">
             <span class="mdl-switch__label">CSRF</span>
@@ -52,14 +52,14 @@
                 (onSuccess)="onLogin($event)"
                 (onError)="onError($event)">
     <div class="mobile-settings">
-        <p>
+        <p *ngIf="!isOauth2">
             <label for="switch1-mobile" class="mdl-switch mdl-js-switch mdl-js-ripple-effect">
                 <input type="checkbox" id="switch1-mobile" [checked]="isECM" class="mdl-switch__input"
                        (click)="toggleECM()">
                 <span class="mdl-switch__label">Content Services</span>
             </label>
         </p>
-        <p>
+        <p *ngIf="!isOauth2">
             <label for="switch2-mobile" class="mdl-switch mdl-js-switch mdl-js-ripple-effect">
                 <input type="checkbox" id="switch2-mobile" [checked]="isBPM" class="mdl-switch__input"
                        (click)="toggleBPM()">
@@ -68,12 +68,12 @@
         </p>
         <p>
             <label for="switch3-mobile" class="mdl-switch mdl-js-switch mdl-js-ripple-effect">
-                <input type="checkbox" id="switch3-mobile" [checked]="isBPM" class="mdl-switch__input"
+                <input type="checkbox" id="switch3-mobile" [checked]="isOauth2" class="mdl-switch__input"
                        (click)="toggleOAUTH()">
                 <span class="mdl-switch__label">Oauth authentication</span>
             </label>
         </p>
-        <p>
+        <p *ngIf="!isOauth2">
             <label for="switch4-mobile" class="mdl-switch mdl-js-switch mdl-js-ripple-effect">
                 <input type="checkbox" id="switch4-mobile" class="mdl-switch__input" [checked]="!disableCsrf" (click)="toggleCSRF()">
                 <span class="mdl-switch__label">CSRF</span>

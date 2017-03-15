@@ -115,11 +115,11 @@ export class AppComponent {
     }
 
     private setOauthHost() {
-        if (localStorage.getItem(`oauthHost`)) {
-            this.alfrescoSettingsService.oauthHost = localStorage.getItem(`oauthHost`);
-            this.oauthHost = localStorage.getItem(`oauthHost`);
+        if (this.storage.getItem(`oauthHost`)) {
+            this.settingsService.oauthHost = this.storage.getItem(`oauthHost`);
+            this.oauthHost = this.storage.getItem(`oauthHost`);
         } else {
-            this.alfrescoSettingsService.oauthHost = this.oauthHost;
+            this.settingsService.oauthHost = this.oauthHost;
         }
     }
 

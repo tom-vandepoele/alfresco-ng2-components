@@ -24,6 +24,8 @@ export class AlfrescoSettingsService {
     static DEFAULT_ECM_ADDRESS: string = 'http://' + window.location.hostname + ':8080';
     static DEFAULT_BPM_ADDRESS: string = 'http://' + window.location.hostname + ':9999';
     static DEFAULT_OAUTH_ADDRESS: string = 'http://' + window.location.hostname + ':9191';
+    static DEFAULT_CLIENT_ID: string = 'alfrescoexample';
+    static DEFAULT_SECRET: string = 'secret';
     static DEFAULT_CSRF_CONFIG: boolean = false;
 
     static DEFAULT_BPM_CONTEXT_PATH: string = '/activiti-app';
@@ -31,16 +33,22 @@ export class AlfrescoSettingsService {
     private _ecmHost: string = AlfrescoSettingsService.DEFAULT_ECM_ADDRESS;
     private _bpmHost: string = AlfrescoSettingsService.DEFAULT_BPM_ADDRESS;
     private _oauthHost: string = AlfrescoSettingsService.DEFAULT_OAUTH_ADDRESS;
+
     private _csrfDisabled: boolean = AlfrescoSettingsService.DEFAULT_CSRF_CONFIG;
+
+    private _clientId: string = AlfrescoSettingsService.DEFAULT_CLIENT_ID;
+    private _secret: string = AlfrescoSettingsService.DEFAULT_SECRET;
 
     private _bpmContextPath = AlfrescoSettingsService.DEFAULT_BPM_CONTEXT_PATH;
 
-    private providers: string = 'ALL'; // ECM, BPM , ALL
+    private providers: string = 'ALL'; // ECM, BPM , ALL, OAUTH
 
     public bpmHostSubject: Subject<string> = new Subject<string>();
     public ecmHostSubject: Subject<string> = new Subject<string>();
     public oauthHostSubject: Subject<string> = new Subject<string>();
     public csrfSubject: Subject<boolean> = new Subject<boolean>();
+    public clientIdSubject: Subject<string> = new Subject<string>();
+    public secretSubject: Subject<string> = new Subject<string>();
     public providerSubject: Subject<string> = new Subject<string>();
 
     public get ecmHost(): string {
@@ -73,6 +81,24 @@ export class AlfrescoSettingsService {
     public set oauthHost(oauthHostUrl: string) {
         this.oauthHostSubject.next(oauthHostUrl);
         this._oauthHost = oauthHostUrl;
+    }
+
+    public get clientId(): string {
+        return this._clientId;
+    }
+
+    public set clientId(clientId: string) {
+        this.clientIdSubject.next(clientId);
+        this._clientId = clientId;
+    }
+
+    public get secret(): string {
+        return this._secret;
+    }
+
+    public set secret(secret: string) {
+        this.secretSubject.next(secret);
+        this._secret = secret;
     }
 
     public getBPMApiBaseUrl(): string {

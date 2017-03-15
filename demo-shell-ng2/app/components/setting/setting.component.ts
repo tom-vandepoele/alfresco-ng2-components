@@ -29,6 +29,8 @@ export class SettingComponent {
     bpmHost: string;
     oauthHost: string;
 
+    clientId: string;
+    secret: string;
 
     constructor(private settingsService: AlfrescoSettingsService,
                 private storage: StorageService,
@@ -36,6 +38,8 @@ export class SettingComponent {
         this.ecmHost = this.settingsService.ecmHost;
         this.bpmHost = this.settingsService.bpmHost;
         this.oauthHost = this.settingsService.oauthHost;
+        this.clientId = this.settingsService.clientId;
+        this.secret = this.settingsService.secret;
     }
 
     public onChangeECMHost(event: KeyboardEvent): void {
@@ -66,6 +70,30 @@ export class SettingComponent {
             this.settingsService.oauthHost = value;
             this.storage.setItem(`oauthHost`, value);
         }
+    }
+
+    public onChangeClientId(event: KeyboardEvent): void {
+        let value = (<HTMLInputElement>event.target).value.trim();
+        if (value) {
+            this.logService.info(`clientId: ${value}`);
+            this.clientId = value;
+            this.settingsService.clientId = value;
+            this.storage.setItem(`clientId`, value);
+        }
+    }
+
+    public onChangeSecret(event: KeyboardEvent): void {
+        let value = (<HTMLInputElement>event.target).value.trim();
+        if (value) {
+            this.logService.info(`Secret: ${value}`);
+            this.secret = value;
+            this.settingsService.secret = value;
+            this.storage.setItem(`secret`, value);
+        }
+    }
+
+    public isOauthProviderEnabled(): boolean {
+        return this.storage.getItem('providers') === "OAUTH";
     }
 
 }

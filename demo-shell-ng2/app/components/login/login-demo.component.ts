@@ -65,12 +65,19 @@ export class LoginDemoComponent implements OnInit {
         if (this.providers === 'BPM') {
             this.isECM = false;
             this.isBPM = true;
+            this.isOauth2 = false;
         } else if (this.providers === 'ECM') {
             this.isECM = true;
             this.isBPM = false;
-        } else if (this.providers === 'OAUTH' || this.providers === 'ALL') {
+            this.isOauth2 = false;
+        } else if (this.providers === 'ALL') {
             this.isECM = true;
             this.isBPM = true;
+            this.isOauth2 = false;
+        }  else if (this.providers === 'OAUTH') {
+            this.isECM = true;
+            this.isBPM = true;
+            this.isOauth2 = true;
         }
     }
 
@@ -94,7 +101,7 @@ export class LoginDemoComponent implements OnInit {
 
     toggleOAUTH() {
         this.isOauth2 = !this.isOauth2;
-        this.storage.setItem('providers', this.updateProvider());
+        this.storage.setItem('providers',  this.updateProvider());
     }
 
     toggleCSRF() {
@@ -102,13 +109,13 @@ export class LoginDemoComponent implements OnInit {
     }
 
     updateProvider() {
-        if (this.isBPM && this.isECM) {
-            this.providers = 'ALL';
+        if (this.isOauth2) {
+            this.providers = 'OAUTH';
             return this.providers;
         }
 
-        if (this.isOauth2) {
-            this.providers = 'OAUTH';
+        if (this.isBPM && this.isECM) {
+            this.providers = 'ALL';
             return this.providers;
         }
 
