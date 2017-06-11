@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { AlfrescoApiService, LogService } from 'ng2-alfresco-core';
 import { ObjectDataTableAdapter } from 'ng2-alfresco-datatable';
 
@@ -48,41 +48,39 @@ import { ObjectDataTableAdapter } from 'ng2-alfresco-datatable';
             <div *ngIf="contentType === 'HTML'" id="webscript-data-HTML" [innerHTML]="data"></div>
             <div *ngIf="contentType === 'TEXT'" id="webscript-data-TEXT" >{{data}}</div>
             <div *ngIf="isDataTableContent()"><alfresco-datatable id="webscript-datatable-wrapper" [data]="data"></alfresco-datatable><div>
-            <div *ngIf="showError" id="error">Error during the deserialization of {{data}} as {{contentType}}</div>
         </div>
     `
 })
 export class WebscriptComponent {
 
     @Input()
-    scriptPath: string;
+    public scriptPath: string;
 
     @Input()
-    scriptArgs: any;
+    public scriptArgs: any;
 
     @Input()
-    showData: boolean = true;
+    public showData: boolean = true;
 
     @Input()
-    contextRoot: string = 'alfresco';
+    public contextRoot: string = 'alfresco';
 
     @Input()
-    servicePath: string = 'service';
+    public servicePath: string = 'service';
 
     @Input()
-    contentType: string = 'TEXT';
+    public contentType: string = 'TEXT';
 
     @Output()
-    onSuccess = new EventEmitter();
+    public onSuccess = new EventEmitter();
 
-    data: any = undefined;
-    showError: boolean = false;
+    private data: any = undefined;
 
     constructor(private apiService: AlfrescoApiService,
                 private logService: LogService) {
     }
 
-    ngOnChanges(changes) {
+    public ngOnChanges(): Promise<{}> {
         if (this.showData) {
             this.clean();
         }
@@ -108,6 +106,10 @@ export class WebscriptComponent {
         });
     }
 
+    public isDataTableContent(): boolean {
+        return this.contentType === 'DATATABLE';
+    }
+
     /**
      * show the data in a ng2-alfresco-datatable
      *
@@ -115,7 +117,7 @@ export class WebscriptComponent {
      *
      * @retutns the data as datatable
      */
-    showDataAsDataTable(data: any) {
+    private showDataAsDataTable(data: any): void {
         let datatableData: any = null;
         try {
 
@@ -134,11 +136,7 @@ export class WebscriptComponent {
         return datatableData;
     }
 
-    clean() {
+    private clean(): void {
         this.data = undefined;
-    }
-
-    isDataTableContent() {
-        return this.contentType === 'DATATABLE';
     }
 }
