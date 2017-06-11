@@ -15,12 +15,12 @@
  * limitations under the License.
  */
 
-import { Component, OnInit, Input } from '@angular/core';
-import { AlfrescoTranslationService, AlfrescoAuthenticationService } from 'ng2-alfresco-core';
-import { EcmUserModel } from './../models/ecm-user.model';
+import { Component, Input, OnInit } from '@angular/core';
+import { AlfrescoAuthenticationService, AlfrescoTranslationService } from 'ng2-alfresco-core';
 import { BpmUserModel } from './../models/bpm-user.model';
-import { EcmUserService } from './../services/ecm-user.service';
+import { EcmUserModel } from './../models/ecm-user.model';
 import { BpmUserService } from './../services/bpm-user.service';
+import { EcmUserService } from './../services/ecm-user.service';
 
 declare let componentHandler: any;
 declare var require: any;
@@ -33,22 +33,22 @@ declare var require: any;
 export class UserInfoComponent implements OnInit {
 
     @Input()
-    ecmBackgroundImage: string = require('../assets/images/ecm-background.png');
+    public ecmBackgroundImage: string = require('../assets/images/ecm-background.png');
 
     @Input()
-    bpmBackgroundImage: string = require('../assets/images/bpm-background.png');
+    public bpmBackgroundImage: string = require('../assets/images/bpm-background.png');
 
     @Input()
-    menuOpenType: string = 'right';
+    public menuOpenType: string = 'right';
 
     @Input()
-    fallBackThumbnailImage: string;
+    public fallBackThumbnailImage: string;
 
-    ecmUser: EcmUserModel;
-    bpmUser: BpmUserModel;
-    anonymousImageUrl: string = require('../assets/images/anonymous.gif');
-    bpmUserImage: any;
-    ecmUserImage: any;
+    public ecmUser: EcmUserModel;
+    public bpmUser: BpmUserModel;
+    public anonymousImageUrl: string = require('../assets/images/anonymous.gif');
+    public bpmUserImage: string;
+    public ecmUserImage: string;
 
     constructor(private ecmUserService: EcmUserService,
                 private bpmUserService: BpmUserService,
@@ -62,20 +62,43 @@ export class UserInfoComponent implements OnInit {
         });
     }
 
-    ngOnInit() {
+    public isLoggedIn(): boolean {
+        return this.authService.isLoggedIn();
+    }
+
+    public  ngOnInit(): void {
         this.getUserInfo();
     }
 
-    getUserInfo() {
+    public onImageLoadingError(event: Event): void {
+        if (event) {
+            let element = <any> event.target;
+            element.src = this.fallBackThumbnailImage || this.anonymousImageUrl;
+        }
+    }
+
+    public stopClosing(event: Event): void {
+        event.stopPropagation();
+    }
+
+    public getUserAvatar(): string {
+        return this.ecmUserImage || this.bpmUserImage;
+    }
+
+    public getBpmUserAvatar(): string {
+        return this.bpmUserImage;
+    }
+
+    public getEcmUserAvatar(): string {
+        return this.ecmUserImage;
+    }
+
+    private getUserInfo(): void {
         this.getEcmUserInfo();
         this.getBpmUserInfo();
     }
 
-    isLoggedIn() {
-        return this.authService.isLoggedIn();
-    }
-
-    getEcmUserInfo(): void {
+    private getEcmUserInfo(): void {
         if (this.authService.isEcmLoggedIn()) {
             this.ecmUserService.getCurrentUserInfo()
                 .subscribe((res) => {
@@ -89,7 +112,7 @@ export class UserInfoComponent implements OnInit {
         }
     }
 
-    getBpmUserInfo(): void {
+    private getBpmUserInfo(): void {
         if (this.authService.isBpmLoggedIn()) {
             this.bpmUserService.getCurrentUserInfo()
                 .subscribe((res) => {
@@ -102,30 +125,8 @@ export class UserInfoComponent implements OnInit {
         }
     }
 
-    onImageLoadingError(event) {
-        if (event) {
-            let element = <any> event.target;
-            element.src = this.fallBackThumbnailImage || this.anonymousImageUrl;
-        }
-    }
-
-    stopClosing(event) {
-        event.stopPropagation();
-    }
-
-    private getEcmAvatar() {
+    private getEcmAvatar(): void {
         this.ecmUserImage = this.ecmUserService.getUserProfileImage(this.ecmUser.avatarId);
     }
 
-    getUserAvatar() {
-        return this.ecmUserImage || this.bpmUserImage;
-    }
-
-    getBpmUserAvatar() {
-        return this.bpmUserImage;
-    }
-
-    getEcmUserAvatar() {
-        return this.ecmUserImage;
-    }
 }

@@ -16,12 +16,12 @@
  */
 
 export class EcmCompanyModel {
-      organization: string;
-      address1: string;
-      address2: string;
-      address3: string;
-      postcode: string;
-      telephone: string;
-      fax: string;
-      email: string;
+    public organization: string;
+    public address1: string;
+    public address2: string;
+    public address3: string;
+    public postcode: string;
+    public telephone: string;
+    public fax: string;
+    public email: string;
 }

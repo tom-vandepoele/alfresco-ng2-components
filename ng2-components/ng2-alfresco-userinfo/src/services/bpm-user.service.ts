@@ -17,9 +17,11 @@
 
 import { Injectable } from '@angular/core';
 import { Response } from '@angular/http';
-import { Observable } from 'rxjs/Rx';
 import { AlfrescoApiService, LogService } from 'ng2-alfresco-core';
+import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
+import { Observable } from 'rxjs/Rx';
 import { BpmUserModel } from '../models/bpm-user.model';
+
 /**
  *
  * BPMUserService retrieve all the information of an Ecm user.
@@ -34,29 +36,29 @@ export class BpmUserService {
     }
 
     /**
-     * get Current User information for BPM
-     * @param userName - the user name
-     */
-    getCurrentUserInfo(): Observable<BpmUserModel> {
-        return Observable.fromPromise(this.apiService.getInstance().activiti.profileApi.getProfile())
-            .map((data) => <BpmUserModel> data)
-            .catch(err => this.handleError(err));
-    }
-
-    getCurrentUserProfileImage(): string {
-        return this.apiService.getInstance().activiti.profileApi.getProfilePictureUrl();
-    }
-
-    /**
      * Throw the error
      * @param error
      * @returns {ErrorObservable}
      */
-    private handleError(error: Response) {
+    private handleError(error: Response): ErrorObservable<string | Response> {
         // in a real world app, we may send the error to some remote logging infrastructure
         // instead of just logging it to the console
         this.logService.error(error);
         return Observable.throw(error || 'Server error');
+    }
+
+    /**
+     * get Current User information for BPM
+     * @param userName - the user name
+     */
+    public getCurrentUserInfo(): Observable <BpmUserModel> {
+        return Observable.fromPromise(this.apiService.getInstance().activiti.profileApi.getProfile())
+            .map((data) => <BpmUserModel> data)
+            .catch((err) => this.handleError(err));
+    }
+
+    public getCurrentUserProfileImage(): string {
+        return this.apiService.getInstance().activiti.profileApi.getProfilePictureUrl();
     }
 
 }

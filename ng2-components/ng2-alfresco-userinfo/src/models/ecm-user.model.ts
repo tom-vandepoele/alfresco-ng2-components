@@ -18,25 +18,25 @@
 import { EcmCompanyModel } from './ecm-company.model';
 
 export class EcmUserModel {
-    id: string;
-    firstName: string;
-    lastName: string;
-    fullNameDisplay: string;
-    description: string;
-    avatarId: string;
-    email: string;
-    skypeId: string;
-    googleId: string;
-    instantMessageId: string;
-    jobTitle: string;
-    location: string;
-    company: EcmCompanyModel;
-    mobile: string;
-    telephone: string;
-    statusUpdatedAt: string;
-    userStatus: string;
-    enabled: boolean;
-    emailNotificationsEnabled: boolean;
+    public id: string;
+    public firstName: string;
+    public lastName: string;
+    public fullNameDisplay: string;
+    public description: string;
+    public avatarId: string;
+    public email: string;
+    public skypeId: string;
+    public googleId: string;
+    public instantMessageId: string;
+    public jobTitle: string;
+    public location: string;
+    public company: EcmCompanyModel;
+    public mobile: string;
+    public telephone: string;
+    public statusUpdatedAt: string;
+    public userStatus: string;
+    public enabled: boolean;
+    public emailNotificationsEnabled: boolean;
 
     constructor(obj?: any) {
         this.id = obj && obj.id || null;
@@ -60,7 +60,7 @@ export class EcmUserModel {
         this.emailNotificationsEnabled = obj && obj.emailNotificationsEnabled;
     }
 
-    private formatValue(value: string) {
+    private formatValue(value: string): string {
         return value && value !== 'null' ? value : 'N/A';
     }
 }

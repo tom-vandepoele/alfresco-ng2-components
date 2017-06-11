@@ -16,27 +16,27 @@
  */
 
 export class BpmUserModel {
-    apps: any;
-    capabilities: string;
-    company: string;
-    created: string;
-    email: string;
-    externalId: string;
-    firstName: string;
-    lastName: string;
-    fullname: string;
-    fullNameDisplay: string;
-    groups: any;
-    id: string;
-    lastUpdate: string;
-    latestSyncTimeStamp: string;
-    password: string;
-    pictureId: string;
-    status: string;
-    tenantId: string;
-    tenantName: string;
-    tenantPictureId: string;
-    type: string;
+    public apps: any;
+    public capabilities: string;
+    public company: string;
+    public created: string;
+    public email: string;
+    public externalId: string;
+    public firstName: string;
+    public lastName: string;
+    public fullname: string;
+    public fullNameDisplay: string;
+    public groups: any;
+    public id: string;
+    public lastUpdate: string;
+    public latestSyncTimeStamp: string;
+    public password: string;
+    public pictureId: string;
+    public status: string;
+    public tenantId: string;
+    public tenantName: string;
+    public tenantPictureId: string;
+    public type: string;
 
     constructor(obj?: any) {
         this.apps = obj && obj.apps || null;

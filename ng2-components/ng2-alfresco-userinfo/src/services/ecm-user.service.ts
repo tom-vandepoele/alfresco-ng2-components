@@ -17,9 +17,11 @@
 
 import { Injectable } from '@angular/core';
 import { Response } from '@angular/http';
+import { AlfrescoApiService, AlfrescoContentService, LogService } from 'ng2-alfresco-core';
+import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 import { Observable } from 'rxjs/Rx';
-import { AlfrescoContentService, AlfrescoApiService, LogService } from 'ng2-alfresco-core';
 import { EcmUserModel } from '../models/ecm-user.model';
+
 /**
  *
  * ECMUserService retrieve all the information of an Ecm user.
@@ -35,40 +37,39 @@ export class EcmUserService {
     }
 
     /**
-     * get User Information via ECM
-     * @param userName - the user name
-     */
-    getUserInfo(userName: string): Observable<EcmUserModel> {
-        return Observable.fromPromise(this.callApiGetPersonInfo(userName))
-            .map(data => <EcmUserModel> data['entry'])
-            .catch(err => this.handleError(err));
-    }
-
-    getCurrentUserInfo() {
-        return this.getUserInfo('-me-');
-    }
-
-    private callApiGetPersonInfo(userName: string, opts?: any) {
-        return this.apiService.getInstance().core.peopleApi.getPerson(userName, opts);
-    }
-
-    getUserProfileImage(avatarId: string) {
-        if (avatarId) {
-            let nodeObj = {entry: {id: avatarId}};
-            return this.contentService.getContentUrl(nodeObj);
-        }
-    }
-
-    /**
      * Throw the error
      * @param error
      * @returns {ErrorObservable}
      */
-    private handleError(error: Response) {
+    private handleError(error: Response): ErrorObservable<string | Response> {
         // in a real world app, we may send the error to some remote logging infrastructure
         // instead of just logging it to the console
         this.logService.error(error);
         return Observable.throw(error || 'Server error');
     }
 
+    /**
+     * get User Information via ECM
+     * @param userName - the user name
+     */
+    public getUserInfo(userName: string): Observable < EcmUserModel > {
+        return Observable.fromPromise(this.callApiGetPersonInfo(userName))
+            .map((data) => <EcmUserModel> data.entry)
+            .catch((err) => this.handleError(err));
+    }
+
+    public getCurrentUserInfo(): Observable < EcmUserModel > {
+        return this.getUserInfo('-me-');
+    }
+
+    private callApiGetPersonInfo(userName: string, opts ?: any): Promise < any > {
+        return this.apiService.getInstance().core.peopleApi.getPerson(userName, opts);
+    }
+
+    public getUserProfileImage(avatarId: string): string {
+        if (avatarId) {
+            let nodeObj = {entry: {id: avatarId}};
+            return this.contentService.getContentUrl(nodeObj);
+        }
+    }
 }
