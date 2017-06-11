@@ -15,9 +15,9 @@
  * limitations under the License.
  */
 
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { TagService } from './../services/tag.service';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { AlfrescoTranslationService } from 'ng2-alfresco-core';
+import { TagService } from './../services/tag.service';
 
 /**
  *
@@ -34,27 +34,27 @@ import { AlfrescoTranslationService } from 'ng2-alfresco-core';
 export class TagActionsComponent {
 
     @Input()
-    nodeId: string;
+    public nodeId: string;
 
     @Input()
-    isContextMenu: boolean = false;
+    public isContextMenu: boolean = false;
 
     @Output()
-    successAdd: EventEmitter<any> = new EventEmitter();
+    public successAdd: EventEmitter<any> = new EventEmitter();
 
     @Output()
-    error: EventEmitter<any> = new EventEmitter();
+    public error: EventEmitter<any> = new EventEmitter();
 
     @Output()
-    result = new EventEmitter();
+    public result = new EventEmitter();
 
-    newTagName: string;
+    public newTagName: string;
 
-    tagsEntries: any;
+    public tagsEntries: any;
 
-    errorMsg: string;
+    public errorMsg: string;
 
-    disableAddTag: boolean = true;
+    public disableAddTag: boolean = true;
 
     constructor(private tagService: TagService, private translateService: AlfrescoTranslationService) {
         if (translateService) {
@@ -66,11 +66,11 @@ export class TagActionsComponent {
         });
     }
 
-    ngOnChanges() {
-        return this.refreshTag();
+    public ngOnChanges(): void {
+        this.refreshTag();
     }
 
-    refreshTag() {
+    public refreshTag(): void {
         this.tagService.getTagsByNodeId(this.nodeId).subscribe((data) => {
             this.tagsEntries = data.list.entries;
             this.disableAddTag = false;
@@ -82,13 +82,13 @@ export class TagActionsComponent {
         });
     }
 
-    addTag() {
+    public addTag(): void {
         if (this.searchTag(this.newTagName)) {
             this.translateService.get('TAG.MESSAGES.EXIST').subscribe((error) => {
                 this.errorMsg = error;
             });
             this.error.emit(this.errorMsg);
-        }else {
+        } else {
             this.tagService.addTag(this.nodeId, this.newTagName).subscribe(() => {
                 this.newTagName = '';
                 this.successAdd.emit(this.nodeId);
@@ -96,7 +96,7 @@ export class TagActionsComponent {
         }
     }
 
-    searchTag(searchTagName: string) {
+    public searchTag(searchTagName: string): any {
         if (this.tagsEntries) {
             return this.tagsEntries.find((currentTag) => {
                 return (searchTagName === currentTag.entry.tag);
@@ -104,11 +104,11 @@ export class TagActionsComponent {
         }
     }
 
-    cleanErrorMsg() {
+    public cleanErrorMsg(): void {
         this.errorMsg = '';
     }
 
-    removeTag(tag: string) {
+    public removeTag(tag: string): void {
         this.tagService.removeTag(this.nodeId, tag);
     }
 }

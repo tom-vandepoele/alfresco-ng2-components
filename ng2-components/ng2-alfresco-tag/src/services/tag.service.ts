@@ -15,9 +15,10 @@
  * limitations under the License.
  */
 
-import { Injectable, Output, EventEmitter } from '@angular/core';
-import { Observable } from 'rxjs/Rx';
+import { EventEmitter, Injectable, Output } from '@angular/core';
 import { AlfrescoApiService, LogService } from 'ng2-alfresco-core';
+import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
+import { Observable } from 'rxjs/Rx';
 
 /**
  * @returns {TagService}
@@ -26,23 +27,23 @@ import { AlfrescoApiService, LogService } from 'ng2-alfresco-core';
 export class TagService {
 
     @Output()
-    refresh = new EventEmitter();
+    public refresh = new EventEmitter();
 
     constructor(private apiService: AlfrescoApiService,
                 private logService: LogService) {
     }
 
-    getTagsByNodeId(nodeId: string): any {
+    public getTagsByNodeId(nodeId: string): any {
         return Observable.fromPromise(this.apiService.getInstance().core.tagsApi.getNodeTags(nodeId))
-            .catch(err => this.handleError(err));
+            .catch((err) => this.handleError(err));
     }
 
-    getAllTheTags() {
+    public getAllTheTags(): Observable<any> {
         return Observable.fromPromise(this.apiService.getInstance().core.tagsApi.getTags())
-            .catch(err => this.handleError(err));
+            .catch((err) => this.handleError(err));
     }
 
-    addTag(nodeId: string, tagName: string): any {
+    public addTag(nodeId: string, tagName: string): any {
         let alfrescoApi: any = this.apiService.getInstance();
         let tagBody = new alfrescoApi.core.TagBody();
         tagBody.tag = tagName;
@@ -58,7 +59,7 @@ export class TagService {
         return promiseAdd;
     }
 
-    removeTag(nodeId: string, tag: string): any {
+    public removeTag(nodeId: string, tag: string): any {
         let promiseRemove = Observable.fromPromise(this.apiService.getInstance().core.tagsApi.removeTag(nodeId, tag));
 
         promiseRemove.subscribe((data) => {
@@ -70,7 +71,7 @@ export class TagService {
         return promiseRemove;
     }
 
-    private handleError(error: any) {
+    private handleError(error: Response): ErrorObservable<string | Response> {
         this.logService.error(error);
         return Observable.throw(error || 'Server error');
     }

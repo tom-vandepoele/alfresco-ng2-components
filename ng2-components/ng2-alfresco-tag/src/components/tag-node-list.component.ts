@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { TagService } from '../services/tag.service';
 
 /**
@@ -33,12 +33,12 @@ import { TagService } from '../services/tag.service';
 export class TagNodeList {
 
     @Input()
-    nodeId: string;
+    public nodeId: string;
 
-    tagsEntries: any;
+    public tagsEntries: any;
 
     @Output()
-    results = new EventEmitter();
+    public results = new EventEmitter();
 
     /**
      * Constructor
@@ -50,18 +50,18 @@ export class TagNodeList {
         });
     }
 
-    ngOnChanges() {
-        return this.refreshTag();
+    public ngOnChanges(): void {
+        this.refreshTag();
     }
 
-    refreshTag() {
+    public refreshTag(): void {
         this.tagService.getTagsByNodeId(this.nodeId).subscribe((data) => {
             this.tagsEntries = data.list.entries;
             this.results.emit(this.tagsEntries);
         });
     }
 
-    removeTag(tag: string) {
+    public removeTag(tag: string): void {
         this.tagService.removeTag(this.nodeId, tag).subscribe(() => {
             this.refreshTag();
         });
