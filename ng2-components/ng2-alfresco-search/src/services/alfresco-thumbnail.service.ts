@@ -21,7 +21,7 @@ import { AlfrescoContentService } from 'ng2-alfresco-core';
 @Injectable()
 export class AlfrescoThumbnailService {
 
-    mimeTypeIcons: any = {
+    public mimeTypeIcons: any = {
         'image/png': 'ft_ic_raster_image',
         'image/jpeg': 'ft_ic_raster_image',
         'image/gif': 'ft_ic_raster_image',

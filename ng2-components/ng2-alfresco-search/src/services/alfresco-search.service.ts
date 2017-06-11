@@ -16,9 +16,10 @@
  */
 
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Rx';
-import { AlfrescoAuthenticationService, AlfrescoApiService } from 'ng2-alfresco-core';
 import { NodePaging } from 'alfresco-js-api';
+import { AlfrescoApiService, LogService } from 'ng2-alfresco-core';
+import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
+import { Observable } from 'rxjs/Rx';
 
 /**
  * Internal service used by Document List component.
@@ -26,8 +27,8 @@ import { NodePaging } from 'alfresco-js-api';
 @Injectable()
 export class AlfrescoSearchService {
 
-    constructor(public authService: AlfrescoAuthenticationService,
-                private apiService: AlfrescoApiService) {
+    constructor(private apiService: AlfrescoApiService,
+                private logService: LogService) {
     }
 
     /**
@@ -37,17 +38,18 @@ export class AlfrescoSearchService {
      * @param options Additional options passed to the search
      * @returns {Observable<NodePaging>} Search results
      */
-    getNodeQueryResults(term: string, options?: SearchOptions): Observable<NodePaging> {
+    public getNodeQueryResults(term: string, options?: SearchOptions): Observable<NodePaging> {
         return Observable.fromPromise(this.getQueryNodesPromise(term, options))
-            .map(res => <NodePaging> res)
-            .catch(err => this.handleError(err));
+            .map((res) => <NodePaging> res)
+            .catch((err) => this.handleError(err));
     }
 
-    getQueryNodesPromise(term: string, opts: SearchOptions): Promise<NodePaging> {
+    public getQueryNodesPromise(term: string, opts: SearchOptions): Promise<NodePaging> {
         return this.apiService.getInstance().core.queriesApi.findNodes(term, opts);
     }
 
-    private handleError(error: any): Observable<any> {
+    private handleError(error: Response): ErrorObservable<string | Response> {
+        this.logService.error(error);
         return Observable.throw(error || 'Server error');
     }
 }

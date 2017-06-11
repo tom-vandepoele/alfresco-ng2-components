@@ -15,9 +15,9 @@
  * limitations under the License.
  */
 
-import { Component, ElementRef, EventEmitter, Input, OnInit, OnChanges, Output, ViewChild } from '@angular/core';
-import { AlfrescoTranslationService } from 'ng2-alfresco-core';
+import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from '@angular/core';
 import { MinimalNodeEntity } from 'alfresco-js-api';
+import { AlfrescoTranslationService } from 'ng2-alfresco-core';
 import { AlfrescoSearchService, SearchOptions } from './../services/alfresco-search.service';
 import { AlfrescoThumbnailService } from './../services/alfresco-thumbnail.service';
 
@@ -31,56 +31,57 @@ declare var require: any;
 export class AlfrescoSearchAutocompleteComponent implements OnInit, OnChanges {
 
     @Input()
-    searchTerm: string = '';
+    public  searchTerm: string = '';
 
-    results: any = null;
+    public results: any = null;
 
-    errorMessage;
-
-    @Input()
-    ngClass: any;
+    public errorMessage;
 
     @Input()
-    maxResults: number = 5;
+    public  ngClass: any;
 
     @Input()
-    resultSort: string = null;
+    public maxResults: number = 5;
 
     @Input()
-    rootNodeId: string = '-root';
+    public resultSort: string = null;
 
     @Input()
-    resultType: string = null;
+    public rootNodeId: string = '-root';
+
+    @Input()
+    public resultType: string = null;
 
     @Output()
-    fileSelect: EventEmitter<any> = new EventEmitter();
+    public fileSelect: EventEmitter<any> = new EventEmitter();
 
     @Output()
-    searchFocus: EventEmitter<FocusEvent> = new EventEmitter<FocusEvent>();
+    public searchFocus: EventEmitter<FocusEvent> = new EventEmitter<FocusEvent>();
 
     @Output()
-    cancel = new EventEmitter();
+    public cancel = new EventEmitter();
 
     @Output()
-    resultsLoad = new EventEmitter();
+    public resultsLoad = new EventEmitter();
 
     @Output()
-    scrollBack = new EventEmitter();
+    public scrollBack = new EventEmitter();
 
-    @ViewChild('resultsTableBody', {}) resultsTableBody: ElementRef;
+    @ViewChild('resultsTableBody', {})
+    public resultsTableBody: ElementRef;
 
     constructor(private searchService: AlfrescoSearchService,
                 private translateService: AlfrescoTranslationService,
                 private thumbnailService: AlfrescoThumbnailService) {
     }
 
-    ngOnInit(): void {
+    public ngOnInit(): void {
         if (this.translateService) {
             this.translateService.addTranslationFolder('ng2-alfresco-search', 'assets/ng2-alfresco-search');
         }
     }
 
-    ngOnChanges(changes) {
+    public  ngOnChanges(changes): void {
         if (changes.searchTerm) {
             this.results = null;
             this.errorMessage = null;
@@ -92,7 +93,7 @@ export class AlfrescoSearchAutocompleteComponent implements OnInit, OnChanges {
      * Loads and displays search results
      * @param searchTerm Search query entered by user
      */
-    private displaySearchResults(searchTerm) {
+    private displaySearchResults(searchTerm): void {
         let searchOpts: SearchOptions = {
             include: ['path'],
             rootNodeId: this.rootNodeId,
@@ -104,12 +105,12 @@ export class AlfrescoSearchAutocompleteComponent implements OnInit, OnChanges {
             this.searchService
                 .getNodeQueryResults(searchTerm, searchOpts)
                 .subscribe(
-                    results => {
+                    (results) => {
                         this.results = results.list.entries.slice(0, this.maxResults);
                         this.errorMessage = null;
                         this.resultsLoad.emit(this.results);
                     },
-                    error => {
+                    (error) => {
                         this.results = null;
                         this.errorMessage = <any>error;
                         this.resultsLoad.error(error);
@@ -123,7 +124,7 @@ export class AlfrescoSearchAutocompleteComponent implements OnInit, OnChanges {
      * @param node Node to get URL for.
      * @returns {string} URL address.
      */
-    getMimeTypeIcon(node: MinimalNodeEntity): string {
+    public getMimeTypeIcon(node: MinimalNodeEntity): string {
         if (node.entry.content && node.entry.content.mimeType) {
             let icon = this.thumbnailService.getMimeTypeIcon(node.entry.content.mimeType);
             return this.resolveIconPath(icon);
@@ -133,7 +134,7 @@ export class AlfrescoSearchAutocompleteComponent implements OnInit, OnChanges {
         }
     }
 
-    resolveIconPath(icon: string): string {
+    public  resolveIconPath(icon: string): string {
         return require('../assets/images/' + icon);
     }
 
@@ -142,7 +143,7 @@ export class AlfrescoSearchAutocompleteComponent implements OnInit, OnChanges {
      * @param node Node to get URL for.
      * @returns {string} URL address.
      */
-    getMimeTypeKey(node: MinimalNodeEntity): string {
+    public getMimeTypeKey(node: MinimalNodeEntity): string {
         if (node.entry.content && node.entry.content.mimeType) {
             return 'SEARCH.ICONS.' + this.thumbnailService.getMimeTypeKey(node.entry.content.mimeType);
         } else {
@@ -150,26 +151,26 @@ export class AlfrescoSearchAutocompleteComponent implements OnInit, OnChanges {
         }
     }
 
-    focusResult(): void {
+    public focusResult(): void {
         let firstResult: any = this.resultsTableBody.nativeElement.querySelector('tr');
         firstResult.focus();
     }
 
-    onItemClick(node: MinimalNodeEntity): void {
+    public  onItemClick(node: MinimalNodeEntity): void {
         if (node && node.entry) {
             this.fileSelect.emit(node);
         }
     }
 
-    onRowFocus($event: FocusEvent): void {
+    public onRowFocus($event: FocusEvent): void {
         this.searchFocus.emit($event);
     }
 
-    onRowBlur($event: FocusEvent): void {
+    public onRowBlur($event: FocusEvent): void {
         this.searchFocus.emit($event);
     }
 
-    onRowEnter(node: MinimalNodeEntity): void {
+    public  onRowEnter(node: MinimalNodeEntity): void {
         if (node && node.entry) {
             if (node.entry.isFile) {
                 this.fileSelect.emit(node);
@@ -177,22 +178,14 @@ export class AlfrescoSearchAutocompleteComponent implements OnInit, OnChanges {
         }
     }
 
-    private getNextElementSibling(node: Element): Element {
-        return node.nextElementSibling;
-    }
-
-    private getPreviousElementSibling(node: Element): Element {
-        return node.previousElementSibling;
-    }
-
-    onRowArrowDown($event: KeyboardEvent): void {
+    public onRowArrowDown($event: KeyboardEvent): void {
         let nextElement: any = this.getNextElementSibling(<Element> $event.target);
         if (nextElement) {
             nextElement.focus();
         }
     }
 
-    onRowArrowUp($event: KeyboardEvent): void {
+    public onRowArrowUp($event: KeyboardEvent): void {
         let previousElement: any = this.getPreviousElementSibling(<Element> $event.target);
         if (previousElement) {
             previousElement.focus();
@@ -201,8 +194,16 @@ export class AlfrescoSearchAutocompleteComponent implements OnInit, OnChanges {
         }
     }
 
-    onRowEscape($event: KeyboardEvent): void {
+    public onRowEscape($event: KeyboardEvent): void {
         this.cancel.emit($event);
+    }
+
+    private getNextElementSibling(node: Element): Element {
+        return node.nextElementSibling;
+    }
+
+    private getPreviousElementSibling(node: Element): Element {
+        return node.previousElementSibling;
     }
 
 }

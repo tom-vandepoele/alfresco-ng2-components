@@ -15,12 +15,12 @@
  * limitations under the License.
  */
 
+import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
-import { Component, Input, Output, OnInit, OnDestroy, ElementRef, EventEmitter, ViewChild } from '@angular/core';
-import { Observable, Subject } from 'rxjs/Rx';
 import { AlfrescoTranslationService } from 'ng2-alfresco-core';
-import { AlfrescoSearchAutocompleteComponent } from './alfresco-search-autocomplete.component';
+import { Observable, Subject } from 'rxjs/Rx';
 import { SearchTermValidator } from './../forms/search-term-validator';
+import { AlfrescoSearchAutocompleteComponent } from './alfresco-search-autocomplete.component';
 
 @Component({
     selector: 'alfresco-search-control',
@@ -30,60 +30,60 @@ import { SearchTermValidator } from './../forms/search-term-validator';
 export class AlfrescoSearchControlComponent implements OnInit, OnDestroy {
 
     @Input()
-    searchTerm = '';
+    public searchTerm = '';
 
     @Input()
-    inputType = 'text';
+    public inputType = 'text';
 
     @Input()
-    autocomplete: boolean = false;
+    public autocomplete: boolean = false;
 
     @Input()
-    expandable: boolean = true;
+    public expandable: boolean = true;
 
     @Output()
-    searchChange = new EventEmitter();
+    public searchChange = new EventEmitter();
 
     @Output()
-    searchSubmit = new EventEmitter();
+    public searchSubmit = new EventEmitter();
 
     @Output()
-    fileSelect = new EventEmitter();
+    public fileSelect = new EventEmitter();
 
     @Output()
-    expand = new EventEmitter();
+    public expand = new EventEmitter();
 
-    searchControl: FormControl;
+    public searchControl: FormControl;
 
     @ViewChild('searchInput', {})
-    searchInput: ElementRef;
+    public searchInput: ElementRef;
 
     @ViewChild(AlfrescoSearchAutocompleteComponent)
-    liveSearchComponent: AlfrescoSearchAutocompleteComponent;
+    public liveSearchComponent: AlfrescoSearchAutocompleteComponent;
 
     @Input()
-    liveSearchEnabled: boolean = true;
+    public liveSearchEnabled: boolean = true;
 
     @Input()
-    liveSearchTerm: string = '';
+    public liveSearchTerm: string = '';
 
     @Input()
-    liveSearchRoot: string = '-root-';
+    public liveSearchRoot: string = '-root-';
 
     @Input()
-    liveSearchResultType: string = null;
+    public liveSearchResultType: string = null;
 
     @Input()
-    liveSearchResultSort: string = null;
+    public liveSearchResultSort: string = null;
 
     @Input()
-    liveSearchMaxResults: number = 5;
+    public liveSearchMaxResults: number = 5;
 
-    searchActive = false;
+    public searchActive = false;
 
-    searchValid = false;
+    public searchValid = false;
 
-    private focusSubject = new Subject<FocusEvent>();
+    public focusSubject = new Subject<FocusEvent>();
 
     constructor(private translateService: AlfrescoTranslationService) {
 
@@ -93,19 +93,19 @@ export class AlfrescoSearchControlComponent implements OnInit, OnDestroy {
         );
     }
 
-    ngOnInit(): void {
+    public ngOnInit(): void {
         this.searchControl.valueChanges.debounceTime(400).distinctUntilChanged()
             .subscribe((value: string) => {
-                this.onSearchTermChange(value);
-            }
-        );
+                    this.onSearchTermChange(value);
+                }
+            );
 
         this.setupFocusEventHandlers();
 
         this.translateService.addTranslationFolder('ng2-alfresco-search', 'assets/ng2-alfresco-search');
     }
 
-    ngOnDestroy(): void {
+    public ngOnDestroy(): void {
         this.focusSubject.unsubscribe();
     }
 
@@ -114,34 +114,34 @@ export class AlfrescoSearchControlComponent implements OnInit, OnDestroy {
         this.liveSearchTerm = this.searchValid ? value : '';
         this.searchControl.setValue(value, true);
         this.searchChange.emit({
-            value: value,
+            value,
             valid: this.searchValid
         });
     }
 
-    private setupFocusEventHandlers() {
+    private setupFocusEventHandlers(): void {
         let focusEvents: Observable<FocusEvent> = this.focusSubject.asObservable().debounceTime(50);
         focusEvents.filter(($event: FocusEvent) => {
             return $event.type === 'focusin' || $event.type === 'focus';
-        }).subscribe(($event) => {
-            this.onSearchFocus($event);
+        }).subscribe(() => {
+            this.onSearchFocus();
         });
         focusEvents.filter(($event: any) => {
             return $event.type === 'focusout' || $event.type === 'blur';
-        }).subscribe(($event) => {
-            this.onSearchBlur($event);
+        }).subscribe(() => {
+            this.onSearchBlur();
         });
     }
 
-    getTextFieldClassName(): string {
+    public getTextFieldClassName(): string {
         return 'mdl-textfield mdl-js-textfield' + (this.expandable ? ' mdl-textfield--expandable' : '');
     }
 
-    getTextFieldHolderClassName(): string {
+    public getTextFieldHolderClassName(): string {
         return this.expandable ? 'search-field mdl-textfield__expandable-holder' : 'search-field';
     }
 
-    getAutoComplete(): string {
+    public getAutoComplete(): string {
         return this.autocomplete ? 'on' : 'off';
     }
 
@@ -150,7 +150,7 @@ export class AlfrescoSearchControlComponent implements OnInit, OnDestroy {
      *
      * @param event Submit event that was fired
      */
-    onSearch(event: Event): void {
+    public onSearch(): void {
         this.searchControl.setValue(this.searchTerm, true);
         if (this.searchControl.valid) {
             this.searchSubmit.emit({
@@ -160,28 +160,28 @@ export class AlfrescoSearchControlComponent implements OnInit, OnDestroy {
         }
     }
 
-    isAutoCompleteDisplayed(): boolean {
+    public isAutoCompleteDisplayed(): boolean {
         return this.searchActive;
     }
 
-    setAutoCompleteDisplayed(display: boolean): void {
+    public setAutoCompleteDisplayed(display: boolean): void {
         this.searchActive = display;
     }
 
-    onFileClicked(event: Event): void {
+    public onFileClicked(event: any): void {
         this.setAutoCompleteDisplayed(false);
-        this.fileSelect.emit(event: Event);
+        this.fileSelect.emit(event);
     }
 
-    onSearchFocus($event): void {
+    public onSearchFocus(): void {
         this.setAutoCompleteDisplayed(true);
     }
 
-    onSearchBlur($event): void {
+    public onSearchBlur(): void {
         this.setAutoCompleteDisplayed(false);
     }
 
-    onFocus($event): void {
+    public onFocus($event: FocusEvent): void {
         if (this.expandable) {
             this.expand.emit({
                 expanded: true
@@ -190,7 +190,7 @@ export class AlfrescoSearchControlComponent implements OnInit, OnDestroy {
         this.focusSubject.next($event);
     }
 
-    onBlur($event): void {
+    public onBlur($event): void {
         if (this.expandable && (this.searchControl.value === '' || this.searchControl.value === undefined)) {
             this.expand.emit({
                 expanded: false
@@ -199,11 +199,11 @@ export class AlfrescoSearchControlComponent implements OnInit, OnDestroy {
         this.focusSubject.next($event);
     }
 
-    onEscape(): void {
+    public onEscape(): void {
         this.setAutoCompleteDisplayed(false);
     }
 
-    onArrowDown(): void {
+    public onArrowDown(): void {
         if (this.isAutoCompleteDisplayed()) {
             this.liveSearchComponent.focusResult();
         } else {
@@ -211,17 +211,17 @@ export class AlfrescoSearchControlComponent implements OnInit, OnDestroy {
         }
     }
 
-    onAutoCompleteFocus($event): void {
+    public onAutoCompleteFocus($event): void {
         this.focusSubject.next($event);
     }
 
-    onAutoCompleteReturn($event): void {
+    public onAutoCompleteReturn($event): void {
         if (this.searchInput) {
             (<any> this.searchInput.nativeElement).focus();
         }
     }
 
-    onAutoCompleteCancel($event): void {
+    public onAutoCompleteCancel($event): void {
         if (this.searchInput) {
             (<any> this.searchInput.nativeElement).focus();
         }

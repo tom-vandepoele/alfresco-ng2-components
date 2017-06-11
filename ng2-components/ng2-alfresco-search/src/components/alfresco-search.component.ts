@@ -15,11 +15,11 @@
  * limitations under the License.
  */
 
-import { Component, EventEmitter, Input, Output, Optional, OnChanges, SimpleChanges, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Optional, Output, SimpleChanges } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
-import { AlfrescoSearchService, SearchOptions } from './../services/alfresco-search.service';
-import { AlfrescoTranslationService } from 'ng2-alfresco-core';
 import { NodePaging, Pagination } from 'alfresco-js-api';
+import { AlfrescoTranslationService } from 'ng2-alfresco-core';
+import { AlfrescoSearchService, SearchOptions } from './../services/alfresco-search.service';
 
 @Component({
     selector: 'alfresco-search',
@@ -28,48 +28,48 @@ import { NodePaging, Pagination } from 'alfresco-js-api';
 })
 export class AlfrescoSearchComponent implements OnChanges, OnInit {
 
-    static SINGLE_CLICK_NAVIGATION: string = 'click';
-    static DOUBLE_CLICK_NAVIGATION: string = 'dblclick';
+    public static SINGLE_CLICK_NAVIGATION: string = 'click';
+    public static DOUBLE_CLICK_NAVIGATION: string = 'dblclick';
 
     @Input()
-    searchTerm: string = '';
+    public searchTerm: string = '';
 
     @Input()
-    maxResults: number = 20;
+    public maxResults: number = 20;
 
     @Input()
-    resultSort: string = null;
+    public resultSort: string = null;
 
     @Input()
-    rootNodeId: string = '-root-';
+    public rootNodeId: string = '-root-';
 
     @Input()
-    resultType: string = null;
+    public resultType: string = null;
 
     @Input()
-    navigationMode: string = AlfrescoSearchComponent.DOUBLE_CLICK_NAVIGATION; // click|dblclick
+    public navigationMode: string = AlfrescoSearchComponent.DOUBLE_CLICK_NAVIGATION; // click|dblclick
 
     @Input()
-    emptyFolderImageUrl: string = require('../assets/images/empty_doc_lib.svg');
+    public emptyFolderImageUrl: string = require('../assets/images/empty_doc_lib.svg');
 
     @Output()
-    resultsLoad = new EventEmitter();
+    public resultsLoad = new EventEmitter();
 
     @Output()
-    preview: EventEmitter<any> = new EventEmitter<any>();
+    public preview: EventEmitter<any> = new EventEmitter<any>();
 
-    pagination: Pagination;
-    errorMessage;
-    queryParamName = 'q';
-    skipCount: number = 0;
-    nodeResults: NodePaging;
+    private pagination: Pagination;
+    private errorMessage;
+    private queryParamName = 'q';
+    private skipCount: number = 0;
+    private nodeResults: NodePaging;
 
     constructor(private searchService: AlfrescoSearchService,
                 private translateService: AlfrescoTranslationService,
                 @Optional() private route: ActivatedRoute) {
     }
 
-    ngOnInit() {
+    public ngOnInit(): void {
         if (this.translateService !== null) {
             this.translateService.addTranslationFolder('ng2-alfresco-search', 'assets/ng2-alfresco-search');
         }
@@ -84,15 +84,15 @@ export class AlfrescoSearchComponent implements OnChanges, OnInit {
         }
     }
 
-    ngOnChanges(changes: SimpleChanges) {
-        if (changes['searchTerm']) {
-            this.searchTerm = changes['searchTerm'].currentValue;
+    public ngOnChanges(changes: SimpleChanges): void {
+        if (changes.searchTerm) {
+            this.searchTerm = changes.searchTerm.currentValue;
             this.skipCount = 0;
             this.displaySearchResults(this.searchTerm);
         }
     }
 
-    onPreviewFile(event: any) {
+    public onPreviewFile(event: any): void {
         if (event.value) {
             this.preview.emit({
                 value: event.value
@@ -104,7 +104,7 @@ export class AlfrescoSearchComponent implements OnChanges, OnInit {
      * Loads and displays search results
      * @param searchTerm Search query entered by user
      */
-    private displaySearchResults(searchTerm) {
+    private displaySearchResults(searchTerm: string): void {
         if (searchTerm && this.searchService) {
             let searchOpts: SearchOptions = {
                 include: ['path'],
@@ -117,13 +117,13 @@ export class AlfrescoSearchComponent implements OnChanges, OnInit {
             this.searchService
                 .getNodeQueryResults(searchTerm, searchOpts)
                 .subscribe(
-                    results => {
+                    (results) => {
                         this.nodeResults = results;
                         this.pagination = results.list.pagination;
                         this.resultsLoad.emit(results.list.entries);
                         this.errorMessage = null;
                     },
-                    error => {
+                    (error) => {
                         if (error.status !== 400) {
                             this.errorMessage = <any>error;
                             this.resultsLoad.error(error);
