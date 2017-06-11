@@ -20,13 +20,13 @@ export class BaseEvent<T> {
 
     private isDefaultPrevented: boolean = false;
 
-    value: T;
+    public value: T;
 
-    get defaultPrevented() {
+    public get defaultPrevented(): boolean {
         return this.isDefaultPrevented;
     }
 
-    preventDefault() {
+    public preventDefault(): void {
         this.isDefaultPrevented = true;
     }
 }

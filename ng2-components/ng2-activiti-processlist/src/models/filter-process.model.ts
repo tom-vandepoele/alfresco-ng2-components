@@ -23,13 +23,13 @@
  * @returns {FilterProcessRepresentationModel} .
  */
 export class FilterProcessRepresentationModel {
-    id: string;
-    appId: string;
-    name: string;
-    recent: boolean;
-    icon: string;
-    filter: ProcessFilterParamRepresentationModel;
-    index: number;
+    public id: string;
+    public appId: string;
+    public name: string;
+    public recent: boolean;
+    public icon: string;
+    public filter: ProcessFilterParamRepresentationModel;
+    public index: number;
 
     constructor(obj?: any) {
         this.id = obj && obj.id || null;
@@ -41,7 +41,7 @@ export class FilterProcessRepresentationModel {
         this.index = obj && obj.index;
     }
 
-    hasFilter() {
+    public hasFilter(): boolean {
         return this.filter ? true : false;
     }
 }
@@ -54,9 +54,9 @@ export class FilterProcessRepresentationModel {
  * @returns {FilterParamsModel} .
  */
 export class FilterParamsModel {
-    id: string;
-    name: string;
-    index: number;
+    public id: string;
+    public name: string;
+    public index: number;
 
     constructor(obj?: any) {
         this.id = obj && obj.id || null;
@@ -73,8 +73,8 @@ export class FilterParamsModel {
  * @returns {ProcessFilterParamRepresentationModel} .
  */
 export class ProcessFilterParamRepresentationModel {
-    state: string;
-    sort: string;
+    public state: string;
+    public sort: string;
 
     constructor(obj?: any) {
         this.state = obj && obj.state || null;

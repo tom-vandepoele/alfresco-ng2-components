@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import { Component, Input, ChangeDetectionStrategy, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation } from '@angular/core';
 
 @Component({
     selector: 'adf-toolbar',
@@ -27,9 +27,8 @@ import { Component, Input, ChangeDetectionStrategy, ViewEncapsulation } from '@a
 export class AdfToolbarComponent {
 
     @Input()
-    title: string = '';
+    public title: string = '';
 
     @Input()
-    color: string;
-
+    public color: string;
 }

@@ -16,9 +16,9 @@
  */
 
 export class ProcessInstanceVariable {
-    name: string;
-    scope: string;
-    value: any;
+    public name: string;
+    public scope: string;
+    public value: any;
 
     constructor(obj?: any) {
         this.name = obj && obj.name !== undefined ? obj.name : null;

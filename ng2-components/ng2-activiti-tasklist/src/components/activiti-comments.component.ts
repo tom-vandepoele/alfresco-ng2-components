@@ -15,11 +15,11 @@
  * limitations under the License.
  */
 
-import { Component, Input, Output, ViewChild, OnChanges, SimpleChanges, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { AlfrescoTranslationService } from 'ng2-alfresco-core';
-import { ActivitiTaskListService } from './../services/activiti-tasklist.service';
+import { Observable, Observer } from 'rxjs/Rx';
 import { Comment } from '../models/comment.model';
-import { Observer, Observable } from 'rxjs/Rx';
+import { ActivitiTaskListService } from './../services/activiti-tasklist.service';
 
 declare let dialogPolyfill: any;
 
@@ -32,23 +32,23 @@ declare let dialogPolyfill: any;
 export class ActivitiComments implements OnChanges {
 
     @Input()
-    taskId: string;
+    public taskId: string;
 
     @Input()
-    readOnly: boolean = false;
+    public readOnly: boolean = false;
 
     @Output()
-    error: EventEmitter<any> = new EventEmitter<any>();
+    public error: EventEmitter<any> = new EventEmitter<any>();
 
     @ViewChild('dialog')
-    dialog: any;
+    public dialog: any;
 
-    comments: Comment [] = [];
+    public comments: Comment [] = [];
 
     private commentObserver: Observer<Comment>;
-    comment$: Observable<Comment>;
+    public comment$: Observable<Comment>;
 
-    message: string;
+    public message: string;
 
     /**
      * Constructor
@@ -62,14 +62,14 @@ export class ActivitiComments implements OnChanges {
             translateService.addTranslationFolder('ng2-activiti-tasklist', 'assets/ng2-activiti-tasklist');
         }
 
-        this.comment$ = new Observable<Comment>(observer =>  this.commentObserver = observer).share();
+        this.comment$ = new Observable<Comment>((observer) => this.commentObserver = observer).share();
         this.comment$.subscribe((comment: Comment) => {
             this.comments.push(comment);
         });
     }
 
-    ngOnChanges(changes: SimpleChanges) {
-        let taskId = changes['taskId'];
+    public ngOnChanges(changes: SimpleChanges): void {
+        let taskId = changes.taskId;
         if (taskId) {
             if (taskId.currentValue) {
                 this.getTaskComments(taskId.currentValue);
@@ -79,7 +79,7 @@ export class ActivitiComments implements OnChanges {
         }
     }
 
-    private getTaskComments(taskId: string) {
+    private getTaskComments(taskId: string): void {
         this.resetComments();
         if (taskId) {
             this.activitiTaskList.getTaskComments(taskId).subscribe(
@@ -97,18 +97,18 @@ export class ActivitiComments implements OnChanges {
         }
     }
 
-    private resetComments() {
+    private resetComments(): void {
         this.comments = [];
     }
 
-    public showDialog() {
+    public showDialog(): void {
         if (!this.dialog.nativeElement.showModal) {
             dialogPolyfill.registerDialog(this.dialog.nativeElement);
         }
         this.dialog.nativeElement.showModal();
     }
 
-    public add() {
+    public add(): void {
         this.activitiTaskList.addTaskComment(this.taskId, this.message).subscribe(
             (res: Comment) => {
                 this.comments.push(res);
@@ -121,7 +121,7 @@ export class ActivitiComments implements OnChanges {
         this.cancel();
     }
 
-    public cancel() {
+    public cancel(): void {
         if (this.dialog) {
             this.dialog.nativeElement.close();
         }

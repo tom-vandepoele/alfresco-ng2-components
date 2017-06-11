@@ -29,7 +29,7 @@ export class NoContentTemplateComponent implements AfterContentInit {
     constructor(private dataTable: DataTableComponent) {
     }
 
-    ngAfterContentInit() {
+    public ngAfterContentInit(): void {
         this.dataTable.noContentTemplate = this.template;
     }
 }

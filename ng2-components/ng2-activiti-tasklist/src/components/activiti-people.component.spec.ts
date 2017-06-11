@@ -15,13 +15,13 @@
  * limitations under the License.
  */
 
-import { ComponentFixture, TestBed, async } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { AlfrescoTranslationService, CoreModule, LogService } from 'ng2-alfresco-core';
 import { Observable } from 'rxjs/Rx';
-import { CoreModule, AlfrescoTranslationService, LogService } from 'ng2-alfresco-core';
-import { ActivitiPeopleService } from '../services/activiti-people.service';
-import { ActivitiPeople } from './activiti-people.component';
-import { ActivitiPeopleSearch } from './activiti-people-search.component';
 import { User } from '../models/user.model';
+import { ActivitiPeopleService } from '../services/activiti-people.service';
+import { ActivitiPeopleSearch } from './activiti-people-search.component';
+import { ActivitiPeople } from './activiti-people.component';
 
 declare let jasmine: any;
 

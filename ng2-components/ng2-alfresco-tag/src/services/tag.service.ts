@@ -71,6 +71,11 @@ export class TagService {
         return promiseRemove;
     }
 
+    /**
+     * Throw the error
+     * @param error
+     * @returns {ErrorObservable}
+     */
     private handleError(error: Response): ErrorObservable<string | Response> {
         this.logService.error(error);
         return Observable.throw(error || 'Server error');

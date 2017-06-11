@@ -16,11 +16,11 @@
  */
 
 import { SimpleChange } from '@angular/core';
-import { ComponentFixture, TestBed, async } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { Observable } from 'rxjs/Rx';
 
-import { AlfrescoTranslationService, CoreModule } from 'ng2-alfresco-core';
 import { ActivitiContentService } from 'ng2-activiti-form';
+import { AlfrescoTranslationService, CoreModule } from 'ng2-alfresco-core';
 
 import { ActivitiCreateTaskAttachmentComponent } from './adf-create-task-attachment.component';
 
@@ -67,13 +67,13 @@ describe('Activiti Task Create Attachment', () => {
 
     it('should not call createTaskRelatedContent service when taskId changed', () => {
         let change = new SimpleChange(null, '123', true);
-        component.ngOnChanges({ 'taskId': change });
+        component.ngOnChanges({ taskId: change });
         expect(createTaskRelatedContentSpy).not.toHaveBeenCalled();
     });
 
     it('should not call createTaskRelatedContent service when there is no file uploaded', () => {
         let change = new SimpleChange(null, '123', true);
-        component.ngOnChanges({ 'taskId': change });
+        component.ngOnChanges({ taskId: change });
         let customEvent = {
             detail: {
                 files: [
@@ -86,7 +86,7 @@ describe('Activiti Task Create Attachment', () => {
 
     it('should call createTaskRelatedContent service when there is a file uploaded', () => {
         let change = new SimpleChange(null, '123', true);
-        component.ngOnChanges({ 'taskId': change });
+        component.ngOnChanges({ taskId: change });
         let file = new File([new Blob()], 'Test');
         let customEvent = {
             detail: {

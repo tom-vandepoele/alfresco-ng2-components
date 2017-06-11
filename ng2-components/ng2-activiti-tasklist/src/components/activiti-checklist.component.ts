@@ -15,11 +15,11 @@
  * limitations under the License.
  */
 
-import { Component, Input, OnInit, ViewChild, OnChanges, SimpleChanges, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { AlfrescoTranslationService, LogService } from 'ng2-alfresco-core';
-import { ActivitiTaskListService } from './../services/activiti-tasklist.service';
+import { Observable, Observer } from 'rxjs/Rx';
 import { TaskDetailsModel } from '../models/task-details.model';
-import { Observer, Observable } from 'rxjs/Rx';
+import { ActivitiTaskListService } from './../services/activiti-tasklist.service';
 
 declare let dialogPolyfill: any;
 
@@ -32,32 +32,32 @@ declare let dialogPolyfill: any;
 export class ActivitiChecklist implements OnInit, OnChanges {
 
     @Input()
-    taskId: string;
+    public taskId: string;
 
     @Input()
-    readOnly: boolean = false;
+    public readOnly: boolean = false;
 
     @Input()
-    assignee: string;
+    public assignee: string;
 
     @Output()
-    checklistTaskCreated: EventEmitter<TaskDetailsModel> = new EventEmitter<TaskDetailsModel>();
+    public checklistTaskCreated: EventEmitter<TaskDetailsModel> = new EventEmitter<TaskDetailsModel>();
 
     @Output()
-    checklistTaskDeleted: EventEmitter<string> = new EventEmitter<string>();
+    public checklistTaskDeleted: EventEmitter<string> = new EventEmitter<string>();
 
     @Output()
-    error: EventEmitter<any> = new EventEmitter<any>();
+    public  error: EventEmitter<any> = new EventEmitter<any>();
 
     @ViewChild('dialog')
-    dialog: any;
+    public dialog: any;
 
-    taskName: string;
+    public taskName: string;
 
-    checklist: TaskDetailsModel [] = [];
+    public checklist: TaskDetailsModel [] = [];
 
     private taskObserver: Observer<TaskDetailsModel>;
-    task$: Observable<TaskDetailsModel>;
+    public task$: Observable<TaskDetailsModel>;
 
     /**
      * Constructor
@@ -71,27 +71,26 @@ export class ActivitiChecklist implements OnInit, OnChanges {
         if (translateService) {
             translateService.addTranslationFolder('ng2-activiti-tasklist', 'assets/ng2-activiti-tasklist');
         }
-        this.task$ = new Observable<TaskDetailsModel>(observer => this.taskObserver = observer).share();
+        this.task$ = new Observable<TaskDetailsModel>((observer) => this.taskObserver = observer).share();
     }
 
-    ngOnInit() {
+    public ngOnInit(): void {
         this.task$.subscribe((task: TaskDetailsModel) => {
             this.checklist.push(task);
         });
     }
 
-    ngOnChanges(changes: SimpleChanges) {
-        let taskId = changes['taskId'];
+    public ngOnChanges(changes: SimpleChanges): void {
+        let taskId = changes.taskId;
         if (taskId && taskId.currentValue) {
             this.getTaskChecklist(taskId.currentValue);
-            return;
         }
     }
 
-    public getTaskChecklist(taskId: string) {
+    public getTaskChecklist(taskId: string): void {
         this.checklist = [];
-        if (this.taskId) {
-            this.activitiTaskList.getTaskChecklist(this.taskId).subscribe(
+        if (taskId) {
+            this.activitiTaskList.getTaskChecklist(taskId).subscribe(
                 (res: TaskDetailsModel[]) => {
                     res.forEach((task) => {
                         this.taskObserver.next(task);
@@ -106,7 +105,7 @@ export class ActivitiChecklist implements OnInit, OnChanges {
         }
     }
 
-    public showDialog() {
+    public showDialog(): void {
         if (this.dialog) {
             if (!this.dialog.nativeElement.showModal) {
                 dialogPolyfill.registerDialog(this.dialog.nativeElement);
@@ -115,11 +114,11 @@ export class ActivitiChecklist implements OnInit, OnChanges {
         }
     }
 
-    public add() {
+    public add(): void {
         let newTask = new TaskDetailsModel({
             name: this.taskName,
             parentTaskId: this.taskId,
-            assignee: { id: this.assignee }
+            assignee: {id: this.assignee}
         });
         this.activitiTaskList.addTask(newTask).subscribe(
             (res: TaskDetailsModel) => {
@@ -134,10 +133,10 @@ export class ActivitiChecklist implements OnInit, OnChanges {
         this.cancel();
     }
 
-    public delete(taskId: string) {
+    public delete(taskId: string): void {
         this.activitiTaskList.deleteTask(taskId).subscribe(
             () => {
-                this.checklist = this.checklist.filter(check => check.id !== taskId);
+                this.checklist = this.checklist.filter((check) => check.id !== taskId);
                 this.checklistTaskDeleted.emit(taskId);
             },
             (error) => {
@@ -145,7 +144,7 @@ export class ActivitiChecklist implements OnInit, OnChanges {
             });
     }
 
-    public cancel() {
+    public cancel(): void {
         if (this.dialog) {
             this.dialog.nativeElement.close();
         }

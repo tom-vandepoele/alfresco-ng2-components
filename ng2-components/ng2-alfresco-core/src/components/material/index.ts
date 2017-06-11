@@ -15,10 +15,10 @@
  * limitations under the License.
  */
 
-import { MDL } from './mdl-upgrade-element.directive';
 import { AlfrescoMdlButtonDirective } from './mdl-button.directive';
 import { AlfrescoMdlMenuDirective } from './mdl-menu.directive';
 import { AlfrescoMdlTextFieldDirective } from './mdl-textfield.directive';
+import { MDL } from './mdl-upgrade-element.directive';
 
 export * from './mdl-upgrade-element.directive';
 export * from './mdl-button.directive';

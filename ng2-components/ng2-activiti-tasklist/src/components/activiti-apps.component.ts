@@ -15,13 +15,13 @@
  * limitations under the License.
  */
 
-import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AlfrescoTranslationService } from 'ng2-alfresco-core';
-import { ActivitiTaskListService } from './../services/activiti-tasklist.service';
+import { Observable } from 'rxjs/Observable';
+import { Observer } from 'rxjs/Observer';
 import { AppDefinitionRepresentationModel } from '../models/filter.model';
 import { IconModel } from '../models/icon.model';
-import { Observer } from 'rxjs/Observer';
-import { Observable } from 'rxjs/Observable';
+import { ActivitiTaskListService } from './../services/activiti-tasklist.service';
 
 declare let componentHandler: any;
 
@@ -42,23 +42,23 @@ export class ActivitiApps implements OnInit {
     public static DEFAULT_TASKS_APP_MATERIAL_ICON: string = 'favorite_border';
 
     @Input()
-    layoutType: string = ActivitiApps.LAYOUT_GRID;
+    public layoutType: string = ActivitiApps.LAYOUT_GRID;
 
     @Input()
-    filtersAppId: any[];
+    public filtersAppId: any[];
 
     @Output()
-    appClick: EventEmitter<AppDefinitionRepresentationModel> = new EventEmitter<AppDefinitionRepresentationModel>();
+    public appClick: EventEmitter<AppDefinitionRepresentationModel> = new EventEmitter<AppDefinitionRepresentationModel>();
 
     @Output()
-    error: EventEmitter<any> = new EventEmitter<any>();
+    public error: EventEmitter<any> = new EventEmitter<any>();
 
     private appsObserver: Observer<AppDefinitionRepresentationModel>;
-    apps$: Observable<AppDefinitionRepresentationModel>;
+    public apps$: Observable<AppDefinitionRepresentationModel>;
 
-    currentApp: AppDefinitionRepresentationModel;
+    public currentApp: AppDefinitionRepresentationModel;
 
-    appList: AppDefinitionRepresentationModel [] = [];
+    public appList: AppDefinitionRepresentationModel [] = [];
 
     private iconsMDL: IconModel;
 
@@ -74,10 +74,10 @@ export class ActivitiApps implements OnInit {
             translateService.addTranslationFolder('ng2-activiti-tasklist', 'assets/ng2-activiti-tasklist');
         }
 
-        this.apps$ = new Observable<AppDefinitionRepresentationModel>(observer =>  this.appsObserver = observer).share();
+        this.apps$ = new Observable<AppDefinitionRepresentationModel>((observer) => this.appsObserver = observer).share();
     }
 
-    ngOnInit() {
+    public ngOnInit(): void {
         if (!this.isValidType()) {
             this.setDefaultLayoutType();
         }
@@ -89,7 +89,7 @@ export class ActivitiApps implements OnInit {
         this.load();
     }
 
-    private load() {
+    private load(): void {
         this.activitiTaskList.getDeployedApplications().subscribe(
             (res) => {
                 res = this.filterApps(res);
@@ -114,7 +114,7 @@ export class ActivitiApps implements OnInit {
      * Pass the selected app as next
      * @param app
      */
-    public selectApp(app: AppDefinitionRepresentationModel) {
+    public selectApp(app: AppDefinitionRepresentationModel): void {
         this.currentApp = app;
         this.appClick.emit(app);
     }
@@ -124,7 +124,7 @@ export class ActivitiApps implements OnInit {
      * @param appId
      * @returns {boolean}
      */
-    isSelected(appId: number): boolean {
+    public isSelected(appId: number): boolean {
         return (this.currentApp !== undefined && appId === this.currentApp.id);
     }
 
@@ -153,7 +153,7 @@ export class ActivitiApps implements OnInit {
      * Check if the value of the layoutType property is an allowed value
      * @returns {boolean}
      */
-    isValidType(): boolean {
+    public isValidType(): boolean {
         if (this.layoutType && (this.layoutType === ActivitiApps.LAYOUT_LIST || this.layoutType === ActivitiApps.LAYOUT_GRID)) {
             return true;
         }
@@ -163,7 +163,7 @@ export class ActivitiApps implements OnInit {
     /**
      * Assign the default value to LayoutType
      */
-    setDefaultLayoutType(): void {
+    public setDefaultLayoutType(): void {
         this.layoutType = ActivitiApps.LAYOUT_GRID;
     }
 
@@ -171,7 +171,7 @@ export class ActivitiApps implements OnInit {
      * Return true if the layout type is LIST
      * @returns {boolean}
      */
-    isList(): boolean {
+    public isList(): boolean {
         return this.layoutType === ActivitiApps.LAYOUT_LIST;
     }
 
@@ -179,19 +179,19 @@ export class ActivitiApps implements OnInit {
      * Return true if the layout type is GRID
      * @returns {boolean}
      */
-    isGrid(): boolean {
+    public isGrid(): boolean {
         return this.layoutType === ActivitiApps.LAYOUT_GRID;
     }
 
-    isEmpty(): boolean {
+    public isEmpty(): boolean {
         return this.appList.length === 0;
     }
 
-    getTheme(app: AppDefinitionRepresentationModel): string {
+    public getTheme(app: AppDefinitionRepresentationModel): string {
         return app.theme ? app.theme : '';
     }
 
-    getBackgroundIcon(app: AppDefinitionRepresentationModel): string {
+    public getBackgroundIcon(app: AppDefinitionRepresentationModel): string {
         return this.iconsMDL.mapGlyphiconToMaterialDesignIcons(app.icon);
     }
 

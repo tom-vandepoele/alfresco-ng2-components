@@ -16,25 +16,25 @@
  */
 
 import {
-    Component,
-    Input,
-    Output,
-    ContentChild,
     AfterContentInit,
+    Component,
+    ContentChild,
     EventEmitter,
+    Input,
     OnChanges,
+    Output,
     SimpleChanges
 } from '@angular/core';
-import { AlfrescoTranslationService, LogService, DataColumnListComponent } from 'ng2-alfresco-core';
+import { AlfrescoTranslationService, DataColumnListComponent, LogService } from 'ng2-alfresco-core';
 import {
-    ObjectDataTableAdapter,
-    DataTableAdapter,
+    DataColumn,
     DataRowEvent,
+    DataTableAdapter,
     ObjectDataRow,
-    DataColumn
+    ObjectDataTableAdapter
 } from 'ng2-alfresco-datatable';
-import { ActivitiTaskListService } from './../services/activiti-tasklist.service';
 import { TaskQueryRequestRepresentationModel } from '../models/filter.model';
+import { ActivitiTaskListService } from './../services/activiti-tasklist.service';
 
 @Component({
     selector: 'activiti-tasklist',
@@ -45,42 +45,43 @@ export class ActivitiTaskList implements OnChanges, AfterContentInit {
 
     private requestNode: TaskQueryRequestRepresentationModel;
 
-    @ContentChild(DataColumnListComponent) columnList: DataColumnListComponent;
+    @ContentChild(DataColumnListComponent)
+    public columnList: DataColumnListComponent;
 
     @Input()
-    appId: string;
+    public appId: string;
 
     @Input()
-    processDefinitionKey: string;
+    public processDefinitionKey: string;
 
     @Input()
-    state: string;
+    public state: string;
 
     @Input()
-    assignment: string;
+    public assignment: string;
 
     @Input()
-    sort: string;
+    public sort: string;
 
     @Input()
-    name: string;
+    public name: string;
 
     @Input()
-    landingTaskId: string;
+    public landingTaskId: string;
 
     @Input()
-    data: DataTableAdapter;
+    public data: DataTableAdapter;
 
     @Output()
-    rowClick: EventEmitter<string> = new EventEmitter<string>();
+    public rowClick: EventEmitter<string> = new EventEmitter<string>();
 
     @Output()
-    onSuccess: EventEmitter<any> = new EventEmitter<any>();
+    public onSuccess: EventEmitter<any> = new EventEmitter<any>();
 
     @Output()
-    onError: EventEmitter<any> = new EventEmitter<any>();
+    public onError: EventEmitter<any> = new EventEmitter<any>();
 
-    currentInstanceId: string;
+    public currentInstanceId: string;
 
     /**
      * Toggles custom data source mode.
@@ -90,11 +91,11 @@ export class ActivitiTaskList implements OnChanges, AfterContentInit {
      * @type {boolean}
      * @memberOf ActivitiTaskList
      */
-    hasCustomDataSource: boolean = false;
+    public hasCustomDataSource: boolean = false;
 
     private defaultSchemaColumn: DataColumn[] = [
-        { type: 'text', key: 'name', title: 'Name', cssClass: 'full-width name-column', sortable: true },
-        { type: 'text', key: 'created', title: 'Created', cssClass: 'hidden', sortable: true }
+        {type: 'text', key: 'name', title: 'Name', cssClass: 'full-width name-column', sortable: true},
+        {type: 'text', key: 'created', title: 'Created', cssClass: 'hidden', sortable: true}
     ];
 
     constructor(private translateService: AlfrescoTranslationService,
@@ -105,7 +106,7 @@ export class ActivitiTaskList implements OnChanges, AfterContentInit {
         }
     }
 
-    ngAfterContentInit() {
+    public ngAfterContentInit(): void {
         this.setupSchema();
     }
 
@@ -113,11 +114,11 @@ export class ActivitiTaskList implements OnChanges, AfterContentInit {
      * Setup html-based (html definitions) or code behind (data adapter) schema.
      * If component is assigned with an empty data adater the default schema settings applied.
      */
-    setupSchema(): void {
+    public setupSchema(): void {
         let schema: DataColumn[] = [];
 
         if (this.columnList && this.columnList.columns && this.columnList.columns.length > 0) {
-            schema = this.columnList.columns.map(c => <DataColumn> c);
+            schema = this.columnList.columns.map((c) => <DataColumn> c);
         }
 
         if (!this.data) {
@@ -131,13 +132,13 @@ export class ActivitiTaskList implements OnChanges, AfterContentInit {
         }
     }
 
-    ngOnChanges(changes: SimpleChanges) {
+    public ngOnChanges(changes: SimpleChanges): void {
         if (this.isPropertyChanged(changes)) {
             this.reload();
         }
     }
 
-    setCustomDataSource(rows: ObjectDataRow[]): void {
+    public setCustomDataSource(rows: ObjectDataRow[]): void {
         if (this.data) {
             this.data.setRows(rows);
             this.hasCustomDataSource = true;
@@ -147,13 +148,13 @@ export class ActivitiTaskList implements OnChanges, AfterContentInit {
     private isPropertyChanged(changes: SimpleChanges): boolean {
         let changed: boolean = false;
 
-        let appId = changes['appId'];
-        let processDefinitionKey = changes['processDefinitionKey'];
-        let state = changes['state'];
-        let sort = changes['sort'];
-        let name = changes['name'];
-        let assignment = changes['assignment'];
-        let landingTaskId = changes['landingTaskId'];
+        let appId = changes.appId;
+        let processDefinitionKey = changes.processDefinitionKey;
+        let state = changes.state;
+        let sort = changes.sort;
+        let name = changes.name;
+        let assignment = changes.assignment;
+        let landingTaskId = changes.landingTaskId;
         if (appId && appId.currentValue) {
             changed = true;
         } else if (processDefinitionKey && processDefinitionKey.currentValue) {
@@ -172,14 +173,14 @@ export class ActivitiTaskList implements OnChanges, AfterContentInit {
         return changed;
     }
 
-    reload(): void {
+    public reload(): void {
         if (!this.hasCustomDataSource) {
             this.requestNode = this.createRequestNode();
             this.load(this.requestNode);
         }
     }
 
-    private load(requestNode: TaskQueryRequestRepresentationModel) {
+    private load(requestNode: TaskQueryRequestRepresentationModel): void {
         this.taskListService.getTotalTasks(requestNode).subscribe(
             (res) => {
                 requestNode.size = res.total;
@@ -215,7 +216,7 @@ export class ActivitiTaskList implements OnChanges, AfterContentInit {
      *
      * @param instances
      */
-    private renderInstances(instances: any[]) {
+    private renderInstances(instances: any[]): void {
         instances = this.optimizeNames(instances);
         this.data.setRows(instances);
     }
@@ -223,11 +224,11 @@ export class ActivitiTaskList implements OnChanges, AfterContentInit {
     /**
      * Select the task given in input if present
      */
-    selectTask(taskIdToSelect: string): void {
+    public selectTask(taskIdToSelect: string): void {
         if (!this.isListEmpty()) {
             let rows = this.data.getRows();
             if (rows.length > 0) {
-                let dataRow = rows.find(row => row.getValue('id') === taskIdToSelect) || rows[0];
+                let dataRow = rows.find((row) => row.getValue('id') === taskIdToSelect) || rows[0];
                 this.data.selectedRow = dataRow;
                 this.currentInstanceId = dataRow.getValue('id');
             }
@@ -243,7 +244,7 @@ export class ActivitiTaskList implements OnChanges, AfterContentInit {
      * Return the current id
      * @returns {string}
      */
-    getCurrentId(): string {
+    public getCurrentId(): string {
         return this.currentInstanceId;
     }
 
@@ -252,7 +253,7 @@ export class ActivitiTaskList implements OnChanges, AfterContentInit {
      * @param taskId
      * @returns {boolean}
      */
-    isEqualToCurrentId(taskId: string) {
+    public isEqualToCurrentId(taskId: string): boolean {
         return this.currentInstanceId === taskId ? true : false;
     }
 
@@ -260,7 +261,7 @@ export class ActivitiTaskList implements OnChanges, AfterContentInit {
      * Check if the list is empty
      * @returns {ObjectDataTableAdapter|boolean}
      */
-    isListEmpty(): boolean {
+    public isListEmpty(): boolean {
         return this.data === undefined ||
             (this.data && this.data.getRows() && this.data.getRows().length === 0);
     }
@@ -269,7 +270,7 @@ export class ActivitiTaskList implements OnChanges, AfterContentInit {
      * Emit the event rowClick passing the current task id when the row is clicked
      * @param event
      */
-    onRowClick(event: DataRowEvent) {
+    public onRowClick(event: DataRowEvent): void {
         let item = event;
         this.currentInstanceId = item.value.getValue('id');
         this.rowClick.emit(this.currentInstanceId);
@@ -280,15 +281,15 @@ export class ActivitiTaskList implements OnChanges, AfterContentInit {
      * @param istances
      * @returns {any[]}
      */
-    private optimizeNames(istances: any[]) {
-        istances = istances.map(t => {
+    private optimizeNames(istances: any[]): any[] {
+        istances = istances.map((t) => {
             t.obj.name = t.obj.name || 'No name';
             return t;
         });
         return istances;
     }
 
-    private createRequestNode() {
+    private createRequestNode(): any {
         let requestNode = {
             appDefinitionId: this.appId,
             processDefinitionKey: this.processDefinitionKey,

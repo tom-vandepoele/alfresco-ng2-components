@@ -33,33 +33,33 @@ import {ActivitiProcessInstanceTasks} from './activiti-process-instance-tasks.co
 export class ActivitiProcessInstanceDetails implements OnChanges {
 
     @Input()
-    processInstanceId: string;
+    public processInstanceId: string;
 
     @ViewChild(ActivitiProcessInstanceHeader)
-    processInstanceHeader: ActivitiProcessInstanceHeader;
+    public processInstanceHeader: ActivitiProcessInstanceHeader;
 
     @ViewChild(ActivitiProcessInstanceTasks)
-    tasksList: ActivitiProcessInstanceTasks;
+    public tasksList: ActivitiProcessInstanceTasks;
 
     @Input()
-    showTitle: boolean = true;
+    public showTitle: boolean = true;
 
     @Input()
-    showRefreshButton: boolean = true;
+    public showRefreshButton: boolean = true;
 
     @Output()
-    processCancelled: EventEmitter<any> = new EventEmitter<any>();
+    public processCancelled: EventEmitter<any> = new EventEmitter<any>();
 
     @Output()
-    error: EventEmitter<any> = new EventEmitter<any>();
+    public error: EventEmitter<any> = new EventEmitter<any>();
 
     @Output()
-    taskClick: EventEmitter<TaskDetailsEvent> = new EventEmitter<TaskDetailsEvent>();
+    public taskClick: EventEmitter<TaskDetailsEvent> = new EventEmitter<TaskDetailsEvent>();
 
-    processInstanceDetails: ProcessInstance;
+    public processInstanceDetails: ProcessInstance;
 
     @Output()
-    showProcessDiagram: EventEmitter<any> = new EventEmitter<any>();
+    public showProcessDiagram: EventEmitter<any> = new EventEmitter<any>();
 
     /**
      * Constructor
@@ -75,14 +75,13 @@ export class ActivitiProcessInstanceDetails implements OnChanges {
         }
     }
 
-    ngOnChanges(changes: SimpleChanges) {
-        let processInstanceId = changes['processInstanceId'];
-        if (processInstanceId && !processInstanceId.currentValue) {
+    public ngOnChanges(changes: SimpleChanges): void {
+        if (changes.processInstanceId && !changes.processInstanceId.currentValue) {
             this.reset();
             return;
         }
-        if (processInstanceId && processInstanceId.currentValue) {
-            this.load(processInstanceId.currentValue);
+        if (changes.processInstanceId && changes.processInstanceId.currentValue) {
+            this.load(changes.processInstanceId.currentValue);
             return;
         }
     }
@@ -90,11 +89,11 @@ export class ActivitiProcessInstanceDetails implements OnChanges {
     /**
      * Reset the task detail to undefined
      */
-    reset() {
+    public reset(): void {
         this.processInstanceDetails = null;
     }
 
-    load(processId: string) {
+    public load(processId: string): void {
         if (processId) {
             this.activitiProcess.getProcess(processId).subscribe(
                 (res: ProcessInstance) => {
@@ -104,11 +103,11 @@ export class ActivitiProcessInstanceDetails implements OnChanges {
         }
     }
 
-    isRunning(): boolean {
+    public isRunning(): boolean {
         return this.processInstanceDetails && !this.processInstanceDetails.ended;
     }
 
-    cancelProcess() {
+    public cancelProcess(): void {
         this.activitiProcess.cancelProcess(this.processInstanceId).subscribe(
             (data) => {
                 this.processCancelled.emit(data);
@@ -118,11 +117,11 @@ export class ActivitiProcessInstanceDetails implements OnChanges {
     }
 
     // bubbles (taskClick) event
-    onTaskClicked(event: TaskDetailsEvent) {
-        this.taskClick.emit(event: Event);
+    public onTaskClicked(event: TaskDetailsEvent): void {
+        this.taskClick.emit(event);
     }
 
-    getProcessNameOrDescription(dateFormat): string {
+    public getProcessNameOrDescription(dateFormat): string {
         let name = '';
         if (this.processInstanceDetails) {
             name = this.processInstanceDetails.name ||
@@ -131,7 +130,7 @@ export class ActivitiProcessInstanceDetails implements OnChanges {
         return name;
     }
 
-    getFormatDate(value, format: string) {
+    public getFormatDate(value, format: string): any {
         let datePipe = new DatePipe('en-US');
         try {
             return datePipe.transform(value, format);
@@ -140,8 +139,8 @@ export class ActivitiProcessInstanceDetails implements OnChanges {
         }
     }
 
-    onShowProcessDiagram(event: any) {
-        this.showProcessDiagram.emit(event: Event);
+    public onShowProcessDiagram(event: any): void {
+        this.showProcessDiagram.emit(event);
     }
 
 }

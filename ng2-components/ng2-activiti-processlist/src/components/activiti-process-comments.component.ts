@@ -34,21 +34,21 @@ declare let dialogPolyfill: any;
 export class ActivitiProcessComments implements OnChanges {
 
     @Input()
-    processInstanceId: string;
+    public processInstanceId: string;
 
     @Output()
-    error: EventEmitter<any> = new EventEmitter<any>();
+    public error: EventEmitter<any> = new EventEmitter<any>();
 
     @ViewChild('dialog')
-    dialog: any;
+    public dialog: any;
 
-    comments: Comment [] = [];
+    public comments: Comment [] = [];
 
-    commentObserver: Observer<Comment>;
+    public commentObserver: Observer<Comment>;
 
-    comment$: Observable<Comment>;
+    public comment$: Observable<Comment>;
 
-    message: string;
+    public message: string;
 
     /**
      * Constructor
@@ -68,8 +68,8 @@ export class ActivitiProcessComments implements OnChanges {
         });
     }
 
-    ngOnChanges(changes: SimpleChanges) {
-        let processInstanceId = changes['processInstanceId'];
+    public ngOnChanges(changes: SimpleChanges): void {
+        let processInstanceId = changes.processInstanceId;
         if (processInstanceId) {
             if (processInstanceId.currentValue) {
                 this.getProcessComments(processInstanceId.currentValue);
@@ -79,7 +79,7 @@ export class ActivitiProcessComments implements OnChanges {
         }
     }
 
-    private getProcessComments(processInstanceId: string) {
+    private getProcessComments(processInstanceId: string): void {
         this.comments = [];
         if (processInstanceId) {
             this.activitiProcess.getProcessInstanceComments(processInstanceId).subscribe(
@@ -97,11 +97,11 @@ export class ActivitiProcessComments implements OnChanges {
         }
     }
 
-    private resetComments() {
+    private resetComments(): void {
         this.comments = [];
     }
 
-    public showDialog() {
+    public showDialog(): void {
         if (!this.dialog.nativeElement.showModal) {
             dialogPolyfill.registerDialog(this.dialog.nativeElement);
         }
@@ -110,7 +110,7 @@ export class ActivitiProcessComments implements OnChanges {
         }
     }
 
-    public add() {
+    public add(): void {
         this.activitiProcess.addProcessInstanceComment(this.processInstanceId, this.message).subscribe(
             (res: Comment) => {
                 this.comments.push(res);
@@ -123,7 +123,7 @@ export class ActivitiProcessComments implements OnChanges {
         this.cancel();
     }
 
-    public cancel() {
+    public cancel(): void {
         if (this.dialog) {
             this.dialog.nativeElement.close();
         }

@@ -34,37 +34,37 @@ declare let dialogPolyfill: any;
 export class ActivitiProcessInstanceTasks implements OnInit, OnChanges {
 
     @Input()
-    processInstanceDetails: ProcessInstance;
+    public processInstanceDetails: ProcessInstance;
 
     @Input()
-    showRefreshButton: boolean = true;
+    public showRefreshButton: boolean = true;
 
     @Output()
-    error: EventEmitter<any> = new EventEmitter<any>();
+    public error: EventEmitter<any> = new EventEmitter<any>();
 
-    activeTasks: TaskDetailsModel[] = [];
-    completedTasks: TaskDetailsModel[] = [];
+    public activeTasks: TaskDetailsModel[] = [];
+    public completedTasks: TaskDetailsModel[] = [];
 
     private taskObserver: Observer<TaskDetailsModel>;
     private completedTaskObserver: Observer<TaskDetailsModel>;
 
-    task$: Observable<TaskDetailsModel>;
-    completedTask$: Observable<TaskDetailsModel>;
+    public task$: Observable<TaskDetailsModel>;
+    public completedTask$: Observable<TaskDetailsModel>;
 
-    message: string;
-    processId: string;
+    public message: string;
+    public processId: string;
 
     @ViewChild('dialog')
-    dialog: any;
+    public dialog: any;
 
     @ViewChild('startDialog')
-    startDialog: any;
+    public startDialog: any;
 
     @ViewChild('taskdetails')
-    taskdetails: any;
+    public taskdetails: any;
 
     @Output()
-    taskClick: EventEmitter<TaskDetailsEvent> = new EventEmitter<TaskDetailsEvent>();
+    public taskClick: EventEmitter<TaskDetailsEvent> = new EventEmitter<TaskDetailsEvent>();
 
     constructor(private translate: AlfrescoTranslationService,
                 private activitiProcess: ActivitiProcessService,
@@ -77,7 +77,7 @@ export class ActivitiProcessInstanceTasks implements OnInit, OnChanges {
         this.completedTask$ = new Observable<TaskDetailsModel>((observer) => this.completedTaskObserver = observer).share();
     }
 
-    ngOnInit() {
+    public  ngOnInit(): void {
         this.task$.subscribe((task: TaskDetailsModel) => {
             this.activeTasks.push(task);
         });
@@ -86,19 +86,19 @@ export class ActivitiProcessInstanceTasks implements OnInit, OnChanges {
         });
     }
 
-    ngOnChanges(changes: SimpleChanges) {
-        let processInstanceDetails = changes['processInstanceDetails'];
+    public ngOnChanges(changes: SimpleChanges): void {
+        let processInstanceDetails = changes.processInstanceDetails;
         if (processInstanceDetails && processInstanceDetails.currentValue) {
             this.load(processInstanceDetails.currentValue.id);
         }
     }
 
-    load(processId: string) {
+    public load(processId: string): void {
         this.loadActive(processId);
         this.loadCompleted(processId);
     }
 
-    loadActive(processId: string) {
+    public loadActive(processId: string): void {
         this.activeTasks = [];
         if (processId) {
             this.activitiProcess.getProcessTasks(processId, null).subscribe(
@@ -116,7 +116,7 @@ export class ActivitiProcessInstanceTasks implements OnInit, OnChanges {
         }
     }
 
-    loadCompleted(processId: string) {
+    public loadCompleted(processId: string): void {
         this.completedTasks = [];
         if (processId) {
             this.activitiProcess.getProcessTasks(processId, 'completed').subscribe(
@@ -134,11 +134,11 @@ export class ActivitiProcessInstanceTasks implements OnInit, OnChanges {
         }
     }
 
-    hasStartFormDefined(): boolean {
+    public hasStartFormDefined(): boolean {
         return this.processInstanceDetails && this.processInstanceDetails.startFormDefined === true;
     }
 
-    getUserFullName(user: any) {
+    public getUserFullName(user: any): string {
         if (user) {
             return (user.firstName && user.firstName !== 'null'
                     ? user.firstName + ' ' : '') +
@@ -147,7 +147,7 @@ export class ActivitiProcessInstanceTasks implements OnInit, OnChanges {
         return 'Nobody';
     }
 
-    getFormatDate(value, format: string) {
+    public getFormatDate(value, format: string): any {
         let datePipe = new DatePipe('en-US');
         try {
             return datePipe.transform(value, format);
@@ -156,17 +156,17 @@ export class ActivitiProcessInstanceTasks implements OnInit, OnChanges {
         }
     }
 
-    clickTask($event: any, task: TaskDetailsModel) {
+    public clickTask($event: any, task: TaskDetailsModel): void {
         let args = new TaskDetailsEvent(task);
         this.taskClick.emit(args);
     }
 
-    clickStartTask() {
+    public clickStartTask(): void {
         this.processId = this.processInstanceDetails.id;
         this.showStartDialog();
     }
 
-    showStartDialog() {
+    public showStartDialog(): void {
         if (!this.startDialog.nativeElement.showModal) {
             dialogPolyfill.registerDialog(this.startDialog.nativeElement);
         }
@@ -176,17 +176,17 @@ export class ActivitiProcessInstanceTasks implements OnInit, OnChanges {
         }
     }
 
-    closeSartDialog() {
+    public closeSartDialog(): void {
         if (this.startDialog) {
             this.startDialog.nativeElement.close();
         }
     }
 
-    onRefreshClicked() {
+    public onRefreshClicked(): void {
         this.load(this.processInstanceDetails.id);
     }
 
-    onFormContentClick() {
+    public  onFormContentClick(): void {
         if (this.startDialog) {
             this.startDialog.nativeElement.close();
         }

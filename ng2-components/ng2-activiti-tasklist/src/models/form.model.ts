@@ -24,8 +24,8 @@
  */
 export class Form {
 
-    id: number;
-    name: string;
+    public id: number;
+    public name: string;
 
     constructor(id: number, name: string) {
         this.name = name;

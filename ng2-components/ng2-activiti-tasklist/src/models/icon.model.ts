@@ -24,14 +24,14 @@ export class IconModel {
         this.initIconsMDL();
     }
 
-    mapGlyphiconToMaterialDesignIcons(icon: string) {
+    public  mapGlyphiconToMaterialDesignIcons(icon: string): any {
         return this.iconsMDL.get(icon) ? this.iconsMDL.get(icon) : IconModel.DEFAULT_TASKS_APP_MATERIAL_ICON;
     }
 
     /**
      * Map all the bootstrap glyphicon icons with Material design material icon
      */
-    initIconsMDL() {
+    public initIconsMDL(): void {
         this.iconsMDL = new Map<string, string>();
 
         this.iconsMDL.set('glyphicon-asterisk', 'ac_unit');

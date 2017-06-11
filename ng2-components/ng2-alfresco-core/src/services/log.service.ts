@@ -52,12 +52,12 @@ export class LogService {
 
 export class LogServiceMock {
 
-    assert(message?: any, ...optionalParams: any[]) {}
-    error(message?: any, ...optionalParams: any[]) {}
-    group(message?: any, ...optionalParams: any[]) {}
-    groupEnd(message?: any, ...optionalParams: any[]) {}
-    info(message?: any, ...optionalParams: any[]) {}
-    log(message?: any, ...optionalParams: any[]) {}
-    warn(message?: any, ...optionalParams: any[]) {}
+    public assert(message?: any, ...optionalParams: any[]): void {}
+    public error(message?: any, ...optionalParams: any[]): void {}
+    public group(message?: any, ...optionalParams: any[]): void {}
+    public groupEnd(message?: any, ...optionalParams: any[]): void {}
+    public info(message?: any, ...optionalParams: any[]): void {}
+    public log(message?: any, ...optionalParams: any[]): void {}
+    public warn(message?: any, ...optionalParams: any[]): void {}
 
 }

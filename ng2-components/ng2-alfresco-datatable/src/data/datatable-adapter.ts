@@ -57,7 +57,7 @@ export class DataSorting {
 
 export class DataRowEvent extends BaseUIEvent<DataRow> {
 
-    sender: any;
+    public sender: any;
 
     constructor(value: DataRow, domEvent: Event, sender?: any) {
         super();

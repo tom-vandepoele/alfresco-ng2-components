@@ -34,22 +34,22 @@ declare let dialogPolyfill: any;
 export class ActivitiProcessInstanceVariables implements OnInit, OnChanges {
 
     @Input()
-    processInstanceId: string;
+    public processInstanceId: string;
 
     @Input()
-    data: DataTableAdapter;
+    public data: DataTableAdapter;
 
     @Output()
-    error: EventEmitter<any> = new EventEmitter<any>();
+    public error: EventEmitter<any> = new EventEmitter<any>();
 
     @ViewChild('addDialog')
-    addDialog: DebugElement;
+    public addDialog: DebugElement;
 
     @ViewChild('editDialog')
-    editDialog: DebugElement;
+    public editDialog: DebugElement;
 
     @ViewChild('errorDialog')
-    errorDialog: DebugElement;
+    public errorDialog: DebugElement;
 
     private defaultSchemaColumn: any[] = [
         {type: 'text', key: 'name', title: 'Name', cssClass: 'full-width name-column', sortable: true},
@@ -57,9 +57,9 @@ export class ActivitiProcessInstanceVariables implements OnInit, OnChanges {
         {type: 'text', key: 'scope', title: 'Scope', sortable: true}
     ];
 
-    variableName: string;
-    variableValue: string;
-    variableScope: string;
+    public variableName: string;
+    public variableValue: string;
+    public variableScope: string;
 
     /**
      * Constructor
@@ -75,18 +75,17 @@ export class ActivitiProcessInstanceVariables implements OnInit, OnChanges {
 
     }
 
-    ngOnInit() {
+    public ngOnInit(): void {
         if (!this.data) {
             this.data = this.initDefaultSchemaColumns();
         }
         if (this.processInstanceId) {
             this.getProcessInstanceVariables(this.processInstanceId);
-            return;
         }
     }
 
-    ngOnChanges(changes: SimpleChanges) {
-        let processInstanceId = changes['processInstanceId'];
+    public ngOnChanges(changes: SimpleChanges): void {
+        let processInstanceId = changes.processInstanceId;
         if (processInstanceId) {
             if (processInstanceId.currentValue) {
                 this.getProcessInstanceVariables(processInstanceId.currentValue);
@@ -100,7 +99,7 @@ export class ActivitiProcessInstanceVariables implements OnInit, OnChanges {
      * Check if the list is empty
      * @returns {ObjectDataTableAdapter|boolean}
      */
-    isListEmpty(): boolean {
+    public isListEmpty(): boolean {
         return this.data === undefined ||
             (this.data && this.data.getRows() && this.data.getRows().length === 0);
     }
@@ -138,11 +137,11 @@ export class ActivitiProcessInstanceVariables implements OnInit, OnChanges {
      *
      * @param instances
      */
-    private renderInstances(instances: any[]) {
+    private renderInstances(instances: any[]): void {
         this.data.setRows(instances);
     }
 
-    private getProcessInstanceVariables(processInstanceId: string) {
+    private getProcessInstanceVariables(processInstanceId: string): void {
         if (processInstanceId) {
             this.activitiProcess.getProcessInstanceVariables(processInstanceId).subscribe(
                 (res: ProcessInstanceVariable[]) => {
@@ -158,25 +157,25 @@ export class ActivitiProcessInstanceVariables implements OnInit, OnChanges {
         }
     }
 
-    private resetVariables() {
+    private resetVariables(): void {
         if (this.data) {
             this.data.setRows([]);
         }
     }
 
-    private polyfillDialog(dialog: DebugElement) {
+    private polyfillDialog(dialog: DebugElement): void {
         if (!dialog.nativeElement.showModal) {
             dialogPolyfill.registerDialog(dialog.nativeElement);
         }
     }
 
-    public showAddDialog() {
+    public showAddDialog(): void {
         this.resetForm();
         this.polyfillDialog(this.addDialog);
         this.addDialog.nativeElement.showModal();
     }
 
-    public showEditDialog(row: ObjectDataRow) {
+    public showEditDialog(row: ObjectDataRow): void {
         this.variableName = row.getValue('name');
         this.variableValue = row.getValue('value');
         this.variableScope = row.getValue('scope');
@@ -184,12 +183,12 @@ export class ActivitiProcessInstanceVariables implements OnInit, OnChanges {
         this.editDialog.nativeElement.showModal();
     }
 
-    public showErrorDialog() {
+    public showErrorDialog(): void {
         this.polyfillDialog(this.errorDialog);
         this.errorDialog.nativeElement.showModal();
     }
 
-    public add() {
+    public add(): void {
         this.activitiProcess.createOrUpdateProcessInstanceVariables(this.processInstanceId, [new ProcessInstanceVariable({
             name: this.variableName,
             value: this.variableValue,
@@ -207,7 +206,7 @@ export class ActivitiProcessInstanceVariables implements OnInit, OnChanges {
         this.closeAddDialog();
     }
 
-    public edit() {
+    public edit(): void {
         this.activitiProcess.createOrUpdateProcessInstanceVariables(this.processInstanceId, [new ProcessInstanceVariable({
             name: this.variableName,
             value: this.variableValue,
@@ -225,35 +224,35 @@ export class ActivitiProcessInstanceVariables implements OnInit, OnChanges {
         this.closeEditDialog();
     }
 
-    public closeAddDialog() {
+    public closeAddDialog(): void {
         this.addDialog.nativeElement.close();
     }
 
-    public closeEditDialog() {
+    public closeEditDialog(): void {
         this.editDialog.nativeElement.close();
     }
 
-    public closeErrorDialog() {
+    public closeErrorDialog(): void {
         this.errorDialog.nativeElement.close();
     }
 
-    private resetForm() {
+    private resetForm(): void {
         this.variableName = '';
         this.variableValue = '';
         this.variableScope = 'global';
     }
 
-    private onDeleteVariable(row: ObjectDataRow) {
+    private onDeleteVariable(row: ObjectDataRow): void {
         this.activitiProcess.deleteProcessInstanceVariable(this.processInstanceId, row.getValue('name')).subscribe(() => {
-            this.getProcessInstanceVariables(this.processInstanceId);
-        },
-        (err) => {
-            this.showErrorDialog();
-            this.error.emit(err);
-        });
+                this.getProcessInstanceVariables(this.processInstanceId);
+            },
+            (err) => {
+                this.showErrorDialog();
+                this.error.emit(err);
+            });
     }
 
-    onExecuteRowAction(event: Event) {
+    public onExecuteRowAction(event: any): void {
         let row: ObjectDataRow = event.args.row;
         let action = event.args.action;
         if (action && action.id === 'delete') {
@@ -264,10 +263,10 @@ export class ActivitiProcessInstanceVariables implements OnInit, OnChanges {
         }
     }
 
-    onShowRowActionsMenu(event: DataCellEvent) {
+    public  onShowRowActionsMenu(event: DataCellEvent): void {
         event.value.actions = [
-            { id: 'delete', title: 'Delete' },
-            { id: 'edit', title: 'Edit' }
+            {id: 'delete', title: 'Delete'},
+            {id: 'edit', title: 'Edit'}
         ];
     }
 }

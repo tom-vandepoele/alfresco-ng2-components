@@ -71,10 +71,10 @@ describe('DataTable', () => {
 
         dataTable.data = new ObjectDataTableAdapter(
             [
-                { name: '1' },
-                { name: '2' }
+                {name: '1'},
+                {name: '2'}
             ],
-            [ new ObjectDataColumn({ key: 'name'}) ]
+            [new ObjectDataColumn({key: 'name'})]
         );
         const rows = dataTable.data.getRows();
         rows[0].isSelected = true;
@@ -94,10 +94,10 @@ describe('DataTable', () => {
         dataTable.selectionMode = 'single';
         dataTable.data = new ObjectDataTableAdapter(
             [
-                { name: '1' },
-                { name: '2' }
+                {name: '1'},
+                {name: '2'}
             ],
-            [ new ObjectDataColumn({ key: 'name'}) ]
+            [new ObjectDataColumn({key: 'name'})]
         );
         const rows = dataTable.data.getRows();
 
@@ -114,10 +114,10 @@ describe('DataTable', () => {
         dataTable.selectionMode = 'single';
         dataTable.data = new ObjectDataTableAdapter(
             [
-                { name: '1' },
-                { name: '2' }
+                {name: '1'},
+                {name: '2'}
             ],
-            [ new ObjectDataColumn({ key: 'name'}) ]
+            [new ObjectDataColumn({key: 'name'})]
         );
         const rows = dataTable.data.getRows();
 
@@ -134,10 +134,10 @@ describe('DataTable', () => {
         dataTable.selectionMode = 'multiple';
         dataTable.data = new ObjectDataTableAdapter(
             [
-                { name: '1' },
-                { name: '2' }
+                {name: '1'},
+                {name: '2'}
             ],
-            [ new ObjectDataColumn({ key: 'name'}) ]
+            [new ObjectDataColumn({key: 'name'})]
         );
         const rows = dataTable.data.getRows();
 
@@ -351,9 +351,9 @@ describe('DataTable', () => {
 
     it('should invert "select all" status', () => {
         expect(dataTable.isSelectAllChecked).toBeFalsy();
-        dataTable.onSelectAllClick(<MdCheckboxChange> { checked: true });
+        dataTable.onSelectAllClick(<MdCheckboxChange> {checked: true});
         expect(dataTable.isSelectAllChecked).toBeTruthy();
-        dataTable.onSelectAllClick(<MdCheckboxChange> { checked: false });
+        dataTable.onSelectAllClick(<MdCheckboxChange> {checked: false});
         expect(dataTable.isSelectAllChecked).toBeFalsy();
     });
 
@@ -365,13 +365,13 @@ describe('DataTable', () => {
         dataTable.multiselect = true;
         dataTable.ngAfterContentInit();
 
-        dataTable.onSelectAllClick(<MdCheckboxChange> { checked: true });
+        dataTable.onSelectAllClick(<MdCheckboxChange> {checked: true});
         expect(dataTable.isSelectAllChecked).toBe(true);
         for (let i = 0; i < rows.length; i++) {
             expect(rows[i].isSelected).toBe(true);
         }
 
-        dataTable.onSelectAllClick(<MdCheckboxChange> { checked: false });
+        dataTable.onSelectAllClick(<MdCheckboxChange> {checked: false});
         expect(dataTable.isSelectAllChecked).toBe(false);
         for (let i = 0; i < rows.length; i++) {
             expect(rows[i].isSelected).toBe(false);
@@ -382,7 +382,7 @@ describe('DataTable', () => {
         dataTable.multiselect = true;
         dataTable.ngOnChanges({'data': new SimpleChange('123', {}, true)});
 
-        dataTable.onSelectAllClick(<MdCheckboxChange> { checked: true });
+        dataTable.onSelectAllClick(<MdCheckboxChange> {checked: true});
         expect(dataTable.isSelectAllChecked).toBe(true);
     });
 
@@ -394,7 +394,7 @@ describe('DataTable', () => {
         dataTable.multiselect = false;
         dataTable.ngAfterContentInit();
 
-        dataTable.onSelectAllClick(<MdCheckboxChange> { checked: true });
+        dataTable.onSelectAllClick(<MdCheckboxChange> {checked: true});
         expect(dataTable.isSelectAllChecked).toBe(true);
         for (let i = 0; i < rows.length; i++) {
             expect(rows[i].isSelected).toBe(false);
@@ -488,7 +488,7 @@ describe('DataTable', () => {
         };
 
         dataTable.fallbackThumbnail = '<fallback>';
-        dataTable.onImageLoadingError(event: Event);
+        dataTable.onImageLoadingError(event);
         expect(event.target.src).toBe(dataTable.fallbackThumbnail);
     });
 
@@ -501,7 +501,7 @@ describe('DataTable', () => {
         };
 
         dataTable.fallbackThumbnail = null;
-        dataTable.onImageLoadingError(event: Event);
+        dataTable.onImageLoadingError(event);
         expect(event.target.src).toBe(originalSrc);
     });
 

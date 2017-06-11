@@ -25,10 +25,10 @@
 import { User } from './user.model';
 
 export class Comment {
-    id: number;
-    message: string;
-    created: string;
-    createdBy: User;
+    public id: number;
+    public message: string;
+    public created: string;
+    public createdBy: User;
 
     constructor(id: number, message: string, created: string, createdBy: User) {
         this.id = id;

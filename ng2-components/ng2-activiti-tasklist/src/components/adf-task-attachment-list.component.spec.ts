@@ -16,13 +16,13 @@
  */
 
 import { SimpleChange } from '@angular/core';
-import { ComponentFixture, TestBed, async } from '@angular/core/testing';
-import { CoreModule, AlfrescoTranslationService } from 'ng2-alfresco-core';
-import { DataTableModule } from 'ng2-alfresco-datatable';
-import { ActivitiContentService } from 'ng2-activiti-form';
-import { TaskAttachmentListComponent } from './adf-task-attachment-list.component';
-import { Observable } from 'rxjs/Rx';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { ActivitiContentService } from 'ng2-activiti-form';
+import { AlfrescoTranslationService, CoreModule } from 'ng2-alfresco-core';
+import { DataTableModule } from 'ng2-alfresco-datatable';
+import { Observable } from 'rxjs/Rx';
+import { TaskAttachmentListComponent } from './adf-task-attachment-list.component';
 
 declare let jasmine: any;
 
@@ -119,7 +119,7 @@ describe('TaskAttachmentList', () => {
 
     it('should load attachments when taskId specified', () => {
         let change = new SimpleChange(null, '123', true);
-        component.ngOnChanges({'taskId': change});
+        component.ngOnChanges({taskId: change});
         expect(getTaskRelatedContentSpy).toHaveBeenCalled();
     });
 
@@ -127,7 +127,7 @@ describe('TaskAttachmentList', () => {
         let emitSpy = spyOn(component.error, 'emit');
         getTaskRelatedContentSpy.and.returnValue(Observable.throw({}));
         let change = new SimpleChange(null, '123', true);
-        component.ngOnChanges({'taskId': change});
+        component.ngOnChanges({taskId: change});
         expect(emitSpy).toHaveBeenCalled();
     });
 
@@ -138,7 +138,7 @@ describe('TaskAttachmentList', () => {
             expect(attachments[0].id).toEqual(mockAttachment.data[0].id);
         });
 
-        component.ngOnChanges({'taskId': change});
+        component.ngOnChanges({taskId: change});
     });
 
     it('should not attach when no taskId is specified', () => {
@@ -148,7 +148,7 @@ describe('TaskAttachmentList', () => {
 
     it('should display attachments when the task has attachments', async(() => {
         let change = new SimpleChange(null, '123', true);
-        component.ngOnChanges({'taskId': change});
+        component.ngOnChanges({taskId: change});
 
         fixture.whenStable().then(() => {
             fixture.detectChanges();
@@ -159,10 +159,10 @@ describe('TaskAttachmentList', () => {
     it('should not display attachments when the task has no attachments', async(() => {
         component.taskId = '123';
         getTaskRelatedContentSpy.and.returnValue(Observable.of({
-            'size': 0,
-            'total': 0,
-            'start': 0,
-            'data': []
+            size: 0,
+            total: 0,
+            start: 0,
+            data: []
         }));
         fixture.detectChanges();
         fixture.whenStable().then(() => {
@@ -185,7 +185,7 @@ describe('TaskAttachmentList', () => {
         }));
 
         it('should fetch new attachments when taskId changed', () => {
-            component.ngOnChanges({'taskId': change});
+            component.ngOnChanges({taskId: change});
             expect(getTaskRelatedContentSpy).toHaveBeenCalledWith('456');
         });
 
@@ -195,7 +195,7 @@ describe('TaskAttachmentList', () => {
         });
 
         it('should NOT fetch new attachments when taskId changed to null', () => {
-            component.ngOnChanges({'taskId': nullChange});
+            component.ngOnChanges({taskId: nullChange});
             expect(getTaskRelatedContentSpy).not.toHaveBeenCalled();
         });
     });

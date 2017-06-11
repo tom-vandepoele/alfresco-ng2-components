@@ -23,15 +23,15 @@
  * @returns {AppDefinitionRepresentationModel} .
  */
 export class AppDefinitionRepresentationModel {
-    defaultAppId: string;
-    deploymentId: string;
-    name: string;
-    description: string;
-    theme: string;
-    icon: string;
-    id: number;
-    modelId: number;
-    tenantId: number;
+    public defaultAppId: string;
+    public deploymentId: string;
+    public name: string;
+    public description: string;
+    public theme: string;
+    public icon: string;
+    public id: number;
+    public modelId: number;
+    public tenantId: number;
 
     constructor(obj?: any) {
         this.defaultAppId = obj && obj.defaultAppId || null;
@@ -54,9 +54,9 @@ export class AppDefinitionRepresentationModel {
  * @returns {FilterParamsModel} .
  */
 export class FilterParamsModel {
-    id: string;
-    name: string;
-    index: number;
+    public id: string;
+    public name: string;
+    public index: number;
 
     constructor(obj?: any) {
         this.id = obj && obj.id || null;
@@ -73,14 +73,14 @@ export class FilterParamsModel {
  * @returns {FilterRepresentationModel} .
  */
 export class FilterRepresentationModel {
-    id: string;
-    appId: string;
-    name: string;
-    recent: boolean;
-    icon: string;
-    filter: FilterParamRepresentationModel;
-    index: number;
-    landingTaskId: string;
+    public id: string;
+    public appId: string;
+    public name: string;
+    public recent: boolean;
+    public icon: string;
+    public filter: FilterParamRepresentationModel;
+    public index: number;
+    public landingTaskId: string;
 
     constructor(obj?: any) {
         this.id = obj && obj.id || null;
@@ -93,7 +93,7 @@ export class FilterRepresentationModel {
         this.landingTaskId = obj && obj.landingTaskId;
     }
 
-    hasFilter() {
+    public hasFilter(): boolean {
         return this.filter ? true : false;
     }
 }
@@ -106,14 +106,14 @@ export class FilterRepresentationModel {
  * @returns {FilterParamRepresentationModel} .
  */
 export class FilterParamRepresentationModel {
-    processDefinitionId: string;
-    processDefinitionKey: string;
-    name: string;
-    state: string;
-    sort: string;
-    assignment: string;
-    dueAfter: Date;
-    dueBefore: Date;
+    public processDefinitionId: string;
+    public processDefinitionKey: string;
+    public name: string;
+    public state: string;
+    public sort: string;
+    public assignment: string;
+    public dueAfter: Date;
+    public dueBefore: Date;
 
     constructor(obj?: any) {
         this.processDefinitionId = obj && obj.processDefinitionId || null;
@@ -128,17 +128,17 @@ export class FilterParamRepresentationModel {
 }
 
 export class TaskQueryRequestRepresentationModel {
-    appDefinitionId: string;
-    processInstanceId: string;
-    processDefinitionId: string;
-    processDefinitionKey: string;
-    text: string;
-    assignment: string;
-    state: string;
-    sort: string;
-    page: number;
-    size: number;
-    landingTaskId: string;
+    public appDefinitionId: string;
+    public processInstanceId: string;
+    public processDefinitionId: string;
+    public processDefinitionKey: string;
+    public text: string;
+    public assignment: string;
+    public state: string;
+    public sort: string;
+    public page: number;
+    public size: number;
+    public landingTaskId: string;
 
     constructor(obj?: any) {
         this.appDefinitionId = obj && obj.appDefinitionId || null;

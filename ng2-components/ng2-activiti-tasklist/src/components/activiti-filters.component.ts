@@ -15,11 +15,11 @@
  * limitations under the License.
  */
 
-import { Component, Output, EventEmitter, OnInit, Input, SimpleChanges, OnChanges } from '@angular/core';
-import { Observer, Observable } from 'rxjs/Rx';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { AlfrescoTranslationService, LogService } from 'ng2-alfresco-core';
+import { Observable, Observer } from 'rxjs/Rx';
+import { FilterParamsModel, FilterRepresentationModel } from '../models/filter.model';
 import { ActivitiTaskListService } from './../services/activiti-tasklist.service';
-import { FilterRepresentationModel, FilterParamsModel } from '../models/filter.model';
 
 declare let componentHandler: any;
 
@@ -32,56 +32,56 @@ declare let componentHandler: any;
 export class ActivitiFilters implements OnInit, OnChanges {
 
     @Input()
-    filterParam: FilterParamsModel;
+    public filterParam: FilterParamsModel;
 
     @Output()
-    filterClick: EventEmitter<FilterRepresentationModel> = new EventEmitter<FilterRepresentationModel>();
+    public filterClick: EventEmitter<FilterRepresentationModel> = new EventEmitter<FilterRepresentationModel>();
 
     @Output()
-    onSuccess: EventEmitter<any> = new EventEmitter<any>();
+    public onSuccess: EventEmitter<any> = new EventEmitter<any>();
 
     @Output()
-    onError: EventEmitter<any> = new EventEmitter<any>();
+    public onError: EventEmitter<any> = new EventEmitter<any>();
 
     @Input()
-    appId: string;
+    public appId: string;
 
     @Input()
-    appName: string;
+    public appName: string;
 
     @Input()
-    hasIcon: boolean = true;
+    public hasIcon: boolean = true;
 
     private filterObserver: Observer<FilterRepresentationModel>;
-    filter$: Observable<FilterRepresentationModel>;
+    public filter$: Observable<FilterRepresentationModel>;
 
-    currentFilter: FilterRepresentationModel;
+    public currentFilter: FilterRepresentationModel;
 
-    filters: FilterRepresentationModel [] = [];
+    public filters: FilterRepresentationModel [] = [];
 
     constructor(private translateService: AlfrescoTranslationService,
                 private activiti: ActivitiTaskListService,
                 private logService: LogService) {
-        this.filter$ = new Observable<FilterRepresentationModel>(observer => this.filterObserver = observer).share();
+        this.filter$ = new Observable<FilterRepresentationModel>((observer) => this.filterObserver = observer).share();
 
         if (translateService) {
             translateService.addTranslationFolder('ng2-activiti-tasklist', 'assets/ng2-activiti-tasklist');
         }
     }
 
-    ngOnInit() {
+    public ngOnInit(): void {
         this.filter$.subscribe((filter: FilterRepresentationModel) => {
             this.filters.push(filter);
         });
     }
 
-    ngOnChanges(changes: SimpleChanges) {
-        let appId = changes['appId'];
+    public ngOnChanges(changes: SimpleChanges): void {
+        let appId = changes.appId;
         if (appId && (appId.currentValue || appId.currentValue === null)) {
             this.getFiltersByAppId(appId.currentValue);
             return;
         }
-        let appName = changes['appName'];
+        let appName = changes.appName;
         if (appName && appName !== null && appName.currentValue) {
             this.getFiltersByAppName(appName.currentValue);
             return;
@@ -95,7 +95,7 @@ export class ActivitiFilters implements OnInit, OnChanges {
      * @param appId
      * @param appName
      */
-    getFilters(appId?: string, appName?: string) {
+    public getFilters(appId?: string, appName?: string): void {
         if (appName) {
             this.getFiltersByAppName(appName);
         } else {
@@ -107,7 +107,7 @@ export class ActivitiFilters implements OnInit, OnChanges {
      * Return the filter list filtered by appId
      * @param appId - optional
      */
-    getFiltersByAppId(appId?: string) {
+    public getFiltersByAppId(appId?: string): void {
         this.activiti.getTaskListFilters(appId).subscribe(
             (res: FilterRepresentationModel[]) => {
                 if (res.length === 0 && this.isFilterListEmpty()) {
@@ -145,9 +145,9 @@ export class ActivitiFilters implements OnInit, OnChanges {
      * Return the filter list filtered by appName
      * @param appName
      */
-    getFiltersByAppName(appName: string) {
+    public getFiltersByAppName(appName: string): void {
         this.activiti.getDeployedApplications(appName).subscribe(
-            application => {
+            (application) => {
                 this.getFiltersByAppId(application.id);
                 this.selectTaskFilter(this.filterParam);
             },
@@ -160,12 +160,12 @@ export class ActivitiFilters implements OnInit, OnChanges {
      * Pass the selected filter as next
      * @param filter
      */
-    public selectFilter(filter: FilterRepresentationModel) {
+    public selectFilter(filter: FilterRepresentationModel): void {
         this.currentFilter = filter;
         this.filterClick.emit(filter);
     }
 
-    public selectFilterWithTask(taskId: string) {
+    public selectFilterWithTask(taskId: string): void {
         let filteredFilterList: FilterRepresentationModel[] = [];
         this.activiti.getFilterForTaskById(taskId, this.filters).subscribe(
             (filter: FilterRepresentationModel) => {
@@ -186,7 +186,7 @@ export class ActivitiFilters implements OnInit, OnChanges {
     /**
      * Select the first filter of a list if present
      */
-    public selectTaskFilter(filterParam: FilterParamsModel) {
+    public selectTaskFilter(filterParam: FilterParamsModel): void {
         if (filterParam) {
             this.filters.filter((taskFilter: FilterRepresentationModel, index) => {
                 if (filterParam.name && filterParam.name.toLowerCase() === taskFilter.name.toLowerCase() ||
@@ -203,7 +203,7 @@ export class ActivitiFilters implements OnInit, OnChanges {
     /**
      * Select as default task filter the first in the list
      */
-    public selectDefaultTaskFilter() {
+    public selectDefaultTaskFilter(): void {
         if (!this.isFilterListEmpty()) {
             this.currentFilter = this.filters[0];
         }
@@ -213,7 +213,7 @@ export class ActivitiFilters implements OnInit, OnChanges {
      * Return the current task
      * @returns {FilterRepresentationModel}
      */
-    getCurrentFilter(): FilterRepresentationModel {
+    public getCurrentFilter(): FilterRepresentationModel {
         return this.currentFilter;
     }
 
@@ -221,14 +221,14 @@ export class ActivitiFilters implements OnInit, OnChanges {
      * Check if the filter list is empty
      * @returns {boolean}
      */
-    isFilterListEmpty(): boolean {
+    public isFilterListEmpty(): boolean {
         return this.filters === undefined || (this.filters && this.filters.length === 0);
     }
 
     /**
      * Reset the filters properties
      */
-    private resetFilter() {
+    private resetFilter(): void {
         this.filters = [];
         this.currentFilter = undefined;
     }

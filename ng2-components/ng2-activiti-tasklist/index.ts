@@ -15,28 +15,28 @@
  * limitations under the License.
  */
 
-import { NgModule, ModuleWithProviders } from '@angular/core';
-import { MdIconModule, MdButtonModule } from '@angular/material';
+import { ModuleWithProviders, NgModule } from '@angular/core';
+import { MdButtonModule, MdIconModule } from '@angular/material';
+import { ActivitiFormModule } from 'ng2-activiti-form';
 import { CoreModule } from 'ng2-alfresco-core';
 import { DataTableModule } from 'ng2-alfresco-datatable';
-import { ActivitiFormModule } from 'ng2-activiti-form';
 import { ActivitiPeopleService } from './src/services/activiti-people.service';
 import { ActivitiTaskListService } from './src/services/activiti-tasklist.service';
 
 import {
     ActivitiApps,
-    ActivitiTaskList,
-    ActivitiTaskDetails,
-    ActivitiFilters,
-    NoTaskDetailsTemplateComponent,
     ActivitiChecklist,
     ActivitiComments,
+    ActivitiCreateTaskAttachmentComponent,
+    ActivitiFilters,
     ActivitiPeople,
-    ActivitiTaskHeader,
-    ActivitiStartTaskButton,
     ActivitiPeopleSearch,
-    TaskAttachmentListComponent,
-    ActivitiCreateTaskAttachmentComponent
+    ActivitiStartTaskButton,
+    ActivitiTaskDetails,
+    ActivitiTaskHeader,
+    ActivitiTaskList,
+    NoTaskDetailsTemplateComponent,
+    TaskAttachmentListComponent
 } from './src/components/index';
 
 export * from './src/components/index';

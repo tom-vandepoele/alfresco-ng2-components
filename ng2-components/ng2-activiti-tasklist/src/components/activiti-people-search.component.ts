@@ -15,11 +15,11 @@
  * limitations under the License.
  */
 
-import { Component, Input, Output, EventEmitter, OnInit, AfterViewInit } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { User } from '../models/user.model';
-import { Observable } from 'rxjs/Observable';
 import { AlfrescoTranslationService } from 'ng2-alfresco-core';
+import { Observable } from 'rxjs/Observable';
+import { User } from '../models/user.model';
 
 declare let componentHandler: any;
 declare var require: any;
@@ -33,20 +33,20 @@ declare var require: any;
 export class ActivitiPeopleSearch implements OnInit, AfterViewInit {
 
     @Input()
-    iconImageUrl: string = require('../assets/images/user.jpg');
+    public iconImageUrl: string = require('../assets/images/user.jpg');
 
     @Input()
-    results: Observable<User[]>;
+    public results: Observable<User[]>;
 
     @Output()
-    onSearch: EventEmitter<any> = new EventEmitter();
+    public onSearch: EventEmitter<any> = new EventEmitter();
 
     @Output()
-    onRowClicked: EventEmitter<any> = new EventEmitter();
+    public onRowClicked: EventEmitter<any> = new EventEmitter();
 
-    searchUser: FormControl = new FormControl();
+    public searchUser: FormControl = new FormControl();
 
-    userList: User[] = [];
+    public userList: User[] = [];
 
     constructor(private translateService: AlfrescoTranslationService) {
         if (translateService) {
@@ -58,24 +58,24 @@ export class ActivitiPeopleSearch implements OnInit, AfterViewInit {
             .debounceTime(200)
             .subscribe((event: string) => {
                 if (event && event.trim()) {
-                    this.onSearch.emit(event: Event);
+                    this.onSearch.emit(event);
                 } else {
                     this.userList = [];
                 }
             });
     }
 
-    ngOnInit() {
+    public ngOnInit(): void {
         this.results.subscribe((list) => {
             this.userList = list;
         });
     }
 
-    ngAfterViewInit() {
+    public ngAfterViewInit(): void {
         this.setupMaterialComponents(componentHandler);
     }
 
-    setupMaterialComponents(handler?: any): boolean {
+    public setupMaterialComponents(handler?: any): boolean {
         // workaround for MDL issues with dynamic components
         let isUpgraded: boolean = false;
         if (handler) {
@@ -85,7 +85,7 @@ export class ActivitiPeopleSearch implements OnInit, AfterViewInit {
         return isUpgraded;
     }
 
-    onRowClick(userClicked: User) {
+    public onRowClick(userClicked: User): void {
         this.onRowClicked.emit(userClicked);
         this.userList = this.userList.filter((user) => {
             this.searchUser.reset();
@@ -93,7 +93,7 @@ export class ActivitiPeopleSearch implements OnInit, AfterViewInit {
         });
     }
 
-    getDisplayUser(user: User): string {
+    public getDisplayUser(user: User): string {
         let firstName = user.firstName && user.firstName !== 'null' ? user.firstName : 'N/A';
         let lastName = user.lastName && user.lastName !== 'null' ? user.lastName : 'N/A';
         return firstName + ' - ' + lastName;

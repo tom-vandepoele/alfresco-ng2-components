@@ -24,10 +24,10 @@
  */
 
 export class User {
-    id: number;
-    email: string;
-    firstName: string;
-    lastName: string;
+    public id: number;
+    public  email: string;
+    public firstName: string;
+    public lastName: string;
 
     constructor(obj?: any) {
         this.id = obj && obj.id;

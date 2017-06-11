@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import { Directive, Input, HostListener } from '@angular/core';
+import { Directive, HostListener, Input } from '@angular/core';
 import { ContextMenuService } from './context-menu.service';
 
 @Directive({
@@ -23,16 +23,16 @@ import { ContextMenuService } from './context-menu.service';
 })
 export class ContextMenuDirective {
     @Input('context-menu')
-    links: any[];
+    public links: any[];
 
     @Input('context-menu-enabled')
-    enabled: boolean = false;
+    public enabled: boolean = false;
 
     constructor(private _contextMenuService: ContextMenuService) {
     }
 
     @HostListener('contextmenu', ['$event'])
-    onShowContextMenu(event?: MouseEvent) {
+    public onShowContextMenu(event?: MouseEvent): void {
         if (this.enabled) {
             if (event) {
                 event.preventDefault();
@@ -40,7 +40,7 @@ export class ContextMenuDirective {
 
             if (this.links && this.links.length > 0) {
                 if (this._contextMenuService) {
-                    this._contextMenuService.show.next({event: event, obj: this.links});
+                    this._contextMenuService.show.next({event, obj: this.links});
                 }
             }
         }

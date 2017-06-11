@@ -23,22 +23,22 @@ export class ContentService {
 
     private saveData: Function;
 
-    constructor(private sanitizer: DomSanitizer ) {
+    constructor(private sanitizer: DomSanitizer) {
         this.saveData = (function () {
             let a = document.createElement('a');
             document.body.appendChild(a);
             a.style.display = 'none';
 
-            return function (data, format, fileName) {
+            return (data, format, fileName) => {
                 let blob = null;
 
                 if (format === 'blob' || format === 'data') {
-                    blob = new Blob([data], { type: 'octet/stream' });
+                    blob = new Blob([data], {type: 'octet/stream'});
                 }
 
                 if (format === 'object' || format === 'json') {
                     let json = JSON.stringify(data);
-                    blob = new Blob([json], { type: 'octet/stream' });
+                    blob = new Blob([json], {type: 'octet/stream'});
                 }
 
                 if (blob) {
@@ -61,7 +61,7 @@ export class ContentService {
      *
      * @memberOf ContentService
      */
-    downloadBlob(blob: Blob, fileName: string): void {
+    public downloadBlob(blob: Blob, fileName: string): void {
         this.saveData(blob, 'blob', fileName);
     }
 
@@ -73,7 +73,7 @@ export class ContentService {
      *
      * @memberOf ContentService
      */
-    downloadData(data: any, fileName: string): void {
+    public downloadData(data: any, fileName: string): void {
         this.saveData(data, 'data', fileName);
     }
 
@@ -85,7 +85,7 @@ export class ContentService {
      *
      * @memberOf ContentService
      */
-    downloadJSON(json: any, fileName): void {
+    public downloadJSON(json: any, fileName): void {
         this.saveData(json, 'json', fileName);
     }
 
@@ -97,7 +97,7 @@ export class ContentService {
      *
      * @memberOf ContentService
      */
-    createTrustedUrl(blob: Blob): string {
+    public createTrustedUrl(blob: Blob): string {
         let url = window.URL.createObjectURL(blob);
         return <string> this.sanitizer.bypassSecurityTrustUrl(url);
     }

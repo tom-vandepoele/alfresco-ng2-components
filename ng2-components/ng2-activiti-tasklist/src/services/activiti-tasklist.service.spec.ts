@@ -18,38 +18,38 @@
 import { ReflectiveInjector } from '@angular/core';
 import { async } from '@angular/core/testing';
 import {
+    AlfrescoApiService,
     AlfrescoAuthenticationService,
     AlfrescoSettingsService,
-    AlfrescoApiService,
-    StorageService,
-    LogService
+    LogService,
+    StorageService
 } from 'ng2-alfresco-core';
-import { ActivitiTaskListService } from './activiti-tasklist.service';
-import { TaskDetailsModel } from '../models/task-details.model';
+import {
+    fakeAppFilter,
+    fakeAppPromise,
+    fakeApps,
+    fakeErrorTaskList,
+    fakeFilter,
+    fakeFilters,
+    fakeFilterWithProcessDefinitionKey,
+    fakeFormList,
+    fakeRepresentationFilter1,
+    fakeRepresentationFilter2,
+    fakeTaskDetails,
+    fakeTaskList,
+    fakeTaskListDifferentProcessDefinitionKey,
+    fakeTasksChecklist,
+    fakeTasksComment,
+    fakeUser,
+    secondFakeTaskList
+} from '../assets/tasklist-service.mock';
+import { Comment } from '../models/comment.model';
 import {
     FilterRepresentationModel,
     TaskQueryRequestRepresentationModel
 } from '../models/filter.model';
-import { Comment } from '../models/comment.model';
-import {
-    fakeFilters,
-    fakeAppPromise,
-    fakeAppFilter,
-    fakeFilter,
-    fakeTaskList,
-    fakeErrorTaskList,
-    fakeTasksComment,
-    fakeTasksChecklist,
-    fakeTaskDetails,
-    fakeUser,
-    fakeApps,
-    fakeRepresentationFilter1,
-    secondFakeTaskList,
-    fakeRepresentationFilter2,
-    fakeFormList,
-    fakeTaskListDifferentProcessDefinitionKey,
-    fakeFilterWithProcessDefinitionKey
-} from '../assets/tasklist-service.mock';
+import { TaskDetailsModel } from '../models/task-details.model';
+import { ActivitiTaskListService } from './activiti-tasklist.service';
 
 declare let jasmine: any;
 
@@ -95,7 +95,7 @@ describe('Activiti TaskList Service', () => {
             );
 
             jasmine.Ajax.requests.mostRecent().respondWith({
-                'status': 200,
+                status: 200,
                 contentType: 'application/json',
                 responseText: JSON.stringify(fakeFilters)
             });
@@ -115,7 +115,7 @@ describe('Activiti TaskList Service', () => {
             );
 
             jasmine.Ajax.requests.mostRecent().respondWith({
-                'status': 200,
+                status: 200,
                 contentType: 'application/json',
                 responseText: JSON.stringify(fakeFilters)
             });
@@ -135,7 +135,7 @@ describe('Activiti TaskList Service', () => {
             );
 
             jasmine.Ajax.requests.mostRecent().respondWith({
-                'status': 200,
+                status: 200,
                 contentType: 'application/json',
                 responseText: JSON.stringify(fakeFilters)
             });
@@ -165,7 +165,7 @@ describe('Activiti TaskList Service', () => {
             );
 
             jasmine.Ajax.requests.mostRecent().respondWith({
-                'status': 200,
+                status: 200,
                 contentType: 'application/json',
                 responseText: JSON.stringify(fakeAppFilter)
             });
@@ -173,7 +173,7 @@ describe('Activiti TaskList Service', () => {
 
         it('should return the task list filtered', (done) => {
             service.getTasks(<TaskQueryRequestRepresentationModel>fakeFilter).subscribe(
-                res => {
+                (res) => {
                     expect(res).toBeDefined();
                     expect(res.length).toEqual(1);
                     expect(res[0].name).toEqual('FakeNameTask');
@@ -185,7 +185,7 @@ describe('Activiti TaskList Service', () => {
             );
 
             jasmine.Ajax.requests.mostRecent().respondWith({
-                'status': 200,
+                status: 200,
                 contentType: 'application/json',
                 responseText: JSON.stringify(fakeTaskList)
             });
@@ -193,7 +193,7 @@ describe('Activiti TaskList Service', () => {
 
         it('should return the task list filtered by processDefinitionKey', (done) => {
             service.getTasks(<TaskQueryRequestRepresentationModel>fakeFilterWithProcessDefinitionKey).subscribe(
-                res => {
+                (res) => {
                     expect(res).toBeDefined();
                     expect(res.length).toEqual(1);
                     expect(res[0].name).toEqual('FakeNameTask');
@@ -206,7 +206,7 @@ describe('Activiti TaskList Service', () => {
             );
 
             jasmine.Ajax.requests.mostRecent().respondWith({
-                'status': 200,
+                status: 200,
                 contentType: 'application/json',
                 responseText: JSON.stringify(fakeTaskListDifferentProcessDefinitionKey)
             });
@@ -222,7 +222,7 @@ describe('Activiti TaskList Service', () => {
             );
 
             jasmine.Ajax.requests.mostRecent().respondWith({
-                'status': 404,
+                status: 404,
                 contentType: 'application/json',
                 responseText: JSON.stringify(fakeErrorTaskList)
             });
@@ -244,7 +244,7 @@ describe('Activiti TaskList Service', () => {
             );
 
             jasmine.Ajax.requests.mostRecent().respondWith({
-                'status': 200,
+                status: 200,
                 contentType: 'application/json',
                 responseText: JSON.stringify(fakeTaskDetails)
             });
@@ -262,7 +262,7 @@ describe('Activiti TaskList Service', () => {
             );
 
             jasmine.Ajax.requests.mostRecent().respondWith({
-                'status': 200,
+                status: 200,
                 contentType: 'application/json',
                 responseText: JSON.stringify(fakeTasksComment)
             });
@@ -286,7 +286,7 @@ describe('Activiti TaskList Service', () => {
             );
 
             jasmine.Ajax.requests.mostRecent().respondWith({
-                'status': 200,
+                status: 200,
                 contentType: 'application/json',
                 responseText: JSON.stringify(fakeTasksChecklist)
             });
@@ -314,7 +314,7 @@ describe('Activiti TaskList Service', () => {
             );
 
             jasmine.Ajax.requests.mostRecent().respondWith({
-                'status': 200,
+                status: 200,
                 contentType: 'application/json',
                 responseText: JSON.stringify({
                     id: '777', name: 'FakeNameTask', description: null, category: null,
@@ -332,7 +332,7 @@ describe('Activiti TaskList Service', () => {
             );
 
             jasmine.Ajax.requests.mostRecent().respondWith({
-                'status': 200,
+                status: 200,
                 contentType: 'application/json'
             });
         });
@@ -352,7 +352,7 @@ describe('Activiti TaskList Service', () => {
             );
 
             jasmine.Ajax.requests.mostRecent().respondWith({
-                'status': 200,
+                status: 200,
                 contentType: 'application/json',
                 responseText: JSON.stringify({
                     id: '111', message: 'fake-comment-message',
@@ -371,7 +371,7 @@ describe('Activiti TaskList Service', () => {
             );
 
             jasmine.Ajax.requests.mostRecent().respondWith({
-                'status': 200,
+                status: 200,
                 contentType: 'application/json',
                 responseText: JSON.stringify({})
             });
@@ -379,7 +379,7 @@ describe('Activiti TaskList Service', () => {
 
         it('should return the total number of tasks', (done) => {
             service.getTotalTasks(<TaskQueryRequestRepresentationModel>fakeFilter).subscribe(
-                res => {
+                (res) => {
                     expect(res).toBeDefined();
                     expect(res.size).toEqual(1);
                     expect(res.total).toEqual(1);
@@ -388,7 +388,7 @@ describe('Activiti TaskList Service', () => {
             );
 
             jasmine.Ajax.requests.mostRecent().respondWith({
-                'status': 200,
+                status: 200,
                 contentType: 'application/json',
                 responseText: JSON.stringify(fakeTaskList)
             });
@@ -408,7 +408,7 @@ describe('Activiti TaskList Service', () => {
             );
 
             jasmine.Ajax.requests.at(0).respondWith({
-                'status': 200,
+                status: 200,
                 contentType: 'application/json',
                 responseText: JSON.stringify({
                     id: '111', name: 'Involved Tasks', filter: { assignment: 'fake-involved' }
@@ -416,7 +416,7 @@ describe('Activiti TaskList Service', () => {
             });
 
             jasmine.Ajax.requests.at(1).respondWith({
-                'status': 200,
+                status: 200,
                 contentType: 'application/json',
                 responseText: JSON.stringify({
                     id: '222', name: 'My Tasks', filter: { assignment: 'fake-assignee' }
@@ -424,7 +424,7 @@ describe('Activiti TaskList Service', () => {
             });
 
             jasmine.Ajax.requests.at(2).respondWith({
-                'status': 200,
+                status: 200,
                 contentType: 'application/json',
                 responseText: JSON.stringify({
                     id: '333', name: 'Queued Tasks', filter: { assignment: 'fake-candidate' }
@@ -432,7 +432,7 @@ describe('Activiti TaskList Service', () => {
             });
 
             jasmine.Ajax.requests.at(3).respondWith({
-                'status': 200,
+                status: 200,
                 contentType: 'application/json',
                 responseText: JSON.stringify({
                     id: '444', name: 'Completed Tasks', filter: { assignment: 'fake-involved' }
@@ -457,7 +457,7 @@ describe('Activiti TaskList Service', () => {
             );
 
             jasmine.Ajax.requests.mostRecent().respondWith({
-                'status': 200,
+                status: 200,
                 contentType: 'application/json',
                 responseText: JSON.stringify({
                     id: '2233', name: 'FakeNameFilter', filter: { assignment: 'fake-assignement' }
@@ -481,7 +481,7 @@ describe('Activiti TaskList Service', () => {
             );
 
             jasmine.Ajax.requests.mostRecent().respondWith({
-                'status': 200,
+                status: 200,
                 contentType: 'application/json',
                 responseText: JSON.stringify(fakeApps)
             });
@@ -500,7 +500,7 @@ describe('Activiti TaskList Service', () => {
             );
 
             jasmine.Ajax.requests.mostRecent().respondWith({
-                'status': 200,
+                status: 200,
                 contentType: 'application/json',
                 responseText: JSON.stringify(fakeApps)
             });
@@ -518,7 +518,7 @@ describe('Activiti TaskList Service', () => {
             );
 
             jasmine.Ajax.requests.mostRecent().respondWith({
-                'status': 200,
+                status: 200,
                 contentType: 'application/json',
                 responseText: JSON.stringify(fakeApps)
             });
@@ -544,7 +544,7 @@ describe('Activiti TaskList Service', () => {
             );
 
             jasmine.Ajax.requests.mostRecent().respondWith({
-                'status': 200,
+                status: 200,
                 contentType: 'application/json',
                 responseText: JSON.stringify({
                     id: '777',
@@ -567,7 +567,7 @@ describe('Activiti TaskList Service', () => {
             );
 
             jasmine.Ajax.requests.mostRecent().respondWith({
-                'status': 200,
+                status: 200,
                 contentType: 'application/json',
                 responseText: JSON.stringify({})
             });
@@ -595,7 +595,7 @@ describe('Activiti TaskList Service', () => {
             );
 
             jasmine.Ajax.requests.mostRecent().respondWith({
-                'status': 200,
+                status: 200,
                 contentType: 'application/json',
                 responseText: JSON.stringify(fakeTaskList)
             });
@@ -620,13 +620,13 @@ describe('Activiti TaskList Service', () => {
                 });
 
             jasmine.Ajax.requests.at(0).respondWith({
-                'status': 200,
+                status: 200,
                 contentType: 'application/json',
                 responseText: JSON.stringify(fakeTaskList)
             });
 
             jasmine.Ajax.requests.at(1).respondWith({
-                'status': 200,
+                status: 200,
                 contentType: 'application/json',
                 responseText: JSON.stringify(secondFakeTaskList)
             });
@@ -646,7 +646,7 @@ describe('Activiti TaskList Service', () => {
             );
 
             jasmine.Ajax.requests.mostRecent().respondWith({
-                'status': 200,
+                status: 200,
                 contentType: 'application/json',
                 responseText: JSON.stringify(fakeFormList)
             });

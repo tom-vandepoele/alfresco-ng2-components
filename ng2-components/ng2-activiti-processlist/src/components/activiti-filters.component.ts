@@ -15,10 +15,10 @@
  * limitations under the License.
  */
 
-import { Component, Output, EventEmitter, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { Observable, Observer } from 'rxjs/Rx';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { AlfrescoTranslationService, LogService } from 'ng2-alfresco-core';
-import { FilterProcessRepresentationModel, FilterParamsModel } from './../models/filter-process.model';
+import { Observable, Observer } from 'rxjs/Rx';
+import { FilterParamsModel, FilterProcessRepresentationModel } from './../models/filter-process.model';
 import { ActivitiProcessService } from './../services/activiti-process.service';
 
 declare let componentHandler: any;
@@ -31,58 +31,58 @@ declare let componentHandler: any;
 export class ActivitiProcessFilters implements OnInit, OnChanges {
 
     @Input()
-    filterParam: FilterParamsModel;
+    public filterParam: FilterParamsModel;
 
     @Output()
-    filterClick: EventEmitter<FilterProcessRepresentationModel> = new EventEmitter<FilterProcessRepresentationModel>();
+    public filterClick: EventEmitter<FilterProcessRepresentationModel> = new EventEmitter<FilterProcessRepresentationModel>();
 
     @Output()
-    onSuccess: EventEmitter<FilterProcessRepresentationModel[]> = new EventEmitter<FilterProcessRepresentationModel[]>();
+    public onSuccess: EventEmitter<FilterProcessRepresentationModel[]> = new EventEmitter<FilterProcessRepresentationModel[]>();
 
     @Output()
-    onError: EventEmitter<any> = new EventEmitter<any>();
+    public onError: EventEmitter<any> = new EventEmitter<any>();
 
     @Input()
-    appId: number;
+    public appId: number;
 
     @Input()
-    appName: string;
+    public appName: string;
 
     @Input()
-    showIcon: boolean = true;
+    public showIcon: boolean = true;
 
     private filterObserver: Observer<FilterProcessRepresentationModel>;
-    filter$: Observable<FilterProcessRepresentationModel>;
+    public filter$: Observable<FilterProcessRepresentationModel>;
 
-    currentFilter: FilterProcessRepresentationModel;
+    public currentFilter: FilterProcessRepresentationModel;
 
-    filters: FilterProcessRepresentationModel [] = [];
+    public filters: FilterProcessRepresentationModel [] = [];
 
     constructor(private translate: AlfrescoTranslationService,
                 private activiti: ActivitiProcessService,
                 private logService: LogService) {
-        this.filter$ = new Observable<FilterProcessRepresentationModel>(observer => this.filterObserver = observer).share();
+        this.filter$ = new Observable<FilterProcessRepresentationModel>((observer) => this.filterObserver = observer).share();
 
         if (translate) {
             translate.addTranslationFolder('ng2-activiti-processlist', 'assets/ng2-activiti-processlist');
         }
     }
 
-    ngOnInit() {
+    public ngOnInit(): void {
         this.filter$.subscribe((filter: FilterProcessRepresentationModel) => {
             this.filters.push(filter);
         });
     }
 
-    ngOnChanges(changes: SimpleChanges) {
-        let appId = changes['appId'];
-        if (appId && (appId.currentValue || appId.currentValue === null)) {
-            this.getFiltersByAppId(appId.currentValue);
+    public ngOnChanges(changes: SimpleChanges): void {
+
+        if (changes.appId && (changes.appId.currentValue || changes.appId.currentValue === null)) {
+            this.getFiltersByAppId(changes.appId.currentValue);
             return;
         }
-        let appName = changes['appName'];
-        if (appName && appName.currentValue) {
-            this.getFiltersByAppName(appName.currentValue);
+
+        if (changes.appName && changes.appName.currentValue) {
+            this.getFiltersByAppName(changes.appName.currentValue);
             return;
         }
     }
@@ -91,7 +91,7 @@ export class ActivitiProcessFilters implements OnInit, OnChanges {
      * Return the filter list filtered by appId
      * @param appId - optional
      */
-    getFiltersByAppId(appId?: string) {
+    public getFiltersByAppId(appId?: string): void {
         this.activiti.getProcessFilters(appId).subscribe(
             (res: FilterProcessRepresentationModel[]) => {
                 if (res.length === 0 && this.isFilterListEmpty()) {
@@ -129,9 +129,9 @@ export class ActivitiProcessFilters implements OnInit, OnChanges {
      * Return the filter list filtered by appName
      * @param appName
      */
-    getFiltersByAppName(appName: string) {
+    public getFiltersByAppName(appName: string): void {
         this.activiti.getDeployedApplications(appName).subscribe(
-            application => {
+            (application) => {
                 this.getFiltersByAppId(application.id.toString());
                 this.selectTaskFilter(this.filterParam);
             },
@@ -144,7 +144,7 @@ export class ActivitiProcessFilters implements OnInit, OnChanges {
      * Pass the selected filter as next
      * @param filter
      */
-    public selectFilter(filter: FilterProcessRepresentationModel) {
+    public selectFilter(filter: FilterProcessRepresentationModel): void {
         this.currentFilter = filter;
         this.filterClick.emit(filter);
     }
@@ -152,7 +152,7 @@ export class ActivitiProcessFilters implements OnInit, OnChanges {
     /**
      * Select the first filter of a list if present
      */
-    public selectTaskFilter(filterParam: FilterParamsModel) {
+    public selectTaskFilter(filterParam: FilterParamsModel): void {
         if (filterParam) {
             this.filters.filter((taskFilter: FilterProcessRepresentationModel, index) => {
                 if (filterParam.name && filterParam.name.toLowerCase() === taskFilter.name.toLowerCase() ||
@@ -169,7 +169,7 @@ export class ActivitiProcessFilters implements OnInit, OnChanges {
     /**
      * Select as default task filter the first in the list
      */
-    public selectDefaultTaskFilter() {
+    public selectDefaultTaskFilter(): void {
         if (!this.isFilterListEmpty()) {
             this.currentFilter = this.filters[0];
         }
@@ -179,7 +179,7 @@ export class ActivitiProcessFilters implements OnInit, OnChanges {
      * Return the current task
      * @returns {FilterProcessRepresentationModel}
      */
-    getCurrentFilter(): FilterProcessRepresentationModel {
+    public getCurrentFilter(): FilterProcessRepresentationModel {
         return this.currentFilter;
     }
 
@@ -187,14 +187,14 @@ export class ActivitiProcessFilters implements OnInit, OnChanges {
      * Check if the filter list is empty
      * @returns {boolean}
      */
-    isFilterListEmpty(): boolean {
+    public isFilterListEmpty(): boolean {
         return this.filters === undefined || (this.filters && this.filters.length === 0);
     }
 
     /**
      * Reset the filters properties
      */
-    private resetFilter() {
+    private resetFilter(): void {
         this.filters = [];
         this.currentFilter = undefined;
     }

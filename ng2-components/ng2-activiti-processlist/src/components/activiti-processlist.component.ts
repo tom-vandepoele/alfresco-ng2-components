@@ -37,7 +37,7 @@ export class ActivitiProcessInstanceListComponent implements OnChanges, AfterCon
     public  appId: string;
 
     @Input()
-    publicprocessDefinitionKey: string;
+    public processDefinitionKey: string;
 
     @Input()
     public state: string;
@@ -65,8 +65,8 @@ export class ActivitiProcessInstanceListComponent implements OnChanges, AfterCon
     private currentInstanceId: string;
 
     private defaultSchema: DataColumn[] = [
-        { type: 'text', key: 'name', title: 'Name', cssClass: 'full-width name-column', sortable: true },
-        { type: 'text', key: 'created', title: 'Created', cssClass: 'hidden', sortable: true }
+        {type: 'text', key: 'name', title: 'Name', cssClass: 'full-width name-column', sortable: true},
+        {type: 'text', key: 'created', title: 'Created', cssClass: 'hidden', sortable: true}
     ];
 
     constructor(private processService: ActivitiProcessService,
@@ -76,7 +76,7 @@ export class ActivitiProcessInstanceListComponent implements OnChanges, AfterCon
         }
     }
 
-    ngAfterContentInit() {
+    public ngAfterContentInit(): void {
         this.setupSchema();
 
         if (this.appId) {
@@ -88,7 +88,7 @@ export class ActivitiProcessInstanceListComponent implements OnChanges, AfterCon
      * Setup html-based (html definitions) or code behind (data adapter) schema.
      * If component is assigned with an empty data adater the default schema settings applied.
      */
-    protected  setupSchema() {
+    public  setupSchema(): void {
         let schema: DataColumn[] = [];
 
         if (this.columnList && this.columnList.columns && this.columnList.columns.length > 0) {
@@ -106,7 +106,7 @@ export class ActivitiProcessInstanceListComponent implements OnChanges, AfterCon
         }
     }
 
-    ngOnChanges(changes: SimpleChanges) {
+    public ngOnChanges(changes: SimpleChanges): void {
         if (this.isPropertyChanged(changes)) {
             this.reload();
         }
@@ -115,11 +115,11 @@ export class ActivitiProcessInstanceListComponent implements OnChanges, AfterCon
     private isPropertyChanged(changes: SimpleChanges): boolean {
         let changed: boolean = false;
 
-        let appId = changes['appId'];
-        let processDefinitionKey = changes['processDefinitionKey'];
-        let state = changes['state'];
-        let sort = changes['sort'];
-        let name = changes['name'];
+        let appId = changes.appId;
+        let processDefinitionKey = changes.processDefinitionKey;
+        let state = changes.state;
+        let sort = changes.sort;
+        let name = changes.name;
 
         if (appId && appId.currentValue) {
             changed = true;
@@ -135,12 +135,12 @@ export class ActivitiProcessInstanceListComponent implements OnChanges, AfterCon
         return changed;
     }
 
-    public reload() {
+    public reload(): void {
         this.requestNode = this.createRequestNode();
         this.load(this.requestNode);
     }
 
-    private load(requestNode: ProcessFilterRequestRepresentation) {
+    private load(requestNode: ProcessFilterRequestRepresentation): void {
         this.processService.getProcessInstances(requestNode)
             .subscribe(
                 (response) => {
@@ -172,16 +172,16 @@ export class ActivitiProcessInstanceListComponent implements OnChanges, AfterCon
      *
      * @param instances
      */
-    private renderInstances(instances: any[]) {
+    private renderInstances(instances: any[]): void {
         instances = this.optimizeNames(instances);
-        this.setDatatableSorting();
+        this.setDataTableSorting();
         this.data.setRows(instances);
     }
 
     /**
      * Sort the datatable rows based on current value of 'sort' property
      */
-    private setDatatableSorting() {
+    private setDataTableSorting(): void {
         if (!this.sort) {
             return;
         }
@@ -196,7 +196,7 @@ export class ActivitiProcessInstanceListComponent implements OnChanges, AfterCon
     /**
      * Select the first instance of a list if present
      */
-    protected selectFirst() {
+    public selectFirst(): void {
         if (!this.isListEmpty()) {
             let row = this.data.getRows()[0];
             this.data.selectedRow = row;
@@ -213,7 +213,7 @@ export class ActivitiProcessInstanceListComponent implements OnChanges, AfterCon
      * Return the current id
      * @returns {string}
      */
-    protected getCurrentId(): string {
+    public getCurrentId(): string {
         return this.currentInstanceId;
     }
 
@@ -221,7 +221,7 @@ export class ActivitiProcessInstanceListComponent implements OnChanges, AfterCon
      * Check if the list is empty
      * @returns {ObjectDataTableAdapter|boolean}
      */
-    protected isListEmpty(): boolean {
+    public isListEmpty(): boolean {
         return this.data === undefined ||
             (this.data && this.data.getRows() && this.data.getRows().length === 0);
     }
@@ -230,7 +230,7 @@ export class ActivitiProcessInstanceListComponent implements OnChanges, AfterCon
      * Emit the event rowClick passing the current task id when the row is clicked
      * @param event
      */
-    protected onRowClick(event: DataRowEvent) {
+    public onRowClick(event: DataRowEvent): void {
         let item = event;
         this.currentInstanceId = item.value.getValue('id');
         this.rowClick.emit(this.currentInstanceId);
@@ -241,7 +241,7 @@ export class ActivitiProcessInstanceListComponent implements OnChanges, AfterCon
      * @param instances
      * @returns {any[]}
      */
-    private optimizeNames(instances: any[]) {
+    private optimizeNames(instances: any[]): any[] {
         instances = instances.map((t) => {
             t.obj.name = this.getProcessNameOrDescription(t.obj, 'medium');
             return t;
@@ -249,7 +249,7 @@ export class ActivitiProcessInstanceListComponent implements OnChanges, AfterCon
         return instances;
     }
 
-    protected getProcessNameOrDescription(processInstance, dateFormat): string {
+    public getProcessNameOrDescription(processInstance, dateFormat): string {
         let name = '';
         if (processInstance) {
             name = processInstance.name ||
@@ -258,7 +258,7 @@ export class ActivitiProcessInstanceListComponent implements OnChanges, AfterCon
         return name;
     }
 
-    protected getFormatDate(value, format: string) {
+    public getFormatDate(value, format: string): string {
         let datePipe = new DatePipe('en-US');
         try {
             return datePipe.transform(value, format);
@@ -267,7 +267,7 @@ export class ActivitiProcessInstanceListComponent implements OnChanges, AfterCon
         }
     }
 
-    private createRequestNode() {
+    private createRequestNode(): ProcessFilterRequestRepresentation {
         let requestNode = {
             appDefinitionId: this.appId,
             processDefinitionKey: this.processDefinitionKey,

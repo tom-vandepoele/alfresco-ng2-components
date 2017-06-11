@@ -21,5 +21,5 @@ import { BaseEvent } from './base.event';
 export class BaseUIEvent<T> extends BaseEvent<T> {
 
     /** Original DOM event */
-    event: Event;
+    public event: Event;
 }

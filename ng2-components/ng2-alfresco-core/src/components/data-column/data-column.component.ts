@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import { Component, Input, ContentChild, TemplateRef } from '@angular/core';
+import { Component, ContentChild, Input, TemplateRef } from '@angular/core';
 
 @Component({
     selector: 'data-column',
@@ -24,33 +24,33 @@ import { Component, Input, ContentChild, TemplateRef } from '@angular/core';
 export class DataColumnComponent {
 
     @Input()
-    key: string;
+    public key: string;
 
     @Input()
-    type: string = 'text';
+    public type: string = 'text';
 
     @Input()
-    format: string;
+    public format: string;
 
     @Input()
-    sortable: boolean = true;
+    public sortable: boolean = true;
 
     @Input()
-    title: string = '';
+    public title: string = '';
 
     @ContentChild(TemplateRef)
-    template: any;
+    public template: any;
 
     /**
      * Title to be used for screen readers.
      */
     @Input('sr-title')
-    srTitle: string;
+    public srTitle: string;
 
     @Input('class')
-    cssClass: string;
+    public cssClass: string;
 
-    ngOnInit() {
+    public ngOnInit(): void {
         if (!this.srTitle && this.key === '$thumbnail') {
             this.srTitle = 'Thumbnail';
         }

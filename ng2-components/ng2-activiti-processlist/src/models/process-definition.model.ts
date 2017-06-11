@@ -16,16 +16,16 @@
  */
 
 export class ProcessDefinitionRepresentation {
-    id: string;
-    name: string;
-    description: string;
-    key: string;
-    category: string;
-    version: number;
-    deploymentId: string;
-    tenantId: string;
-    metaDataValues: any[];
-    hasStartForm: boolean;
+    public id: string;
+    public name: string;
+    public description: string;
+    public key: string;
+    public category: string;
+    public version: number;
+    public deploymentId: string;
+    public tenantId: string;
+    public metaDataValues: any[];
+    public hasStartForm: boolean;
 
     constructor(obj?: any) {
         this.id = obj && obj.id || null;

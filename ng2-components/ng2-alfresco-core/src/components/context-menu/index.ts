@@ -15,9 +15,9 @@
  * limitations under the License.
  */
 
-import { ContextMenuService } from './context-menu.service';
 import { ContextMenuHolderComponent } from './context-menu-holder.component';
 import { ContextMenuDirective } from './context-menu.directive';
+import { ContextMenuService } from './context-menu.service';
 
 export * from './context-menu.service';
 export * from './context-menu-holder.component';

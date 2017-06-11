@@ -16,17 +16,18 @@
  */
 
 import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs/Rx';
 import { MinimalNodeEntity } from 'alfresco-js-api';
-import { AlfrescoAuthenticationService } from './alfresco-authentication.service';
-import { AlfrescoApiService } from './alfresco-api.service';
-import { LogService } from './log.service';
+import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
+import { Observable, Subject } from 'rxjs/Rx';
 import { FolderCreatedEvent } from '../events/folder-created.event';
+import { AlfrescoApiService } from './alfresco-api.service';
+import { AlfrescoAuthenticationService } from './alfresco-authentication.service';
+import { LogService } from './log.service';
 
 @Injectable()
 export class AlfrescoContentService {
 
-    folderCreated: Subject<FolderCreatedEvent> = new Subject<FolderCreatedEvent>();
+    public folderCreated: Subject<FolderCreatedEvent> = new Subject<FolderCreatedEvent>();
 
     constructor(public authService: AlfrescoAuthenticationService,
                 public apiService: AlfrescoApiService,
@@ -38,7 +39,7 @@ export class AlfrescoContentService {
      * @param nodeId {string} Node to get URL for.
      * @returns {string} URL address.
      */
-    getDocumentThumbnailUrl(nodeId: any): string {
+    public getDocumentThumbnailUrl(nodeId: any): string {
 
         if (nodeId && nodeId.entry) {
             nodeId = nodeId.entry.id;
@@ -52,7 +53,7 @@ export class AlfrescoContentService {
      * @param nodeId {string} Node to get URL for.
      * @returns {string} URL address.
      */
-    getContentUrl(nodeId: any): string {
+    public getContentUrl(nodeId: any): string {
 
         if (nodeId && nodeId.entry) {
             nodeId = nodeId.entry.id;
@@ -67,7 +68,7 @@ export class AlfrescoContentService {
      *
      * @returns {Observable<any>} URL address.
      */
-    getNodeContent(nodeId: string): Observable<any> {
+    public getNodeContent(nodeId: string): Observable<any> {
         return Observable.fromPromise(this.apiService.getInstance().core.nodesApi.getFileContent(nodeId).then((dataContent) => {
             return dataContent;
         })).catch(this.handleError);
@@ -77,20 +78,25 @@ export class AlfrescoContentService {
      * Create a folder
      * @param name - the folder name
      */
-    createFolder(relativePath: string, name: string, parentId?: string): Observable<MinimalNodeEntity> {
+    public createFolder(relativePath: string, name: string, parentId?: string): Observable<MinimalNodeEntity> {
         return Observable.fromPromise(this.apiService.getInstance().nodes.createFolder(name, relativePath, parentId))
-            .do(data => {
+            .do((data) => {
                 this.folderCreated.next({
-                    relativePath: relativePath,
-                    name: name,
-                    parentId: parentId,
+                    relativePath,
+                    name,
+                    parentId,
                     node: data
                 });
             })
-            .catch(err => this.handleError(err));
+            .catch((err) => this.handleError(err));
     }
 
-    private handleError(error: any) {
+    /**
+     * Throw the error
+     * @param error
+     * @returns {ErrorObservable}
+     */
+    private handleError(error: Response): ErrorObservable<string | Response> {
         this.logService.error(error);
         return Observable.throw(error || 'Server error');
     }

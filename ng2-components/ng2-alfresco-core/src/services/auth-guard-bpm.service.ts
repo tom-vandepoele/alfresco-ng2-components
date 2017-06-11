@@ -17,8 +17,8 @@
 
 import { Injectable } from '@angular/core';
 import {
-  CanActivate, Router, CanActivateChild,
-  ActivatedRouteSnapshot,
+  ActivatedRouteSnapshot, CanActivate, CanActivateChild,
+  Router,
   RouterStateSnapshot
 } from '@angular/router';
 
@@ -28,17 +28,17 @@ import { AlfrescoAuthenticationService } from './alfresco-authentication.service
 export class AuthGuardBpm implements CanActivate, CanActivateChild {
     constructor(private authService: AlfrescoAuthenticationService, private router: Router) {}
 
-    canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+    public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
         // let url: string = state.url;
 
         return this.checkLogin();
     }
 
-    canActivateChild(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+    public canActivateChild(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
         return this.canActivate(route, state);
     }
 
-    checkLogin(): boolean {
+    public checkLogin(): boolean {
         if (this.authService.isBpmLoggedIn()) {
             return true;
         }

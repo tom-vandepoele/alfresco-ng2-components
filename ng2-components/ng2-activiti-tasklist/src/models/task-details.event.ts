@@ -26,7 +26,7 @@ export class TaskDetailsEvent {
         return this._value;
     }
 
-    get defaultPrevented() {
+    get defaultPrevented(): boolean {
         return this._defaultPrevented;
     }
 
@@ -34,7 +34,7 @@ export class TaskDetailsEvent {
         this._value = value;
     }
 
-    preventDefault() {
+    public  preventDefault(): void {
         this._defaultPrevented = true;
     }
 }

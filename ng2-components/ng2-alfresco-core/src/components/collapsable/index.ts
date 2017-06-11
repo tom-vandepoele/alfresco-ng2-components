@@ -15,8 +15,8 @@
  * limitations under the License.
  */
 
-import {AccordionComponent} from './accordion.component';
 import {AccordionGroupComponent} from './accordion-group.component';
+import {AccordionComponent} from './accordion.component';
 
 export const COLLAPSABLE_DIRECTIVES: [any] = [
     AccordionComponent,

@@ -15,14 +15,14 @@
  * limitations under the License.
  */
 
-import { Directive, AfterViewInit } from '@angular/core';
+import { AfterViewInit, Directive } from '@angular/core';
 declare var componentHandler;
 
 @Directive({
     selector: '[mdl]'
 })
 export class MDL implements AfterViewInit {
-    ngAfterViewInit() {
+    public ngAfterViewInit(): void {
         componentHandler.upgradeAllRegistered();
     }
 }

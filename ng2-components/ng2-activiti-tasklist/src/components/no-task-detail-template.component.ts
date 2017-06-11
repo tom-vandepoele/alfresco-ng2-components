@@ -16,10 +16,10 @@
  */
 
 import {
-    Directive,
+    AfterContentInit,
     ContentChild,
-    TemplateRef,
-    AfterContentInit
+    Directive,
+    TemplateRef
 } from '@angular/core';
 import { ActivitiTaskDetails } from './activiti-task-details.component';
 
@@ -29,13 +29,12 @@ import { ActivitiTaskDetails } from './activiti-task-details.component';
 export class NoTaskDetailsTemplateComponent implements AfterContentInit {
 
     @ContentChild(TemplateRef)
-    template: any;
+    public template: any;
 
-    constructor(
-        private activitiTaskDetails: ActivitiTaskDetails) {
+    constructor(private activitiTaskDetails: ActivitiTaskDetails) {
     }
 
-    ngAfterContentInit() {
+    public ngAfterContentInit(): void {
         this.activitiTaskDetails.noTaskDetailsTemplateComponent = this.template;
     }
 }

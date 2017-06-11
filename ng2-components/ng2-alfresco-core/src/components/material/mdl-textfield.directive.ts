@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import { Directive, ElementRef, AfterViewInit } from '@angular/core';
+import { AfterViewInit, Directive, ElementRef } from '@angular/core';
 
 declare var componentHandler;
 
@@ -26,7 +26,7 @@ export class AlfrescoMdlTextFieldDirective implements AfterViewInit {
 
     constructor(private element: ElementRef) {}
 
-    ngAfterViewInit() {
+    public ngAfterViewInit(): void {
         if (componentHandler) {
             let el = this.element.nativeElement;
             el.classList.add('mdl-textfield');

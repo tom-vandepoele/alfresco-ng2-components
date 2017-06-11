@@ -15,9 +15,9 @@
  * limitations under the License.
  */
 
-import { ComponentFixture, TestBed, async } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { AlfrescoTranslationService, CoreModule } from 'ng2-alfresco-core';
 import { Observable } from 'rxjs/Rx';
-import { CoreModule, AlfrescoTranslationService } from 'ng2-alfresco-core';
 import { ActivitiTaskListService } from '../services/activiti-tasklist.service';
 import { ActivitiStartTaskButton } from './activiti-start-task.component';
 
@@ -91,7 +91,7 @@ describe('ActivitiStartTaskButton', () => {
         let attachFormToATask = spyOn(service, 'attachFormToATask').and.returnValue(Observable.of());
         spyOn(service, 'createNewTask').and.callFake(
             function() {
-                return Observable.create(observer => {
+                return Observable.create((observer) => {
                     observer.next({ id: 'task-id'});
                     observer.complete();
                 });
@@ -110,7 +110,7 @@ describe('ActivitiStartTaskButton', () => {
         let attachFormToATask = spyOn(service, 'attachFormToATask').and.returnValue(Observable.of());
         spyOn(service, 'createNewTask').and.callFake(
             function() {
-                return Observable.create(observer => {
+                return Observable.create((observer) => {
                     observer.next({ id: 'task-id'});
                     observer.complete();
                 });
@@ -139,7 +139,7 @@ describe('ActivitiStartTaskButton', () => {
         activitiStartTaskButton.name = 'fake-name';
         createTaskButton.click();
         jasmine.Ajax.requests.mostRecent().respondWith({
-            'status': 200
+            status: 200
         });
     });
 
@@ -153,7 +153,7 @@ describe('ActivitiStartTaskButton', () => {
         activitiStartTaskButton.name = 'fake-name';
         createTaskButton.click();
         jasmine.Ajax.requests.mostRecent().respondWith({
-            'status': 403
+            status: 403
         });
     });
 
@@ -166,7 +166,7 @@ describe('ActivitiStartTaskButton', () => {
         activitiStartTaskButton.name = 'fake-name';
         createTaskButton.click();
         jasmine.Ajax.requests.mostRecent().respondWith({
-            'status': 200,
+            status: 200,
             contentType: 'json',
             responseText: {}
         });

@@ -21,11 +21,11 @@ import { Subject } from 'rxjs/Subject';
 @Injectable()
 export class AlfrescoSettingsService {
 
-    static DEFAULT_ECM_ADDRESS: string = 'http://' + window.location.hostname + ':8080';
-    static DEFAULT_BPM_ADDRESS: string = 'http://' + window.location.hostname + ':9999';
-    static DEFAULT_CSRF_CONFIG: boolean = false;
+    public static DEFAULT_ECM_ADDRESS: string = 'http://' + window.location.hostname + ':8080';
+    public static DEFAULT_BPM_ADDRESS: string = 'http://' + window.location.hostname + ':9999';
+    public static DEFAULT_CSRF_CONFIG: boolean = false;
 
-    static DEFAULT_BPM_CONTEXT_PATH: string = '/activiti-app';
+    public static DEFAULT_BPM_CONTEXT_PATH: string = '/activiti-app';
 
     private _ecmHost: string = AlfrescoSettingsService.DEFAULT_ECM_ADDRESS;
     private _bpmHost: string = AlfrescoSettingsService.DEFAULT_BPM_ADDRESS;
@@ -44,11 +44,6 @@ export class AlfrescoSettingsService {
         return this._ecmHost;
     }
 
-    public set csrfDisabled(csrfDisabled: boolean) {
-        this.csrfSubject.next(csrfDisabled);
-        this._csrfDisabled = csrfDisabled;
-    }
-
     public set ecmHost(ecmHostUrl: string) {
         this.ecmHostSubject.next(ecmHostUrl);
         this._ecmHost = ecmHostUrl;
@@ -63,6 +58,11 @@ export class AlfrescoSettingsService {
         this._bpmHost = bpmHostUrl;
     }
 
+    public set csrfDisabled(csrfDisabled: boolean) {
+        this.csrfSubject.next(csrfDisabled);
+        this._csrfDisabled = csrfDisabled;
+    }
+
     public getBPMApiBaseUrl(): string {
         return this._bpmHost + this._bpmContextPath;
     }
@@ -71,7 +71,7 @@ export class AlfrescoSettingsService {
         return this.providers;
     }
 
-    public setProviders(providers: string) {
+    public setProviders(providers: string): void {
         this.providerSubject.next(providers);
         this.providers = providers;
     }

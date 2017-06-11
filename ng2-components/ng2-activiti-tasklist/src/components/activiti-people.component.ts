@@ -16,8 +16,8 @@
  */
 
 import { Component, Input, ViewChild } from '@angular/core';
-import { Observer, Observable } from 'rxjs/Rx';
 import { AlfrescoTranslationService, LogService } from 'ng2-alfresco-core';
+import { Observable, Observer } from 'rxjs/Rx';
 import { User } from '../models/user.model';
 import { ActivitiPeopleService } from '../services/activiti-people.service';
 
@@ -32,25 +32,25 @@ declare var require: any;
 export class ActivitiPeople {
 
     @Input()
-    iconImageUrl: string = require('../assets/images/user.jpg');
+    public iconImageUrl: string = require('../assets/images/user.jpg');
 
     @Input()
-    people: User [] = [];
+    public people: User [] = [];
 
     @Input()
-    taskId: string = '';
+    public taskId: string = '';
 
     @Input()
-    readOnly: boolean = false;
+    public readOnly: boolean = false;
 
     @ViewChild('dialog')
-    dialog: any;
+    public dialog: any;
 
     @ViewChild('activitipeoplesearch')
-    activitipeoplesearch: any;
+    public activitipeoplesearch: any;
 
     private peopleSearchObserver: Observer<User[]>;
-    peopleSearch$: Observable<User[]>;
+    public peopleSearch$: Observable<User[]>;
 
     /**
      * Constructor
@@ -63,10 +63,10 @@ export class ActivitiPeople {
         if (translateService) {
             translateService.addTranslationFolder('ng2-activiti-tasklist', 'assets/ng2-activiti-tasklist');
         }
-        this.peopleSearch$ = new Observable<User[]>(observer => this.peopleSearchObserver = observer).share();
+        this.peopleSearch$ = new Observable<User[]>((observer) => this.peopleSearchObserver = observer).share();
     }
 
-    public showDialog() {
+    public showDialog(): void {
         if (!this.dialog.nativeElement.showModal) {
             dialogPolyfill.registerDialog(this.dialog.nativeElement);
         }
@@ -75,7 +75,7 @@ export class ActivitiPeople {
         }
     }
 
-    public closeDialog() {
+    public closeDialog(): void {
         if (this.dialog) {
             this.dialog.nativeElement.close();
             this.peopleSearchObserver.next([]);
@@ -83,30 +83,30 @@ export class ActivitiPeople {
         }
     }
 
-    searchUser(searchedWord: string) {
+    public searchUser(searchedWord: string): void {
         this.peopleService.getWorkflowUsers(this.taskId, searchedWord)
             .subscribe((users) => {
                 this.peopleSearchObserver.next(users);
-            }, error => this.logService.error('Could not load users'));
+            }, (error) => this.logService.error('Could not load users'));
     }
 
-    involveUser(user: User) {
+    public involveUser(user: User): void {
         this.peopleService.involveUserWithTask(this.taskId, user.id.toString())
             .subscribe(() => {
                 this.people.push(user);
-            }, error => this.logService.error('Impossible to involve user with task'));
+            }, (error) => this.logService.error('Impossible to involve user with task'));
     }
 
-    removeInvolvedUser(user: User) {
+    public removeInvolvedUser(user: User): void {
         this.peopleService.removeInvolvedUser(this.taskId, user.id.toString())
             .subscribe(() => {
                 this.people = this.people.filter((involvedUser) => {
                     return involvedUser.id !== user.id;
                 });
-            }, error => this.logService.error('Impossible to remove involved user from task'));
+            }, (error) => this.logService.error('Impossible to remove involved user from task'));
     }
 
-    getDisplayUser(user: User): string {
+    public getDisplayUser(user: User): string {
         let firstName = user.firstName && user.firstName !== 'null' ? user.firstName : 'N/A';
         let lastName = user.lastName && user.lastName !== 'null' ? user.lastName : 'N/A';
         return firstName + ' ' + lastName;

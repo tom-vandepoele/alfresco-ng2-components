@@ -34,8 +34,8 @@ export class DataRowActionEvent extends BaseEvent<DataRowActionModel> {
 
 export class DataRowActionModel {
 
-    row: DataRow;
-    action: any;
+    public row: DataRow;
+    public action: any;
 
     constructor(row: DataRow, action: any) {
         this.row = row;

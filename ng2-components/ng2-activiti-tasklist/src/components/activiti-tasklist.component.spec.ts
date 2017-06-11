@@ -16,13 +16,13 @@
  */
 
 import { SimpleChange } from '@angular/core';
-import { ComponentFixture, TestBed, async } from '@angular/core/testing';
-import { CoreModule, AlfrescoTranslationService } from 'ng2-alfresco-core';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { AlfrescoTranslationService, CoreModule } from 'ng2-alfresco-core';
 import { DataTableModule } from 'ng2-alfresco-datatable';
-import { ActivitiTaskList } from './activiti-tasklist.component';
+import { DataRowEvent, ObjectDataRow, ObjectDataTableAdapter } from 'ng2-alfresco-datatable';
 import { Observable } from 'rxjs/Rx';
-import { ObjectDataRow, DataRowEvent, ObjectDataTableAdapter } from 'ng2-alfresco-datatable';
 import { ActivitiTaskListService } from '../services/activiti-tasklist.service';
+import { ActivitiTaskList } from './activiti-tasklist.component';
 
 describe('ActivitiTaskList', () => {
 
@@ -178,7 +178,7 @@ describe('ActivitiTaskList', () => {
             done();
         });
         component.ngAfterContentInit();
-        component.ngOnChanges({'state': state, 'processDefinitionKey': processDefinitionKey, 'assignment': assignment});
+        component.ngOnChanges({state, processDefinitionKey, assignment});
         fixture.detectChanges();
     });
 
@@ -200,7 +200,7 @@ describe('ActivitiTaskList', () => {
         });
 
         component.ngAfterContentInit();
-        component.ngOnChanges({'state': state, 'processDefinitionKey': processDefinitionKey, 'assignment': assignment});
+        component.ngOnChanges({state, processDefinitionKey, assignment});
         fixture.detectChanges();
     });
 
@@ -222,7 +222,7 @@ describe('ActivitiTaskList', () => {
         });
 
         component.ngAfterContentInit();
-        component.ngOnChanges({'state': state, 'assignment': assignment});
+        component.ngOnChanges({state, assignment});
         fixture.detectChanges();
     });
 
@@ -249,7 +249,7 @@ describe('ActivitiTaskList', () => {
         });
         let rowEvent = new DataRowEvent(row, null);
 
-        component.rowClick.subscribe(taskId => {
+        component.rowClick.subscribe((taskId) => {
             expect(taskId).toEqual(999);
             expect(component.getCurrentId()).toEqual(999);
             done();
@@ -289,7 +289,7 @@ describe('ActivitiTaskList', () => {
             const landingTaskId = '999';
             let change = new SimpleChange(null, landingTaskId, true);
 
-            component.ngOnChanges({'landingTaskId': change});
+            component.ngOnChanges({landingTaskId: change});
             expect(component.reload).not.toHaveBeenCalled();
             expect(component.data.getRows().length).toEqual(1);
         });
@@ -317,7 +317,7 @@ describe('ActivitiTaskList', () => {
                 done();
             });
 
-            component.ngOnChanges({'landingTaskId': change});
+            component.ngOnChanges({landingTaskId: change});
         });
 
         it('should NOT reload the process list when no parameters changed', () => {
@@ -339,7 +339,7 @@ describe('ActivitiTaskList', () => {
                 done();
             });
 
-            component.ngOnChanges({'appId': change});
+            component.ngOnChanges({appId: change});
         });
 
         it('should reload the list when the processDefinitionKey parameter changes', (done) => {
@@ -355,7 +355,7 @@ describe('ActivitiTaskList', () => {
                 done();
             });
 
-            component.ngOnChanges({'processDefinitionKey': change});
+            component.ngOnChanges({processDefinitionKey: change});
         });
 
         it('should reload the list when the state parameter changes', (done) => {
@@ -371,7 +371,7 @@ describe('ActivitiTaskList', () => {
                 done();
             });
 
-            component.ngOnChanges({'state': change});
+            component.ngOnChanges({state: change});
         });
 
         it('should reload the list when the sort parameter changes', (done) => {
@@ -387,7 +387,7 @@ describe('ActivitiTaskList', () => {
                 done();
             });
 
-            component.ngOnChanges({'sort': change});
+            component.ngOnChanges({sort: change});
         });
 
         it('should reload the process list when the name parameter changes', (done) => {
@@ -403,7 +403,7 @@ describe('ActivitiTaskList', () => {
                 done();
             });
 
-            component.ngOnChanges({'name': change});
+            component.ngOnChanges({name: change});
         });
 
         it('should reload the list when the assignment parameter changes', (done) => {
@@ -419,7 +419,7 @@ describe('ActivitiTaskList', () => {
                 done();
             });
 
-            component.ngOnChanges({'assignment': change});
+            component.ngOnChanges({assignment: change});
         });
     });
 });

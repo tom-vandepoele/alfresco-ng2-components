@@ -78,7 +78,7 @@ export class AlfrescoApiService {
         });
     }
 
-    private init() {
+    private init(): void {
         this.alfrescoApi = <AlfrescoApi>new alfrescoApi({
             provider: this.provider,
             ticketEcm: this.ticketEcm,

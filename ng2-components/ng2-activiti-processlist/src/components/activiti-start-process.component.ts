@@ -34,27 +34,27 @@ declare let dialogPolyfill: any;
 export class ActivitiStartProcessInstance implements OnChanges {
 
     @Input()
-    appId: string;
+    public appId: string;
 
     @Input()
-    variables: RestVariable;
+    public variables: RestVariable;
 
     @Output()
-    start: EventEmitter<ProcessInstance> = new EventEmitter<ProcessInstance>();
+    public start: EventEmitter<ProcessInstance> = new EventEmitter<ProcessInstance>();
 
     @Output()
-    error: EventEmitter<ProcessInstance> = new EventEmitter<ProcessInstance>();
+    public error: EventEmitter<ProcessInstance> = new EventEmitter<ProcessInstance>();
 
     @ViewChild(ActivitiStartForm)
-    startForm: ActivitiStartForm;
+    public startForm: ActivitiStartForm;
 
-    processDefinitions: ProcessDefinitionRepresentation[] = [];
+    public processDefinitions: ProcessDefinitionRepresentation[] = [];
 
-    name: string;
+    public name: string;
 
-    currentProcessDef: ProcessDefinitionRepresentation = new ProcessDefinitionRepresentation();
+    public currentProcessDef: ProcessDefinitionRepresentation = new ProcessDefinitionRepresentation();
 
-    errorMessageId: string = '';
+    public errorMessageId: string = '';
 
     constructor(private translate: AlfrescoTranslationService,
                 private activitiProcess: ActivitiProcessService) {
@@ -64,15 +64,15 @@ export class ActivitiStartProcessInstance implements OnChanges {
         }
     }
 
-    ngOnChanges(changes: SimpleChanges) {
-        let appId = changes['appId'];
+    public ngOnChanges(changes: SimpleChanges): void {
+        let appId = changes.appId;
         if (appId && (appId.currentValue || appId.currentValue === null)) {
             this.load(appId.currentValue);
             return;
         }
     }
 
-    public load(appId: string) {
+    public load(appId: string): void {
         this.resetSelectedProcessDefinition();
         this.resetErrorMessage();
         this.activitiProcess.getProcessDefinitions(appId).subscribe(
@@ -85,7 +85,7 @@ export class ActivitiStartProcessInstance implements OnChanges {
         );
     }
 
-    public startProcess(outcome?: string) {
+    public startProcess(outcome?: string): void {
         if (this.currentProcessDef.id && this.name) {
             this.resetErrorMessage();
             let formValues = this.startForm ? this.startForm.form.values : undefined;
@@ -102,7 +102,7 @@ export class ActivitiStartProcessInstance implements OnChanges {
         }
     }
 
-    onProcessDefChange(processDefinitionId) {
+    public onProcessDefChange(processDefinitionId): void {
         let processDef = this.processDefinitions.find((processDefinition) => {
             return processDefinition.id === processDefinitionId;
         });
@@ -113,11 +113,11 @@ export class ActivitiStartProcessInstance implements OnChanges {
         }
     }
 
-    hasStartForm() {
+    public hasStartForm(): boolean {
         return this.currentProcessDef && this.currentProcessDef.hasStartForm;
     }
 
-    isStartFormMissingOrValid() {
+    public isStartFormMissingOrValid(): boolean {
         if (this.startForm) {
             return this.startForm.form && this.startForm.form.isValid;
         } else {
@@ -125,11 +125,11 @@ export class ActivitiStartProcessInstance implements OnChanges {
         }
     }
 
-    validateForm() {
+    public validateForm(): any {
         return this.currentProcessDef.id && this.name && this.isStartFormMissingOrValid();
     }
 
-    private resetSelectedProcessDefinition() {
+    private resetSelectedProcessDefinition(): void {
         this.currentProcessDef = new ProcessDefinitionRepresentation();
     }
 
@@ -137,11 +137,11 @@ export class ActivitiStartProcessInstance implements OnChanges {
         this.errorMessageId = '';
     }
 
-    public onOutcomeClick(outcome: string) {
+    public onOutcomeClick(outcome: string): void {
         this.startProcess(outcome);
     }
 
-    public reset() {
+    public reset(): void {
         this.resetSelectedProcessDefinition();
         this.name = '';
         if (this.startForm) {

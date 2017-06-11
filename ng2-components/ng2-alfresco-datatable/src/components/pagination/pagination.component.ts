@@ -51,13 +51,13 @@ export class PaginationComponent implements OnInit, OnChanges {
     constructor() {
     }
 
-    ngOnInit() {
+    public ngOnInit(): void {
         if (!this.pagination) {
             this.pagination = new PaginationData(0, 0, 0, this.maxItems, true);
         }
     }
 
-    ngOnChanges(changes: SimpleChanges) {
+    public ngOnChanges(changes: SimpleChanges): void {
         if (changes.pagination) {
             if (changes.pagination.currentValue) {
                 this.pagination = changes.pagination.currentValue;
@@ -66,33 +66,33 @@ export class PaginationComponent implements OnInit, OnChanges {
         }
     }
 
-    protected setPageSize(value: number) {
+    public setPageSize(value: number): void {
         this.pagination.maxItems = value;
         this.updateSummary();
         this.changePageSize.emit(this.pagination);
     }
 
-    protected nextPageAvail(): boolean {
+    public nextPageAvail(): boolean {
         return this.pagination.hasMoreItems;
     }
 
-    protected prevPageAvail(): boolean {
+    public prevPageAvail(): boolean {
         return this.pagination.skipCount > 0;
     }
 
-    protected showNextPage() {
+    public showNextPage(): void {
         this.pagination.skipCount += this.pagination.maxItems;
         this.updateSummary();
         this.nextPage.emit(this.pagination);
     }
 
-    protected showPrevPage() {
+    public showPrevPage(): void {
         this.pagination.skipCount -= this.pagination.maxItems;
         this.updateSummary();
         this.prevPage.emit(this.pagination);
     }
 
-    protected updateSummary() {
+    public updateSummary(): void {
         let from = this.pagination.skipCount;
         if (from === 0) {
             from = 1;

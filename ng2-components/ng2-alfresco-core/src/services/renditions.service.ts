@@ -16,6 +16,7 @@
  */
 
 import { Injectable } from '@angular/core';
+import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 import { Observable } from 'rxjs/Rx';
 import { AlfrescoApiService } from './alfresco-api.service';
 import { LogService } from './log.service';
@@ -33,7 +34,7 @@ export class RenditionsService {
 
     }
 
-    isRenditionAvailable(nodeId: string, encoding: string) {
+    public isRenditionAvailable(nodeId: string, encoding: string): Observable<any> {
         return Observable.create((observer) => {
             this.getRendition(nodeId, encoding).subscribe((res) => {
                 let isAvailable = true;
@@ -49,7 +50,7 @@ export class RenditionsService {
         });
     }
 
-    isConversionPossible(nodeId: string, encoding: string) {
+    public isConversionPossible(nodeId: string, encoding: string): Observable<any> {
         return Observable.create((observer) => {
             this.getRendition(nodeId, encoding).subscribe(() => {
                 observer.next(true);
@@ -61,22 +62,22 @@ export class RenditionsService {
         });
     }
 
-    getRendition(nodeId: string, encoding: string) {
+    public  getRendition(nodeId: string, encoding: string): Observable<any> {
         return Observable.fromPromise(this.apiService.getInstance().core.renditionsApi.getRendition(nodeId, encoding))
-            .catch(err => this.handleError(err));
+            .catch((err) => this.handleError(err));
     }
 
-    getRenditionsListByNodeId(nodeId: string) {
+    public getRenditionsListByNodeId(nodeId: string): Observable<any> {
         return Observable.fromPromise(this.apiService.getInstance().core.renditionsApi.getRenditions(nodeId))
-            .catch(err => this.handleError(err));
+            .catch((err) => this.handleError(err));
     }
 
-    createRendition(nodeId: string, encoding: string) {
+    public createRendition(nodeId: string, encoding: string): Observable<any> {
         return Observable.fromPromise(this.apiService.getInstance().core.renditionsApi.createRendition(nodeId, {id: encoding}))
-            .catch(err => this.handleError(err));
+            .catch((err) => this.handleError(err));
     }
 
-    private handleError(error: any): Observable<any> {
+    private handleError(error: Response): ErrorObservable<string | Response> {
         this.logService.error(error);
         return Observable.throw(error || 'Server error');
     }

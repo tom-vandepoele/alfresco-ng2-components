@@ -56,17 +56,17 @@ export class ObjectDataTableAdapter implements DataTableAdapter {
         'ft_ic_website.svg'
     ];
 
-    selectedRow: DataRow;
+    public selectedRow: DataRow;
 
-    static generateSchema(data: any[]) {
+    public static generateSchema(data: any[]): any[] {
         let schema = [];
 
         if (data && data.length) {
-            let rowToExaminate = data[0];
+            let rowToExamine = data[0];
 
-            if (typeof rowToExaminate === 'object') {
-                for (let key in rowToExaminate) {
-                    if (rowToExaminate.hasOwnProperty(key)) {
+            if (typeof rowToExamine === 'object') {
+                for (let key in rowToExamine) {
+                    if (rowToExamine.hasOwnProperty(key)) {
                         schema.push({
                             type: 'text',
                             key,
@@ -104,24 +104,24 @@ export class ObjectDataTableAdapter implements DataTableAdapter {
         }
     }
 
-    getRows(): DataRow[] {
+    public getRows(): DataRow[] {
         return this._rows;
     }
 
-    setRows(rows: DataRow[]) {
+    public setRows(rows: DataRow[]): void {
         this._rows = rows || [];
         this.sort();
     }
 
-    getColumns(): DataColumn[] {
+    public getColumns(): DataColumn[] {
         return this._columns;
     }
 
-    setColumns(columns: DataColumn[]) {
+    public setColumns(columns: DataColumn[]): void {
         this._columns = columns || [];
     }
 
-    getValue(row: DataRow, col: DataColumn): any {
+    public getValue(row: DataRow, col: DataColumn): any {
         if (!row) {
             throw new Error('Row not found');
         }
@@ -152,15 +152,15 @@ export class ObjectDataTableAdapter implements DataTableAdapter {
         return value;
     }
 
-    getImagePath(id: string): any {
+    public getImagePath(id: string): any {
         return require('./../assets/images/' + id);
     }
 
-    getSorting(): DataSorting {
+    public getSorting(): DataSorting {
         return this._sorting;
     }
 
-    setSorting(sorting: DataSorting): void {
+    public setSorting(sorting: DataSorting): void {
         this._sorting = sorting;
 
         if (sorting && sorting.key) {
@@ -186,7 +186,7 @@ export class ObjectDataTableAdapter implements DataTableAdapter {
         }
     }
 
-    sort(key?: string, direction?: string): void {
+    public sort(key?: string, direction?: string): void {
         let sorting = this._sorting || new DataSorting();
         if (key) {
             sorting.key = key;
@@ -206,11 +206,11 @@ export class ObjectDataRow implements DataRow {
 
     }
 
-    getValue(key: string): any {
+    public getValue(key: string): any {
         return ObjectUtils.getValue(this.obj, key);
     }
 
-    hasValue(key: string): boolean {
+    public hasValue(key: string): boolean {
         return this.getValue(key) !== undefined;
     }
 }
@@ -218,13 +218,13 @@ export class ObjectDataRow implements DataRow {
 // Simple implementation of the DataColumn interface.
 export class ObjectDataColumn implements DataColumn {
 
-    key: string;
-    type: string; // text|image
-    sortable: boolean;
-    title: string;
-    srTitle: string;
-    cssClass: string;
-    template?: TemplateRef<any>;
+    public key: string;
+    public type: string; // text|image
+    public sortable: boolean;
+    public title: string;
+    public srTitle: string;
+    public cssClass: string;
+    public template: TemplateRef<any>;
 
     constructor(obj: any) {
         this.key = obj.key;

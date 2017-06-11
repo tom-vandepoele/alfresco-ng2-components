@@ -27,7 +27,7 @@ export class StorageService {
         this.useLocalStorage = this.storageAvailable('localStorage');
     }
 
-    getItem(key: string): string | null {
+    public getItem(key: string): string | null {
         if (this.useLocalStorage) {
             return localStorage.getItem(key);
         } else {
@@ -35,7 +35,7 @@ export class StorageService {
         }
     }
 
-    setItem(key: string, data: string) {
+    public setItem(key: string, data: string): void {
         if (this.useLocalStorage) {
             localStorage.setItem(key, data);
         } else {
@@ -43,7 +43,7 @@ export class StorageService {
         }
     }
 
-    clear() {
+    public clear(): void {
         if (this.useLocalStorage) {
             localStorage.clear();
         } else {
@@ -51,7 +51,7 @@ export class StorageService {
         }
     }
 
-    removeItem(key: string) {
+    public removeItem(key: string): void {
         if (this.useLocalStorage) {
             localStorage.removeItem(key);
         } else {
@@ -59,7 +59,7 @@ export class StorageService {
         }
     }
 
-    hasItem(key: string): boolean {
+    public hasItem(key: string): boolean {
         if (this.useLocalStorage) {
             return localStorage.getItem(key) ? true : false;
         } else {

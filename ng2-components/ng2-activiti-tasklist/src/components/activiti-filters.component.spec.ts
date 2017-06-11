@@ -17,11 +17,11 @@
 
 import { SimpleChange } from '@angular/core';
 import { async } from '@angular/core/testing';
-import { Observable } from 'rxjs/Rx';
 import { LogServiceMock } from 'ng2-alfresco-core';
-import { ActivitiFilters } from './activiti-filters.component';
+import { Observable } from 'rxjs/Rx';
+import { FilterParamsModel, FilterRepresentationModel } from '../models/filter.model';
 import { ActivitiTaskListService } from '../services/activiti-tasklist.service';
-import { FilterRepresentationModel, FilterParamsModel } from '../models/filter.model';
+import { ActivitiFilters } from './activiti-filters.component';
 
 describe('ActivitiFilters', () => {
 
@@ -73,7 +73,7 @@ describe('ActivitiFilters', () => {
         spyOn(activitiService, 'getTaskListFilters').and.returnValue(Observable.fromPromise(fakeGlobalFilterPromise));
         const appId = '1';
         let change = new SimpleChange(null, appId, true);
-        filterList.ngOnChanges({ 'appId': change });
+        filterList.ngOnChanges({ appId: change });
 
         filterList.onSuccess.subscribe((res) => {
             expect(res).toBeDefined();
@@ -98,7 +98,7 @@ describe('ActivitiFilters', () => {
         spyOn(activitiService, 'getTaskListFilters').and.returnValue(Observable.fromPromise(fakeGlobalFilterPromise));
 
         let change = new SimpleChange(null, 'test', true);
-        filterList.ngOnChanges({ 'appName': change });
+        filterList.ngOnChanges({ appName: change });
 
         filterList.onSuccess.subscribe((res) => {
             let deployApp: any = activitiService.getDeployedApplications;
@@ -115,7 +115,7 @@ describe('ActivitiFilters', () => {
 
         const appId = '1';
         let change = new SimpleChange(null, appId, true);
-        filterList.ngOnChanges({ 'appId': change });
+        filterList.ngOnChanges({ appId: change });
 
         filterList.onError.subscribe((err) => {
             expect(err).toBeDefined();
@@ -130,7 +130,7 @@ describe('ActivitiFilters', () => {
 
         const appId = 'fake-app';
         let change = new SimpleChange(null, appId, true);
-        filterList.ngOnChanges({ 'appName': change });
+        filterList.ngOnChanges({ appName: change });
 
         filterList.onError.subscribe((err) => {
             expect(err).toBeDefined();
@@ -145,7 +145,7 @@ describe('ActivitiFilters', () => {
 
         const appId = '1';
         let change = new SimpleChange(null, appId, true);
-        filterList.ngOnChanges({ 'appId': change });
+        filterList.ngOnChanges({ appId: change });
 
         filterList.onSuccess.subscribe((res) => {
             expect(res).toBeDefined();
@@ -164,7 +164,7 @@ describe('ActivitiFilters', () => {
 
         const appId = '1';
         let change = new SimpleChange(null, appId, true);
-        filterList.ngOnChanges({ 'appId': change });
+        filterList.ngOnChanges({ appId: change });
 
         filterList.onSuccess.subscribe((res) => {
             expect(res).toBeDefined();
@@ -183,7 +183,7 @@ describe('ActivitiFilters', () => {
 
         const appId = '1';
         let change = new SimpleChange(null, appId, true);
-        filterList.ngOnChanges({ 'appId': change });
+        filterList.ngOnChanges({ appId: change });
 
         filterList.onSuccess.subscribe((res) => {
             expect(res).toBeDefined();
@@ -202,7 +202,7 @@ describe('ActivitiFilters', () => {
 
         const appId = '1';
         let change = new SimpleChange(null, appId, true);
-        filterList.ngOnChanges({ 'appId': change });
+        filterList.ngOnChanges({ appId: change });
 
         filterList.onSuccess.subscribe((res) => {
             expect(res).toBeDefined();
@@ -221,7 +221,7 @@ describe('ActivitiFilters', () => {
 
         const appId = '1';
         let change = new SimpleChange(null, appId, true);
-        filterList.ngOnChanges({ 'appId': change });
+        filterList.ngOnChanges({ appId: change });
 
         filterList.onSuccess.subscribe((res) => {
             expect(res).toBeDefined();
@@ -251,7 +251,7 @@ describe('ActivitiFilters', () => {
         const appId = '1';
 
         let change = new SimpleChange(null, appId, true);
-        filterList.ngOnChanges({ 'appId': change });
+        filterList.ngOnChanges({ appId: change });
 
         expect(filterList.getFiltersByAppId).toHaveBeenCalledWith(appId);
     });
@@ -261,7 +261,7 @@ describe('ActivitiFilters', () => {
         const appId = null;
 
         let change = new SimpleChange(null, appId, true);
-        filterList.ngOnChanges({ 'appId': change });
+        filterList.ngOnChanges({ appId: change });
 
         expect(filterList.getFiltersByAppId).toHaveBeenCalledWith(appId);
     });
@@ -271,7 +271,7 @@ describe('ActivitiFilters', () => {
         const appName = 'fake-app-name';
 
         let change = new SimpleChange(null, appName, true);
-        filterList.ngOnChanges({ 'appName': change });
+        filterList.ngOnChanges({ appName: change });
 
         expect(filterList.getFiltersByAppName).toHaveBeenCalledWith(appName);
     });
@@ -290,7 +290,7 @@ describe('ActivitiFilters', () => {
         spyOn(filterList, 'getFiltersByAppId').and.stub();
 
         let change = new SimpleChange(null, null, true);
-        filterList.ngOnChanges({ 'appName': change });
+        filterList.ngOnChanges({ appName: change });
 
         expect(filterList.getFiltersByAppId).toHaveBeenCalled();
     });

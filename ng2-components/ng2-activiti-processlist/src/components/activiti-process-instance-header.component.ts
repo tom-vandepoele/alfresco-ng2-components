@@ -30,16 +30,16 @@ declare let componentHandler: any;
 export class ActivitiProcessInstanceHeader {
 
     @Input()
-    showDiagram: boolean = true;
+    public showDiagram: boolean = true;
 
     @Input()
-    processInstance: ProcessInstance;
+    public processInstance: ProcessInstance;
 
     @Output()
-    onError: EventEmitter<any> = new EventEmitter<any>();
+    public onError: EventEmitter<any> = new EventEmitter<any>();
 
     @Output()
-    showProcessDiagram: EventEmitter<any> = new EventEmitter<any>();
+    public showProcessDiagram: EventEmitter<any> = new EventEmitter<any>();
 
     constructor(private translate: AlfrescoTranslationService,
                 private logService: LogService) {
@@ -49,7 +49,7 @@ export class ActivitiProcessInstanceHeader {
         }
     }
 
-    getStartedByFullName(): string {
+    public getStartedByFullName(): string {
         if (this.processInstance && this.processInstance.startedBy) {
             return (this.processInstance.startedBy.firstName && this.processInstance.startedBy.firstName !== 'null'
                     ? this.processInstance.startedBy.firstName + ' ' : '') +
@@ -58,7 +58,7 @@ export class ActivitiProcessInstanceHeader {
         return '';
     }
 
-    getFormatDate(value, format: string) {
+    public getFormatDate(value, format: string): any {
         let datePipe = new DatePipe('en-US');
         try {
             return datePipe.transform(value, format);
@@ -67,19 +67,19 @@ export class ActivitiProcessInstanceHeader {
         }
     }
 
-    isRunning(): boolean {
+    public isRunning(): boolean {
         return this.processInstance && !this.processInstance.ended;
     }
 
-    isDiagramDisabled(): boolean {
+    public isDiagramDisabled(): boolean {
         return !this.isRunning() ? true : undefined;
     }
 
-    showDiagramEvent() {
+    public showDiagramEvent(): void {
         this.showProcessDiagram.emit({value: this.processInstance.id});
     }
 
-    isShowDiagram(): boolean {
+    public isShowDiagram(): boolean {
         return this.showDiagram;
     }
 }

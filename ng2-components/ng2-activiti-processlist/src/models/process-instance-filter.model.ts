@@ -16,13 +16,13 @@
  */
 
 export class ProcessFilterRequestRepresentation {
-    processDefinitionId: string;
-    processDefinitionKey: string;
-    appDefinitionId: string;
-    state: string;
-    sort: string;
-    page: number;
-    size: number;
+    public processDefinitionId: string;
+    public processDefinitionKey: string;
+    public appDefinitionId: string;
+    public state: string;
+    public sort: string;
+    public page: number;
+    public size: number;
 
     constructor(obj?: any) {
         this.processDefinitionId = obj && obj.processDefinitionId || null;

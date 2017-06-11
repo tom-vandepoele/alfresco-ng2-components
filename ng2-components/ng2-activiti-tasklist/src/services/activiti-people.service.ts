@@ -16,9 +16,10 @@
  */
 
 import { Injectable } from '@angular/core';
-import { AlfrescoApiService, LogService } from 'ng2-alfresco-core';
-import { Observable } from 'rxjs/Rx';
 import { Response } from '@angular/http';
+import { AlfrescoApiService, LogService } from 'ng2-alfresco-core';
+import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
+import { Observable } from 'rxjs/Rx';
 import { User } from '../models/user.model';
 
 @Injectable()
@@ -28,34 +29,34 @@ export class ActivitiPeopleService {
                 private logService: LogService) {
     }
 
-    getWorkflowUsers(taskId: string, searchWord: string): Observable<User[]> {
+    public getWorkflowUsers(taskId: string, searchWord: string): Observable<User[]> {
         let option = {excludeTaskId: taskId, filter: searchWord};
         return Observable.fromPromise(this.getWorkflowUserApi(option))
             .map((response: any) => <User[]> response.data || [])
-            .catch(err => this.handleError(err));
+            .catch((err) => this.handleError(err));
     }
 
-    involveUserWithTask(taskId: string, idToInvolve: string): Observable<User[]> {
+    public involveUserWithTask(taskId: string, idToInvolve: string): Observable<User[]> {
         let node = {userId: idToInvolve};
         return Observable.fromPromise(this.involveUserToTaskApi(taskId, node))
-            .catch(err => this.handleError(err));
+            .catch((err) => this.handleError(err));
     }
 
-    removeInvolvedUser(taskId: string, idToRemove: string): Observable<User[]> {
+    public removeInvolvedUser(taskId: string, idToRemove: string): Observable<User[]> {
         let node = {userId: idToRemove};
         return Observable.fromPromise(this.removeInvolvedUserFromTaskApi(taskId, node))
-            .catch(err => this.handleError(err));
+            .catch((err) => this.handleError(err));
     }
 
-    private getWorkflowUserApi(options: any) {
+    private getWorkflowUserApi(options: any): Promise<User[]>  {
         return this.alfrescoJsApi.getInstance().activiti.usersWorkflowApi.getUsers(options);
     }
 
-    private involveUserToTaskApi(taskId: string, node: any) {
+    private involveUserToTaskApi(taskId: string, node: any): Promise<User[]> {
         return this.alfrescoJsApi.getInstance().activiti.taskActionsApi.involveUser(taskId, node);
     }
 
-    private removeInvolvedUserFromTaskApi(taskId: string, node: any) {
+    private removeInvolvedUserFromTaskApi(taskId: string, node: any): Promise<User[]>  {
         return this.alfrescoJsApi.getInstance().activiti.taskActionsApi.removeInvolvedUser(taskId, node);
     }
 
@@ -64,7 +65,7 @@ export class ActivitiPeopleService {
      * @param error
      * @returns {ErrorObservable}
      */
-    private handleError(error: Response) {
+    private handleError(error: Response): ErrorObservable<string | Response> {
         this.logService.error(error);
         return Observable.throw(error || 'Server error');
     }

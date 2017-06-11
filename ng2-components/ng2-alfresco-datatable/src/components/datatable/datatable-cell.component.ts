@@ -26,20 +26,21 @@ import { DataColumn, DataRow, DataTableAdapter } from '../../data/index';
 export class DataTableCellComponent {
 
     @Input()
-    data: DataTableAdapter;
+    public data: DataTableAdapter;
 
     @Input()
-    column: DataColumn;
+    public column: DataColumn;
 
     @Input()
-    row: DataRow;
+    public row: DataRow;
 
     @Input()
-    value: any;
+    public value: any;
 
-    constructor() { }
+    constructor() {
+    }
 
-    ngOnInit() {
+    public ngOnInit(): void {
         if (this.column && this.column.key && this.row && this.data) {
             this.value = this.data.getValue(this.row, this.column);
         }

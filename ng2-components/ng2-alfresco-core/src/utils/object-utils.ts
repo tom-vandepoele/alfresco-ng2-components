@@ -23,7 +23,7 @@ export class ObjectUtils {
      * @param key
      * @returns {string}
      */
-    static getValue(target: any, key: string): any {
+    public static getValue(target: any, key: string): string {
 
         if (!target) {
             return undefined;

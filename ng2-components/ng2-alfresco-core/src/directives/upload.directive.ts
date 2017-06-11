@@ -15,8 +15,8 @@
  * limitations under the License.
  */
 
-import { Directive, Input, HostListener, ElementRef, Renderer, OnInit, NgZone, OnDestroy } from '@angular/core';
-import { FileUtils, FileInfo } from '../utils/file-utils';
+import { Directive, ElementRef, HostListener, Input, NgZone, OnDestroy, OnInit, Renderer } from '@angular/core';
+import { FileInfo, FileUtils } from '../utils/file-utils';
 
 @Directive({
     selector: '[adf-upload]'
@@ -24,24 +24,24 @@ import { FileUtils, FileInfo } from '../utils/file-utils';
 export class UploadDirective implements OnInit, OnDestroy {
 
     @Input('adf-upload')
-    enabled: boolean = true;
+    public enabled: boolean = true;
 
     @Input('adf-upload-data')
-    data: any;
+    public data: any;
 
     @Input()
-    mode: string[] = ['drop']; // click|drop
+    public mode: string[] = ['drop']; // click|drop
 
     @Input()
-    multiple: boolean;
+    public multiple: boolean;
 
     @Input()
-    accept: string;
+    public accept: string;
 
     @Input()
-    directory: boolean;
+    public directory: boolean;
 
-    isDragging: boolean = false;
+    public isDragging: boolean = false;
 
     private cssClassName: string = 'adf-upload__dragging';
     private upload: HTMLInputElement;
@@ -51,12 +51,12 @@ export class UploadDirective implements OnInit, OnDestroy {
         this.element = el.nativeElement;
     }
 
-    ngOnInit() {
+    public ngOnInit(): void {
         if (this.isClickMode() && this.renderer) {
             this.upload = this.renderer.createElement(this.el.nativeElement.parentNode, 'input') as HTMLInputElement;
             this.upload.type = 'file';
             this.upload.style.display = 'none';
-            this.upload.addEventListener('change', e => this.onSelectFiles(e));
+            this.upload.addEventListener('change', (e) => this.onSelectFiles(e));
 
             if (this.multiple) {
                 this.upload.setAttribute('multiple', '');
@@ -81,7 +81,7 @@ export class UploadDirective implements OnInit, OnDestroy {
         }
     }
 
-    ngOnDestroy() {
+    public ngOnDestroy(): void {
         this.element.removeEventListener('dragenter', this.onDragEnter);
         this.element.removeEventListener('dragover', this.onDragOver);
         this.element.removeEventListener('dragleave', this.onDragLeave);
@@ -89,21 +89,21 @@ export class UploadDirective implements OnInit, OnDestroy {
     }
 
     @HostListener('click', ['$event'])
-    onClick(event: Event) {
+    public onClick(event: Event): void {
         if (this.isClickMode() && this.upload) {
             event.preventDefault();
             this.upload.click();
         }
     }
 
-    onDragEnter(event: Event) {
+    public onDragEnter(): void {
         if (this.isDropMode()) {
             this.element.classList.add(this.cssClassName);
             this.isDragging = true;
         }
     }
 
-    onDragOver(event: Event) {
+    public onDragOver(event: Event): boolean {
         event.preventDefault();
         if (this.isDropMode()) {
             this.element.classList.add(this.cssClassName);
@@ -112,14 +112,14 @@ export class UploadDirective implements OnInit, OnDestroy {
         return false;
     }
 
-    onDragLeave(event) {
+    public onDragLeave(): void {
         if (this.isDropMode()) {
             this.element.classList.remove(this.cssClassName);
             this.isDragging = false;
         }
     }
 
-    onDrop(event: Event) {
+    public onDrop(event: Event): boolean {
         if (this.isDropMode()) {
 
             event.stopPropagation();
@@ -130,7 +130,7 @@ export class UploadDirective implements OnInit, OnDestroy {
 
             const dataTranfer = this.getDataTransfer(event);
             if (dataTranfer) {
-                this.getFilesDropped(dataTranfer).then(files => {
+                this.getFilesDropped(dataTranfer).then((files) => {
                     this.onUploadFiles(files);
                 });
 
@@ -139,13 +139,13 @@ export class UploadDirective implements OnInit, OnDestroy {
         return false;
     }
 
-    onUploadFiles(files: FileInfo[]) {
+    public onUploadFiles(files: FileInfo[]): void {
         if (this.enabled && files.length > 0) {
             let e = new CustomEvent('upload-files', {
                 detail: {
                     sender: this,
                     data: this.data,
-                    files: files
+                    files
                 },
                 bubbles: true
             });
@@ -154,19 +154,19 @@ export class UploadDirective implements OnInit, OnDestroy {
         }
     }
 
-    protected hasMode(mode: string): boolean {
+    public  hasMode(mode: string): boolean {
         return this.enabled && mode && this.mode && this.mode.indexOf(mode) > -1;
     }
 
-    protected isDropMode(): boolean {
+    public isDropMode(): boolean {
         return this.hasMode('drop');
     }
 
-    protected isClickMode(): boolean {
+    public isClickMode(): boolean {
         return this.hasMode('click');
     }
 
-    protected getDataTransfer(event: Event | any): DataTransfer {
+    public getDataTransfer(event: Event | any): DataTransfer {
         if (event && event.dataTransfer) {
             return event.dataTransfer;
         }
@@ -180,8 +180,8 @@ export class UploadDirective implements OnInit, OnDestroy {
      * Extract files from the DataTransfer object used to hold the data that is being dragged during a drag and drop operation.
      * @param dataTransfer DataTransfer object
      */
-    protected getFilesDropped(dataTransfer: DataTransfer): Promise<FileInfo[]> {
-        return new Promise(resolve => {
+    public getFilesDropped(dataTransfer: DataTransfer): Promise<FileInfo[]> {
+        return new Promise((resolve) => {
             const iterations = [];
 
             if (dataTransfer) {
@@ -198,8 +198,8 @@ export class UploadDirective implements OnInit, OnDestroy {
                                         relativeFolder: '/'
                                     }));
                                 } else if (item.isDirectory) {
-                                    iterations.push(new Promise(resolveFolder => {
-                                        FileUtils.flattern(item).then(files => resolveFolder(files));
+                                    iterations.push(new Promise((resolveFolder) => {
+                                        FileUtils.flattern(item).then((files) => resolveFolder(files));
                                     }));
                                 }
                             }
@@ -215,9 +215,9 @@ export class UploadDirective implements OnInit, OnDestroy {
                     // safari or FF
                     let files = FileUtils
                         .toFileArray(dataTransfer.files)
-                        .map(file => <FileInfo> {
+                        .map((file) => <FileInfo> {
                             entry: null,
-                            file: file,
+                            file,
                             relativeFolder: '/'
                         });
 
@@ -225,7 +225,7 @@ export class UploadDirective implements OnInit, OnDestroy {
                 }
             }
 
-            Promise.all(iterations).then(result => {
+            Promise.all(iterations).then((result) => {
                 resolve(result.reduce((a, b) => a.concat(b), []));
             });
         });
@@ -235,13 +235,13 @@ export class UploadDirective implements OnInit, OnDestroy {
      * Invoked when user selects files or folders by means of File Dialog
      * @param e DOM event
      */
-    protected onSelectFiles(e: Event) {
+    public onSelectFiles(domeEvent: Event): void {
         if (this.isClickMode()) {
-            const input = (<HTMLInputElement>e.currentTarget);
+            const input = (<HTMLInputElement>domeEvent.currentTarget);
             const files = FileUtils.toFileArray(input.files);
-            this.onUploadFiles(files.map(file => <FileInfo> {
+            this.onUploadFiles(files.map((file) => <FileInfo> {
                 entry: null,
-                file: file,
+                file,
                 relativeFolder: '/'
             }));
         }

@@ -28,11 +28,11 @@ import { GroupUserModel } from '../core/group-user.model';
 })
 export class PeopleWidget extends WidgetComponent implements OnInit {
 
-    popupVisible: boolean = false;
-    minTermLength: number = 1;
-    value: string;
-    users: GroupUserModel[] = [];
-    groupId: string;
+    public popupVisible: boolean = false;
+    public minTermLength: number = 1;
+    public value: string;
+    public users: GroupUserModel[] = [];
+    public groupId: string;
 
     constructor(private formService: FormService,
                 private elementRef: ElementRef) {
@@ -41,7 +41,7 @@ export class PeopleWidget extends WidgetComponent implements OnInit {
 
     // TODO: investigate, called 2 times
     // https://github.com/angular/angular/issues/6782
-    ngOnInit() {
+    public ngOnInit(): void {
         if (this.field) {
             let user: GroupUserModel = this.field.value;
             if (user) {
@@ -63,7 +63,7 @@ export class PeopleWidget extends WidgetComponent implements OnInit {
         }
     }
 
-    onKeyUp(event: KeyboardEvent) {
+    public onKeyUp(): void {
         if (this.value && this.value.length >= this.minTermLength) {
             this.formService.getWorkflowUsers(this.value, this.groupId)
                 .subscribe((result: GroupUserModel[]) => {
@@ -75,13 +75,13 @@ export class PeopleWidget extends WidgetComponent implements OnInit {
         }
     }
 
-    onBlur() {
+    public onBlur(): void {
         setTimeout(() => {
             this.flushValue();
         }, 200);
     }
 
-    flushValue() {
+    public  flushValue(): void {
         this.popupVisible = false;
 
         let option = this.users.find(item => {
@@ -100,7 +100,7 @@ export class PeopleWidget extends WidgetComponent implements OnInit {
         this.field.updateForm();
     }
 
-    getDisplayName(model: GroupUserModel) {
+    public getDisplayName(model: GroupUserModel): string {
         if (model) {
             let displayName = `${model.firstName || ''} ${model.lastName || ''}`;
             return displayName.trim();
@@ -110,17 +110,17 @@ export class PeopleWidget extends WidgetComponent implements OnInit {
     }
 
     // TODO: still causes onBlur execution
-    onItemClick(item: GroupUserModel, event: Event) {
+    public onItemClick(item: GroupUserModel, event: Event): void {
         if (item) {
             this.field.value = item;
             this.value = this.getDisplayName(item);
         }
-        if (event: Event) {
+        if (event) {
             event.preventDefault();
         }
     }
 
-    setupMaterialComponents(handler: any): boolean {
+    public setupMaterialComponents(handler: any): boolean {
         super.setupMaterialComponents(handler);
         if (handler) {
             if (this.elementRef && this.value) {

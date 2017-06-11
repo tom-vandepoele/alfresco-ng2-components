@@ -17,9 +17,9 @@
 
 import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { AlfrescoTranslationService, LogService } from 'ng2-alfresco-core';
+import { Form } from '../models/form.model';
 import { TaskDetailsModel } from '../models/task-details.model';
 import { ActivitiTaskListService } from './../services/activiti-tasklist.service';
-import { Form } from '../models/form.model';
 
 declare let dialogPolyfill: any;
 
@@ -31,23 +31,23 @@ declare let dialogPolyfill: any;
 export class ActivitiStartTaskButton {
 
     @Input()
-    appId: string;
+    public appId: string;
 
     @Output()
-    onSuccess: EventEmitter<any> = new EventEmitter<any>();
+    public onSuccess: EventEmitter<any> = new EventEmitter<any>();
 
     @Output()
-    error: EventEmitter<any> = new EventEmitter<any>();
+    public error: EventEmitter<any> = new EventEmitter<any>();
 
     @ViewChild('dialog')
-    dialog: any;
+    public dialog: any;
 
-    forms: Form [];
+    public forms: Form [];
 
-    formId: string = null;
+    public formId: string = null;
 
-    name: string;
-    description: string;
+    public name: string;
+    public description: string;
 
     /**
      * Constructor
@@ -64,7 +64,7 @@ export class ActivitiStartTaskButton {
         }
     }
 
-    public start() {
+    public start(): void {
         if (this.name) {
             this.taskService.createNewTask(new TaskDetailsModel({
                 name: this.name,
@@ -77,25 +77,25 @@ export class ActivitiStartTaskButton {
                     this.resetForm();
                     this.attachForm(res.id);
                 },
-                (err) => {
+                () => {
                     this.logService.error('An error occurred while trying to add the task');
                 }
             );
         }
     }
 
-    private attachForm(taskId: string) {
+    private attachForm(taskId: string): void {
         if (this.formId && taskId) {
             this.taskService.attachFormToATask(taskId, Number(this.formId));
             this.formId = null;
         }
     }
 
-    public cancel() {
+    public cancel(): void {
         this.closeDialog();
     }
 
-    public showDialog() {
+    public showDialog(): void {
         if (!this.dialog.nativeElement.showModal) {
             dialogPolyfill.registerDialog(this.dialog.nativeElement);
         }
@@ -107,7 +107,7 @@ export class ActivitiStartTaskButton {
         }
     }
 
-    private loadFormsTask() {
+    private loadFormsTask(): void {
         this.taskService.getFormList().subscribe((res: Form[]) => {
                 this.forms = res;
             },
@@ -117,13 +117,13 @@ export class ActivitiStartTaskButton {
             });
     }
 
-    private closeDialog() {
+    private closeDialog(): void {
         if (this.dialog) {
             this.dialog.nativeElement.close();
         }
     }
 
-    private resetForm() {
+    private resetForm(): void {
         this.name = '';
         this.description = '';
     }

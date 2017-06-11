@@ -16,9 +16,9 @@
  */
 
 export class ComponentTranslationModel {
-    name: string;
-    path: string;
-    json: string [];
+    public name: string;
+    public path: string;
+    public json: string [];
 
     constructor(obj?: any) {
         this.name = obj && obj.name;

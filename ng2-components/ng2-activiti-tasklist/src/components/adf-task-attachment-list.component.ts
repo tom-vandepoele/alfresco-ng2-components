@@ -15,9 +15,9 @@
  * limitations under the License.
  */
 
-import { Component, OnChanges, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
-import { AlfrescoTranslationService, ContentService } from 'ng2-alfresco-core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { ActivitiContentService } from 'ng2-activiti-form';
+import { AlfrescoTranslationService, ContentService } from 'ng2-alfresco-core';
 
 @Component({
     selector: 'adf-task-attachment-list',
@@ -27,18 +27,18 @@ import { ActivitiContentService } from 'ng2-activiti-form';
 export class TaskAttachmentListComponent implements OnChanges {
 
     @Input()
-    taskId: string;
+    public taskId: string;
 
     @Output()
-    attachmentClick = new EventEmitter();
+    public attachmentClick = new EventEmitter();
 
     @Output()
-    success = new EventEmitter();
+    public success = new EventEmitter();
 
     @Output()
-    error: EventEmitter<any> = new EventEmitter<any>();
+    public error: EventEmitter<any> = new EventEmitter<any>();
 
-    attachments: any[] = [];
+    public attachments: any[] = [];
 
     constructor(private translateService: AlfrescoTranslationService,
                 private activitiContentService: ActivitiContentService,
@@ -49,26 +49,26 @@ export class TaskAttachmentListComponent implements OnChanges {
         }
     }
 
-    ngOnChanges(changes: SimpleChanges) {
-        if (changes['taskId'] && changes['taskId'].currentValue) {
-            this.loadAttachmentsByTaskId(changes['taskId'].currentValue);
+    public ngOnChanges(changes: SimpleChanges): void {
+        if (changes.taskId && changes.taskId.currentValue) {
+            this.loadAttachmentsByTaskId(changes.taskId.currentValue);
         }
     }
 
-    reset(): void {
+    public reset(): void {
         this.attachments = [];
     }
 
-    reload(): void {
+    public reload(): void {
         this.loadAttachmentsByTaskId(this.taskId);
     }
 
-    private loadAttachmentsByTaskId(taskId: string) {
+    private loadAttachmentsByTaskId(taskId: string): any {
         if (taskId) {
             this.reset();
             this.activitiContentService.getTaskRelatedContent(taskId).subscribe(
                 (res: any) => {
-                    res.data.forEach(content => {
+                    res.data.forEach((content) => {
                         this.attachments.push({
                             id: content.id,
                             name: content.name,
@@ -81,14 +81,15 @@ export class TaskAttachmentListComponent implements OnChanges {
                 },
                 (err) => {
                     this.error.emit(err);
-                });        }
+                });
+        }
     }
 
-    private deleteAttachmentById(contentId: string) {
+    private deleteAttachmentById(contentId: string): void {
         if (contentId) {
             this.activitiContentService.deleteRelatedContent(contentId).subscribe(
-                (res: any) => {
-                    this.attachments = this.attachments.filter(content => {
+                () => {
+                    this.attachments = this.attachments.filter((content) => {
                         return content.id !== contentId;
                     });
                 },
@@ -98,11 +99,11 @@ export class TaskAttachmentListComponent implements OnChanges {
         }
     }
 
-    isEmpty(): boolean {
+    public isEmpty(): boolean {
         return this.attachments && this.attachments.length === 0;
     }
 
-    onShowRowActionsMenu(event: any) {
+    public onShowRowActionsMenu(event: any): void {
         let viewAction = {
             title: 'View',
             name: 'view'
@@ -125,7 +126,7 @@ export class TaskAttachmentListComponent implements OnChanges {
         ];
     }
 
-    onExecuteRowAction(event: any) {
+    public onExecuteRowAction(event: any): void {
         let args = event.value;
         let action = args.action;
         if (action.name === 'view') {
@@ -137,12 +138,12 @@ export class TaskAttachmentListComponent implements OnChanges {
         }
     }
 
-    openContent(event: any): void {
+    public openContent(event: any): void {
         let content = event.value.obj;
         this.emitDocumentContent(content);
     }
 
-    emitDocumentContent(content: any) {
+    public emitDocumentContent(content: any): void {
         this.activitiContentService.getFileRawContent(content.id).subscribe(
             (blob: Blob) => {
                 content.contentBlob = blob;
@@ -154,7 +155,7 @@ export class TaskAttachmentListComponent implements OnChanges {
         );
     }
 
-    downloadContent(content: any): void {
+    public downloadContent(content: any): void {
         this.activitiContentService.getFileRawContent(content.id).subscribe(
             (blob: Blob) => this.contentService.downloadBlob(blob, content.name),
             (err) => {

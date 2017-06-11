@@ -29,10 +29,10 @@ import { WidgetVisibilityService } from '../../../services/widget-visibility.ser
 })
 export class TypeaheadWidget extends WidgetComponent implements OnInit {
 
-    popupVisible: boolean = false;
-    minTermLength: number = 1;
-    value: string;
-    options: FormFieldOption[] = [];
+    public popupVisible: boolean = false;
+    public minTermLength: number = 1;
+    public value: string;
+    public options: FormFieldOption[] = [];
 
     constructor(private formService: FormService,
                 private visibilityService: WidgetVisibilityService,
@@ -40,7 +40,7 @@ export class TypeaheadWidget extends WidgetComponent implements OnInit {
         super();
     }
 
-    ngOnInit() {
+    public ngOnInit(): void {
         if (this.field.form.taskId) {
             this.getValuesByTaskId();
         } else {
@@ -48,7 +48,7 @@ export class TypeaheadWidget extends WidgetComponent implements OnInit {
         }
     }
 
-    getValuesByTaskId() {
+    public getValuesByTaskId(): void {
         this.formService
             .getRestFieldValues(
                 this.field.form.taskId,
@@ -73,7 +73,7 @@ export class TypeaheadWidget extends WidgetComponent implements OnInit {
             );
     }
 
-    getValuesByProcessDefinitionId() {
+    public getValuesByProcessDefinitionId(): void {
         this.formService
             .getRestFieldValuesByProcessId(
                 this.field.form.processDefinitionId,
@@ -98,7 +98,7 @@ export class TypeaheadWidget extends WidgetComponent implements OnInit {
             );
     }
 
-    getOptions(): FormFieldOption[] {
+    public getOptions(): FormFieldOption[] {
         let val = this.value.toLocaleLowerCase();
         return this.field.options.filter(item => {
             let name = item.name.toLocaleLowerCase();
@@ -106,7 +106,7 @@ export class TypeaheadWidget extends WidgetComponent implements OnInit {
         });
     }
 
-    onKeyUp(event: KeyboardEvent) {
+    onKeyUp() {
         if (this.value && this.value.length >= this.minTermLength) {
             this.options = this.getOptions();
             this.popupVisible = this.options.length > 0;
@@ -115,14 +115,14 @@ export class TypeaheadWidget extends WidgetComponent implements OnInit {
         }
     }
 
-    onBlur() {
+    public onBlur(): void {
         setTimeout(() => {
             this.flushValue();
             this.checkVisibility();
         }, 200);
     }
 
-    flushValue() {
+    public flushValue(): void {
         this.popupVisible = false;
 
         let options = this.field.options || [];
@@ -142,22 +142,22 @@ export class TypeaheadWidget extends WidgetComponent implements OnInit {
     }
 
     // TODO: still causes onBlur execution
-    onItemClick(item: FormFieldOption, event: Event) {
+    public onItemClick(item: FormFieldOption, event: Event): void {
         if (item) {
             this.field.value = item.id;
             this.value = item.name;
             this.checkVisibility();
         }
-        if (event: Event) {
+        if (event) {
             event.preventDefault();
         }
     }
 
-    handleError(error: any) {
+    private handleError(error: any): void {
         this.logService.error(error);
     }
 
-    checkVisibility() {
+    public checkVisibility(): void {
         this.visibilityService.refreshVisibility(this.field.form);
     }
 

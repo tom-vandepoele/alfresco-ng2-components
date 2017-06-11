@@ -16,16 +16,17 @@
  */
 
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Rx';
 import { AlfrescoApiService, LogService } from 'ng2-alfresco-core';
+import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
+import { Observable } from 'rxjs/Rx';
+import { Comment } from '../models/comment.model';
 import {
     FilterRepresentationModel,
     TaskQueryRequestRepresentationModel
 } from '../models/filter.model';
-import { Comment } from '../models/comment.model';
-import { User } from '../models/user.model';
-import { TaskDetailsModel } from '../models/task-details.model';
 import { Form } from '../models/form.model';
+import { TaskDetailsModel } from '../models/task-details.model';
+import { User } from '../models/user.model';
 
 @Injectable()
 export class ActivitiTaskListService {
@@ -38,34 +39,34 @@ export class ActivitiTaskListService {
      * Retrieve all the Deployed app
      * @returns {Observable<any>}
      */
-    getDeployedApplications(name?: string): Observable<any> {
+    public getDeployedApplications(name?: string): Observable<any> {
         return Observable.fromPromise(this.apiService.getInstance().activiti.appsApi.getAppDefinitions())
             .map((response: any) => {
                 if (name) {
-                    return response.data.find(app => app.name === name);
+                    return response.data.find((app) => app.name === name);
                 }
                 return response.data;
             })
-            .catch(err => this.handleError(err));
+            .catch((err) => this.handleError(err));
     }
 
     /**
      * Retrieve Deployed App details by appId
      * @returns {Observable<any>}
      */
-    getApplicationDetailsById(appId: number): Observable<any> {
+    public getApplicationDetailsById(appId: number): Observable<any> {
         return Observable.fromPromise(this.apiService.getInstance().activiti.appsApi.getAppDefinitions())
             .map((response: any) => {
-                return response.data.find(app => app.id === appId);
+                return response.data.find((app) => app.id === appId);
             })
-            .catch(err => this.handleError(err));
+            .catch((err) => this.handleError(err));
     }
 
     /**
      * Retrieve all the Tasks filters
      * @returns {Observable<any>}
      */
-    getTaskListFilters(appId?: string): Observable<any> {
+    public getTaskListFilters(appId?: string): Observable<any> {
         return Observable.fromPromise(this.callApiTaskFilters(appId))
             .map((response: any) => {
                 let filters: FilterRepresentationModel[] = [];
@@ -74,7 +75,7 @@ export class ActivitiTaskListService {
                     filters.push(filterModel);
                 });
                 return filters;
-            }).catch(err => this.handleError(err));
+            }).catch((err) => this.handleError(err));
     }
 
     /**
@@ -83,11 +84,11 @@ export class ActivitiTaskListService {
      * @param appId - string - optional - The id of app
      * @returns {Observable<FilterRepresentationModel>}
      */
-    getTaskFilterById(filterId: number, appId?: string): Observable<FilterRepresentationModel> {
+    public getTaskFilterById(filterId: number, appId?: string): Observable<FilterRepresentationModel> {
         return Observable.fromPromise(this.callApiTaskFilters(appId))
             .map((response: any) => {
-                return response.data.find(filter => filter.id === filterId);
-            }).catch(err => this.handleError(err));
+                return response.data.find((filter) => filter.id === filterId);
+            }).catch((err) => this.handleError(err));
     }
 
     /**
@@ -95,11 +96,11 @@ export class ActivitiTaskListService {
      * @param taskName - string - The name of the filter
      * @returns {Observable<FilterRepresentationModel>}
      */
-    getTaskFilterByName(taskName: string, appId?: string): Observable<FilterRepresentationModel> {
+    public getTaskFilterByName(taskName: string, appId?: string): Observable<FilterRepresentationModel> {
         return Observable.fromPromise(this.callApiTaskFilters(appId))
             .map((response: any) => {
-                return response.data.find(filter => filter.name === taskName);
-            }).catch(err => this.handleError(err));
+                return response.data.find((filter) => filter.name === taskName);
+            }).catch((err) => this.handleError(err));
     }
 
     /**
@@ -108,7 +109,7 @@ export class ActivitiTaskListService {
      * @param filter - FilterRepresentationModel []
      * @returns {FilterRepresentationModel}
      */
-    getFilterForTaskById(taskId: string, filterList: FilterRepresentationModel[]): Observable<FilterRepresentationModel> {
+    public getFilterForTaskById(taskId: string, filterList: FilterRepresentationModel[]): Observable<FilterRepresentationModel> {
         return Observable.from(filterList)
             .flatMap((filter: FilterRepresentationModel) => this.isTaskRelatedToFilter(taskId, filter))
             .filter((filter: FilterRepresentationModel) => filter != null);
@@ -136,12 +137,12 @@ export class ActivitiTaskListService {
      * @param filter - FilterRepresentationModel
      * @returns {FilterRepresentationModel}
      */
-    isTaskRelatedToFilter(taskId: string, filter: FilterRepresentationModel): Observable<FilterRepresentationModel> {
+    public isTaskRelatedToFilter(taskId: string, filter: FilterRepresentationModel): Observable<FilterRepresentationModel> {
         let requestNodeForFilter = this.generateTaskRequestNodeFromFilter(filter);
         return Observable.fromPromise(this.callApiTasksFiltered(requestNodeForFilter))
             .map((res: any) => {
-                return res.data.find(element => element.id === taskId) ? filter : null;
-            }).catch(err => this.handleError(err));
+                return res.data.find((element) => element.id === taskId) ? filter : null;
+            }).catch((err) => this.handleError(err));
     }
 
     /**
@@ -149,15 +150,15 @@ export class ActivitiTaskListService {
      * @param filter - TaskFilterRepresentationModel
      * @returns {any}
      */
-    getTasks(requestNode: TaskQueryRequestRepresentationModel): Observable<TaskDetailsModel[]> {
+    public getTasks(requestNode: TaskQueryRequestRepresentationModel): Observable<TaskDetailsModel[]> {
         return Observable.fromPromise(this.callApiTasksFiltered(requestNode))
             .map((res: any) => {
                 if (requestNode.processDefinitionKey) {
-                    return res.data.filter(p => p.processDefinitionKey === requestNode.processDefinitionKey);
+                    return res.data.filter((p) => p.processDefinitionKey === requestNode.processDefinitionKey);
                 } else {
                     return res.data;
                 }
-            }).catch(err => this.handleError(err));
+            }).catch((err) => this.handleError(err));
     }
 
     /**
@@ -165,12 +166,12 @@ export class ActivitiTaskListService {
      * @param id - taskId
      * @returns {<TaskDetailsModel>}
      */
-    getTaskDetails(id: string): Observable<TaskDetailsModel> {
+    public getTaskDetails(id: string): Observable<TaskDetailsModel> {
         return Observable.fromPromise(this.callApiTaskDetails(id))
-            .map(res => res)
+            .map((res) => res)
             .map((details: any) => {
                 return new TaskDetailsModel(details);
-            }).catch(err => this.handleError(err));
+            }).catch((err) => this.handleError(err));
     }
 
     /**
@@ -178,9 +179,9 @@ export class ActivitiTaskListService {
      * @param id - taskId
      * @returns {<Comment[]>}
      */
-    getTaskComments(id: string): Observable<Comment[]> {
+    public getTaskComments(id: string): Observable<Comment[]> {
         return Observable.fromPromise(this.callApiTaskComments(id))
-            .map(res => res)
+            .map((res) => res)
             .map((response: any) => {
                 let comments: Comment[] = [];
                 response.data.forEach((comment) => {
@@ -188,7 +189,7 @@ export class ActivitiTaskListService {
                     comments.push(new Comment(comment.id, comment.message, comment.created, user));
                 });
                 return comments;
-            }).catch(err => this.handleError(err));
+            }).catch((err) => this.handleError(err));
     }
 
     /**
@@ -196,41 +197,41 @@ export class ActivitiTaskListService {
      * @param id - taskId
      * @returns {TaskDetailsModel}
      */
-    getTaskChecklist(id: string): Observable<TaskDetailsModel[]> {
+    public getTaskChecklist(id: string): Observable<TaskDetailsModel[]> {
         return Observable.fromPromise(this.callApiTaskChecklist(id))
-            .map(res => res)
+            .map((res) => res)
             .map((response: any) => {
                 let checklists: TaskDetailsModel[] = [];
                 response.data.forEach((checklist) => {
                     checklists.push(new TaskDetailsModel(checklist));
                 });
                 return checklists;
-            }).catch(err => this.handleError(err));
+            }).catch((err) => this.handleError(err));
     }
 
     /**
      * Retrieve all the form shared with this user
      * @returns {TaskDetailsModel}
      */
-    getFormList(): Observable<Form []> {
+    public getFormList(): Observable<Form []> {
         let opts = {
-            'filter': 'myReusableForms', // String | filter
-            'sort': 'modifiedDesc', // String | sort
-            'modelType': 2 // Integer | modelType
+            filter: 'myReusableForms', // String | filter
+            sort: 'modifiedDesc', // String | sort
+            modelType: 2 // Integer | modelType
         };
 
-        return Observable.fromPromise(this.apiService.getInstance().activiti.modelsApi.getModels(opts)).map(res => res)
+        return Observable.fromPromise(this.apiService.getInstance().activiti.modelsApi.getModels(opts)).map((res) => res)
             .map((response: any) => {
                 let forms: Form[] = [];
                 response.data.forEach((form) => {
                     forms.push(new Form(form.id, form.name));
                 });
                 return forms;
-            }).catch(err => this.handleError(err));
+            }).catch((err) => this.handleError(err));
     }
 
-    attachFormToATask(taskId: string, formId: number): Observable<any> {
-        return Observable.fromPromise(this.apiService.getInstance().activiti.taskApi.attachForm(taskId, { 'formId': formId }));
+    public attachFormToATask(taskId: string, formId: number): Observable<any> {
+        return Observable.fromPromise(this.apiService.getInstance().activiti.taskApi.attachForm(taskId, {formId}));
     }
 
     /**
@@ -251,7 +252,7 @@ export class ActivitiTaskListService {
         let completedTasksFilter = this.getCompletedTasksFilterInstance(appId);
         let completeObservable = this.addFilter(completedTasksFilter);
 
-        return Observable.create(observer => {
+        return Observable.create((observer) => {
             Observable.forkJoin(
                 involvedObservable,
                 myTaskObservable,
@@ -285,21 +286,21 @@ export class ActivitiTaskListService {
      * @param task - TaskDetailsModel
      * @returns {TaskDetailsModel}
      */
-    addTask(task: TaskDetailsModel): Observable<TaskDetailsModel> {
+    public addTask(task: TaskDetailsModel): Observable<TaskDetailsModel> {
         return Observable.fromPromise(this.callApiAddTask(task))
-            .map(res => res)
+            .map((res) => res)
             .map((response: TaskDetailsModel) => {
                 return new TaskDetailsModel(response);
-            }).catch(err => this.handleError(err));
+            }).catch((err) => this.handleError(err));
     }
 
     /**
      * Delete a task
      * @param taskId - string
      */
-    deleteTask(taskId: string): Observable<TaskDetailsModel> {
+    public deleteTask(taskId: string): Observable<TaskDetailsModel> {
         return Observable.fromPromise(this.callApiDeleteTask(taskId))
-            .catch(err => this.handleError(err));
+            .catch((err) => this.handleError(err));
     }
 
     /**
@@ -307,12 +308,12 @@ export class ActivitiTaskListService {
      * @param filter - FilterRepresentationModel
      * @returns {FilterRepresentationModel}
      */
-    addFilter(filter: FilterRepresentationModel): Observable<FilterRepresentationModel> {
+    public addFilter(filter: FilterRepresentationModel): Observable<FilterRepresentationModel> {
         return Observable.fromPromise(this.callApiAddFilter(filter))
-            .map(res => res)
+            .map((res) => res)
             .map((response: FilterRepresentationModel) => {
                 return response;
-            }).catch(err => this.handleError(err));
+            }).catch((err) => this.handleError(err));
     }
 
     /**
@@ -321,12 +322,12 @@ export class ActivitiTaskListService {
      * @param message - content of the comment
      * @returns {Comment}
      */
-    addTaskComment(id: string, message: string): Observable<Comment> {
+    public addTaskComment(id: string, message: string): Observable<Comment> {
         return Observable.fromPromise(this.callApiAddTaskComment(id, message))
-            .map(res => res)
+            .map((res) => res)
             .map((response: Comment) => {
                 return new Comment(response.id, response.message, response.created, response.createdBy);
-            }).catch(err => this.handleError(err));
+            }).catch((err) => this.handleError(err));
 
     }
 
@@ -335,9 +336,9 @@ export class ActivitiTaskListService {
      * @param id - taskId
      * @returns {TaskDetailsModel}
      */
-    completeTask(id: string) {
+    public completeTask(id: string): Observable<any> {
         return Observable.fromPromise(this.callApiCompleteTask(id))
-            .map(res => res);
+            .map((res) => res);
     }
 
     /**
@@ -350,7 +351,7 @@ export class ActivitiTaskListService {
         return Observable.fromPromise(this.callApiTasksFiltered(requestNode))
             .map((res: any) => {
                 return res;
-            }).catch(err => this.handleError(err));
+            }).catch((err) => this.handleError(err));
     }
 
     /**
@@ -358,72 +359,77 @@ export class ActivitiTaskListService {
      * @param task - TaskDetailsModel
      * @returns {TaskDetailsModel}
      */
-    createNewTask(task: TaskDetailsModel): Observable<TaskDetailsModel> {
+    public createNewTask(task: TaskDetailsModel): Observable<TaskDetailsModel> {
         return Observable.fromPromise(this.callApiCreateTask(task))
-            .map(res => res)
+            .map((res) => res)
             .map((response: TaskDetailsModel) => {
                 return new TaskDetailsModel(response);
-            }).catch(err => this.handleError(err));
+            }).catch((err) => this.handleError(err));
     }
 
     /**
      * Claim a task
      * @param id - taskId
      */
-    claimTask(taskId: string): Observable<TaskDetailsModel> {
+    public claimTask(taskId: string): Observable<TaskDetailsModel> {
         return Observable.fromPromise(this.apiService.getInstance().activiti.taskApi.claimTask(taskId))
-            .catch(err => this.handleError(err));
+            .catch((err) => this.handleError(err));
     }
 
-    private callApiTasksFiltered(requestNode: TaskQueryRequestRepresentationModel) {
+    private callApiTasksFiltered(requestNode: TaskQueryRequestRepresentationModel): Promise<any> {
         return this.apiService.getInstance().activiti.taskApi.listTasks(requestNode);
     }
 
-    callApiTaskFilters(appId?: string) {
+    public callApiTaskFilters(appId?: string): Promise<any> {
         if (appId) {
-            return this.apiService.getInstance().activiti.userFiltersApi.getUserTaskFilters({ appId: appId });
+            return this.apiService.getInstance().activiti.userFiltersApi.getUserTaskFilters({appId});
         } else {
             return this.apiService.getInstance().activiti.userFiltersApi.getUserTaskFilters();
         }
     }
 
-    private callApiTaskDetails(id: string) {
+    private callApiTaskDetails(id: string): Promise<any> {
         return this.apiService.getInstance().activiti.taskApi.getTask(id);
     }
 
-    private callApiTaskComments(id: string) {
+    private callApiTaskComments(id: string): Promise<any> {
         return this.apiService.getInstance().activiti.taskApi.getTaskComments(id);
     }
 
-    private callApiAddTaskComment(id: string, message: string) {
-        return this.apiService.getInstance().activiti.taskApi.addTaskComment({ message: message }, id);
+    private callApiAddTaskComment(id: string, message: string): Promise<any> {
+        return this.apiService.getInstance().activiti.taskApi.addTaskComment({message}, id);
     }
 
-    private callApiAddTask(task: TaskDetailsModel) {
+    private callApiAddTask(task: TaskDetailsModel): Promise<any> {
         return this.apiService.getInstance().activiti.taskApi.addSubtask(task.parentTaskId, task);
     }
 
-    private callApiDeleteTask(taskId: string) {
+    private callApiDeleteTask(taskId: string): Promise<any> {
         return this.apiService.getInstance().activiti.taskApi.deleteTask(taskId);
     }
 
-    private callApiAddFilter(filter: FilterRepresentationModel) {
+    private callApiAddFilter(filter: FilterRepresentationModel): Promise<any> {
         return this.apiService.getInstance().activiti.userFiltersApi.createUserTaskFilter(filter);
     }
 
-    private callApiTaskChecklist(id: string) {
+    private callApiTaskChecklist(id: string): Promise<any> {
         return this.apiService.getInstance().activiti.taskApi.getChecklist(id);
     }
 
-    private callApiCompleteTask(id: string) {
+    private callApiCompleteTask(id: string): Promise<any> {
         return this.apiService.getInstance().activiti.taskApi.completeTask(id);
     }
 
-    private callApiCreateTask(task: TaskDetailsModel) {
+    private callApiCreateTask(task: TaskDetailsModel): Promise<any> {
         return this.apiService.getInstance().activiti.taskApi.createNewTask(task);
     }
 
-    private handleError(error: any) {
+    /**
+     * Throw the error
+     * @param error
+     * @returns {ErrorObservable}
+     */
+    private handleError(error: Response): ErrorObservable<string | Response> {
         this.logService.error(error);
         return Observable.throw(error || 'Server error');
     }
@@ -433,13 +439,13 @@ export class ActivitiTaskListService {
      * @param appId
      * @returns {FilterRepresentationModel}
      */
-    getInvolvedTasksFilterInstance(appId: string): FilterRepresentationModel {
+    public getInvolvedTasksFilterInstance(appId: string): FilterRepresentationModel {
         return new FilterRepresentationModel({
-            'name': 'Involved Tasks',
-            'appId': appId,
-            'recent': false,
-            'icon': 'glyphicon-align-left',
-            'filter': { 'sort': 'created-desc', 'name': '', 'state': 'open', 'assignment': 'involved' }
+            name: 'Involved Tasks',
+            appId,
+            recent: false,
+            icon: 'glyphicon-align-left',
+            filter: {sort: 'created-desc', name: '', state: 'open', assignment: 'involved'}
         });
     }
 
@@ -448,13 +454,13 @@ export class ActivitiTaskListService {
      * @param appId
      * @returns {FilterRepresentationModel}
      */
-    getMyTasksFilterInstance(appId: string): FilterRepresentationModel {
+    public getMyTasksFilterInstance(appId: string): FilterRepresentationModel {
         return new FilterRepresentationModel({
-            'name': 'My Tasks',
-            'appId': appId,
-            'recent': false,
-            'icon': 'glyphicon-inbox',
-            'filter': { 'sort': 'created-desc', 'name': '', 'state': 'open', 'assignment': 'assignee' }
+            name: 'My Tasks',
+            appId,
+            recent: false,
+            icon: 'glyphicon-inbox',
+            filter: {sort: 'created-desc', name: '', state: 'open', assignment: 'assignee'}
         });
     }
 
@@ -463,13 +469,13 @@ export class ActivitiTaskListService {
      * @param appId
      * @returns {FilterRepresentationModel}
      */
-    getQueuedTasksFilterInstance(appId: string): FilterRepresentationModel {
+    public getQueuedTasksFilterInstance(appId: string): FilterRepresentationModel {
         return new FilterRepresentationModel({
-            'name': 'Queued Tasks',
-            'appId': appId,
-            'recent': false,
-            'icon': 'glyphicon-record',
-            'filter': { 'sort': 'created-desc', 'name': '', 'state': 'open', 'assignment': 'candidate' }
+            name: 'Queued Tasks',
+            appId,
+            recent: false,
+            icon: 'glyphicon-record',
+            filter: {sort: 'created-desc', name: '', state: 'open', assignment: 'candidate'}
         });
     }
 
@@ -478,13 +484,13 @@ export class ActivitiTaskListService {
      * @param appId
      * @returns {FilterRepresentationModel}
      */
-    getCompletedTasksFilterInstance(appId: string): FilterRepresentationModel {
+    public getCompletedTasksFilterInstance(appId: string): FilterRepresentationModel {
         return new FilterRepresentationModel({
-            'name': 'Completed Tasks',
-            'appId': appId,
-            'recent': true,
-            'icon': 'glyphicon-ok-sign',
-            'filter': { 'sort': 'created-desc', 'name': '', 'state': 'completed', 'assignment': 'involved' }
+            name: 'Completed Tasks',
+            appId,
+            recent: true,
+            icon: 'glyphicon-ok-sign',
+            filter: {sort: 'created-desc', name: '', state: 'completed', assignment: 'involved'}
         });
     }
 }
