@@ -87,7 +87,7 @@
             true,
             "allow-null-check"
         ],
-        "typedef": false,
+        "typedef": [   true,   "call-signature",   "property-declaration" ],
         "typedef-whitespace": [
             true,
             {

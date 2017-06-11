@@ -40,7 +40,7 @@ module.exports = {
                 test: /\.ts$/,
                 loader: 'tslint-loader',
                 options: {
-                    emitErrors: true,
+                    fix: true, emitErrors: true,
                     failOnHint: true
                 },
                 exclude: [/node_modules/, /bundles/, /dist/, /demo/]
@@ -70,7 +70,7 @@ module.exports = {
                 test: /\.ts$/,
                 loader: 'license-check',
                 options: {
-                    emitErrors: true,
+                    fix: true, emitErrors: true,
                     licenseFile: path.resolve(__dirname, './assets/license_header.txt')
                 },
                 exclude: [/node_modules/, /bundles/, /dist/, /demo/, /rendering-queue.services.ts/ ],
