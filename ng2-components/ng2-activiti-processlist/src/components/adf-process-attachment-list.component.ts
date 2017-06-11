@@ -15,9 +15,9 @@
  * limitations under the License.
  */
 
-import { Component, OnChanges, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
-import { AlfrescoTranslationService, ContentService } from 'ng2-alfresco-core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { ActivitiContentService } from 'ng2-activiti-form';
+import { AlfrescoTranslationService, ContentService } from 'ng2-alfresco-core';
 
 @Component({
     selector: 'adf-process-attachment-list',
@@ -68,7 +68,7 @@ export class ActivitiProcessAttachmentListComponent implements OnChanges {
             this.reset();
             this.activitiContentService.getProcessRelatedContent(processInstanceId).subscribe(
                 (res: any) => {
-                    res.data.forEach(content => {
+                    res.data.forEach((content) => {
                         this.attachments.push({
                             id: content.id,
                             name: content.name,
@@ -89,7 +89,7 @@ export class ActivitiProcessAttachmentListComponent implements OnChanges {
         if (contentId) {
             this.activitiContentService.deleteRelatedContent(contentId).subscribe(
                 (res: any) => {
-                    this.attachments = this.attachments.filter(content => {
+                    this.attachments = this.attachments.filter((content) => {
                         return content.id !== contentId;
                     });
                 },

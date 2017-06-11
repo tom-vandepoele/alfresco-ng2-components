@@ -135,7 +135,7 @@ describe('TextWidget', () => {
                 textWidget.field.value = 'F';
                 let event: any = new Event('keyup');
                 event.keyCode = '70';
-                inputElement.dispatchEvent(event);
+                inputElement.dispatchEvent(event: Event);
                 fixture.detectChanges();
 
                 fixture.whenStable().then(() => {
@@ -167,7 +167,7 @@ describe('TextWidget', () => {
                 textWidget.field.value = '1';
                 let event: any = new Event('keyup');
                 event.keyCode = '49';
-                inputElement.dispatchEvent(event);
+                inputElement.dispatchEvent(event: Event);
 
                 fixture.whenStable().then(() => {
                     fixture.detectChanges();
@@ -183,7 +183,7 @@ describe('TextWidget', () => {
                 textWidget.field.value = '12345678';
                 let event: any = new Event('keyup');
                 event.keyCode = '49';
-                inputElement.dispatchEvent(event);
+                inputElement.dispatchEvent(event: Event);
 
                 fixture.whenStable().then(() => {
                     fixture.detectChanges();
@@ -223,7 +223,7 @@ describe('TextWidget', () => {
                 textWidget.field.value = '1234';
                 let event: any = new Event('keyup');
                 event.keyCode = '49';
-                inputElement.dispatchEvent(event);
+                inputElement.dispatchEvent(event: Event);
 
                 fixture.whenStable().then(() => {
                     fixture.detectChanges();

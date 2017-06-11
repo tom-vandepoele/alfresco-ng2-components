@@ -16,9 +16,9 @@
  */
 
 export interface FileUploadProgress {
-    loaded: number;
-    total: number;
-    percent: number;
+    public loaded: number;
+    public total: number;
+    public percent: number;
 }
 
 export interface FileUploadOptions {
@@ -38,14 +38,14 @@ export enum FileUploadStatus {
 }
 
 export class FileModel {
-    readonly id: string;
-    readonly name: string;
-    readonly size: number;
-    readonly file: File;
+    public readonly id: string;
+    public readonly name: string;
+    public readonly size: number;
+    public readonly file: File;
 
-    status: FileUploadStatus = FileUploadStatus.Pending;
-    progress: FileUploadProgress;
-    options: FileUploadOptions;
+    public status: FileUploadStatus = FileUploadStatus.Pending;
+    public progress: FileUploadProgress;
+    public options: FileUploadOptions;
 
     constructor(file: File, options?: FileUploadOptions) {
         this.file = file;

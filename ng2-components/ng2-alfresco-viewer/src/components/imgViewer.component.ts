@@ -26,21 +26,21 @@ import { ContentService } from 'ng2-alfresco-core';
 export class ImgViewerComponent implements OnChanges {
 
     @Input()
-    urlFile: string;
+    public urlFile: string;
 
     @Input()
-    blobFile: Blob;
+    public blobFile: Blob;
 
     @Input()
-    nameFile: string;
+    public nameFile: string;
 
-    constructor(private contentService: ContentService) {}
+    constructor(private contentService: ContentService) {
+    }
 
-    ngOnChanges(changes: SimpleChanges) {
-        let blobFile = changes['blobFile'];
+    public ngOnChanges(changes: SimpleChanges): void {
+        let blobFile = changes.blobFile;
         if (blobFile && blobFile.currentValue) {
             this.urlFile = this.contentService.createTrustedUrl(this.blobFile);
-            return;
         }
         if (!this.urlFile && !this.blobFile) {
             throw new Error('Attribute urlFile or blobFile is required');

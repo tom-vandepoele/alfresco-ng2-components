@@ -26,13 +26,13 @@ import { ContentService } from 'ng2-alfresco-core';
 export class NotSupportedFormat {
 
     @Input()
-    nameFile: string;
+    public nameFile: string;
 
     @Input()
-    urlFile: string;
+    public urlFile: string;
 
     @Input()
-    blobFile: Blob;
+    public blobFile: Blob;
 
     constructor(private contentService: ContentService) {
 
@@ -41,7 +41,7 @@ export class NotSupportedFormat {
     /**
      * Download file opening it in a new window
      */
-    download() {
+    public download(): void {
         if (this.urlFile) {
             window.open(this.urlFile);
         } else {

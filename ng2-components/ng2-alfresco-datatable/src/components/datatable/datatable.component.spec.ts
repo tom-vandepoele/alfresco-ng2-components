@@ -488,7 +488,7 @@ describe('DataTable', () => {
         };
 
         dataTable.fallbackThumbnail = '<fallback>';
-        dataTable.onImageLoadingError(event);
+        dataTable.onImageLoadingError(event: Event);
         expect(event.target.src).toBe(dataTable.fallbackThumbnail);
     });
 
@@ -501,7 +501,7 @@ describe('DataTable', () => {
         };
 
         dataTable.fallbackThumbnail = null;
-        dataTable.onImageLoadingError(event);
+        dataTable.onImageLoadingError(event: Event);
         expect(event.target.src).toBe(originalSrc);
     });
 

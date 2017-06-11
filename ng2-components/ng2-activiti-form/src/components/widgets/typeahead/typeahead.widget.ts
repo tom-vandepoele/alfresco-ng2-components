@@ -148,7 +148,7 @@ export class TypeaheadWidget extends WidgetComponent implements OnInit {
             this.value = item.name;
             this.checkVisibility();
         }
-        if (event) {
+        if (event: Event) {
             event.preventDefault();
         }
     }

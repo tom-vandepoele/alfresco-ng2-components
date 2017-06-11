@@ -29,9 +29,9 @@ export class DataCellEvent extends BaseEvent<DataCellEventModel> {
 
 export class DataCellEventModel {
 
-    readonly row: DataRow;
-    readonly col: DataColumn;
-    actions: any[];
+    public readonly row: DataRow;
+    public readonly col: DataColumn;
+    public actions: any[];
 
     constructor(row: DataRow, col: DataColumn, actions: any[]) {
         this.row = row;

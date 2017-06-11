@@ -115,7 +115,7 @@ export class PeopleWidget extends WidgetComponent implements OnInit {
             this.field.value = item;
             this.value = this.getDisplayName(item);
         }
-        if (event) {
+        if (event: Event) {
             event.preventDefault();
         }
     }

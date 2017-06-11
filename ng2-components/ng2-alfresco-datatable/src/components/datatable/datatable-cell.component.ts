@@ -15,8 +15,8 @@
  * limitations under the License.
  */
 
-import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
-import { DataTableAdapter, DataColumn, DataRow } from '../../data/index';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { DataColumn, DataRow, DataTableAdapter } from '../../data/index';
 
 @Component({
     selector: 'alfresco-datatable-cell',

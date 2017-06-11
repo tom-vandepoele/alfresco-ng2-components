@@ -16,11 +16,11 @@
  */
 
 import {
-    Directive,
-    ContentChild,
-    TemplateRef,
     AfterContentInit,
-    Input
+    ContentChild,
+    Directive,
+    Input,
+    TemplateRef
 } from '@angular/core';
 import { ViewerComponent } from '../components/viewer.component';
 
@@ -30,23 +30,23 @@ import { ViewerComponent } from '../components/viewer.component';
 export class ExtensionViewerDirective implements AfterContentInit {
 
     @ContentChild(TemplateRef)
-    template: any;
+    public template: any;
 
     @Input()
-    urlFileContent: string;
+    public urlFileContent: string;
 
     @Input()
-    extension: string;
+    public extension: string;
 
     @Input()
-    supportedExtensions: string[];
+    public supportedExtensions: string[];
 
-    templateModel: any;
+    private templateModel: any;
 
     constructor(private viewerComponent: ViewerComponent) {
     }
 
-    ngAfterContentInit() {
+    public ngAfterContentInit(): void {
         this.templateModel = {template: this.template, isVisible: false};
 
         this.viewerComponent.extensionTemplates.push(this.templateModel);
@@ -67,7 +67,7 @@ export class ExtensionViewerDirective implements AfterContentInit {
      *
      * @returns {boolean}
      */
-    isVisible(fileExtension) {
+    private isVisible(fileExtension): boolean {
         let supportedExtension: string;
 
         if (this.supportedExtensions && (this.supportedExtensions instanceof Array)) {

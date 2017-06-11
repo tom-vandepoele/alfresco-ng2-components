@@ -26,10 +26,10 @@ import { UploadService } from '../services/upload.service';
 })
 export class FileUploadingListComponent {
 
-    FileUploadStatus = FileUploadStatus;
+    public FileUploadStatus = FileUploadStatus;
 
     @Input()
-    files: FileModel[];
+    public files: FileModel[];
 
     constructor(private uploadService: UploadService) {
     }
@@ -41,14 +41,14 @@ export class FileUploadingListComponent {
      *
      * @memberOf FileUploadingListComponent
      */
-    cancelFileUpload(file: FileModel): void {
+    public cancelFileUpload(file: FileModel): void {
         this.uploadService.cancelUpload(file);
     }
 
     /**
      * Call the abort method for each file
      */
-    cancelAllFiles(event: Event): void {
+    public cancelAllFiles(event: Event): void {
         if (event) {
             event.preventDefault();
         }
@@ -59,7 +59,7 @@ export class FileUploadingListComponent {
      * Check if all the files are not in the Progress state.
      * @returns {boolean} - false if there is at least one file in Progress
      */
-    isUploadCompleted(): boolean {
+    public isUploadCompleted(): boolean {
         let isPending = false;
         let isAllCompleted = true;
 

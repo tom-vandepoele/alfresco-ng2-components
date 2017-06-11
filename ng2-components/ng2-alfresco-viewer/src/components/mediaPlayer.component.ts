@@ -26,24 +26,24 @@ import { ContentService } from 'ng2-alfresco-core';
 export class MediaPlayerComponent implements OnChanges {
 
     @Input()
-    urlFile: string;
+    public urlFile: string;
 
     @Input()
-    blobFile: Blob;
+    public blobFile: Blob;
 
     @Input()
-    mimeType: string;
+    public mimeType: string;
 
     @Input()
-    nameFile: string;
+    public nameFile: string;
 
-    constructor(private contentService: ContentService ) {}
+    constructor(private contentService: ContentService): void {
+    }
 
-    ngOnChanges(changes: SimpleChanges) {
-        let blobFile = changes['blobFile'];
+    public ngOnChanges(changes: SimpleChanges): void {
+        let blobFile = changes.blobFile;
         if (blobFile && blobFile.currentValue) {
             this.urlFile = this.contentService.createTrustedUrl(this.blobFile);
-            return;
         }
 
         if (!this.urlFile && !this.blobFile) {

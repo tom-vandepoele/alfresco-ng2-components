@@ -76,7 +76,7 @@ export const ANALYTICS_PROVIDERS: any[] = [
     ]
 })
 export class AnalyticsModule {
-    static forRoot(): ModuleWithProviders {
+    public static forRoot(): ModuleWithProviders {
         return {
             ngModule: AnalyticsModule,
             providers: [

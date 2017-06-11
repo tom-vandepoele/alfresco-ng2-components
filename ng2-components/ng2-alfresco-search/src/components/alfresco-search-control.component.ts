@@ -150,7 +150,7 @@ export class AlfrescoSearchControlComponent implements OnInit, OnDestroy {
      *
      * @param event Submit event that was fired
      */
-    onSearch(event): void {
+    onSearch(event: Event): void {
         this.searchControl.setValue(this.searchTerm, true);
         if (this.searchControl.valid) {
             this.searchSubmit.emit({
@@ -168,9 +168,9 @@ export class AlfrescoSearchControlComponent implements OnInit, OnDestroy {
         this.searchActive = display;
     }
 
-    onFileClicked(event): void {
+    onFileClicked(event: Event): void {
         this.setAutoCompleteDisplayed(false);
-        this.fileSelect.emit(event);
+        this.fileSelect.emit(event: Event);
     }
 
     onSearchFocus($event): void {

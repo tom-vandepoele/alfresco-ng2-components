@@ -63,12 +63,13 @@ import { ContextMenuService } from './context-menu.service';
     `
 })
 export class ContextMenuHolderComponent {
-    links = [];
-    isShown = false;
+
+    public links: string[] = [];
+    public isShown: boolean = false;
     private mouseLocation: { left: number, top: number } = {left: 0, top: 0};
 
     constructor(private _contextMenuService: ContextMenuService) {
-        _contextMenuService.show.subscribe(e => this.showMenu(e.event, e.obj));
+        _contextMenuService.show.subscribe(event => this.showMenu(event.event, event.obj));
     }
 
     get locationCss() {
@@ -81,11 +82,11 @@ export class ContextMenuHolderComponent {
     }
 
     @HostListener('document:click')
-    clickedOutside() {
+    public clickedOutside(): void {
         this.isShown = false;
     }
 
-    onMenuItemClick(event: Event, menuItem: any): void {
+    public onMenuItemClick(event: Event, menuItem: any): void {
         if (menuItem && menuItem.model && menuItem.model.disabled) {
             event.preventDefault();
             event.stopImmediatePropagation();
@@ -94,20 +95,20 @@ export class ContextMenuHolderComponent {
         menuItem.subject.next(menuItem);
     }
 
-    showMenu(e, links) {
+    public showMenu(event: MouseEvent, links: string[]): void {
         this.isShown = true;
         this.links = links;
 
-        if (e) {
+        if (event) {
             this.mouseLocation = {
-                left: e.clientX,
-                top: e.clientY
+                left: event.clientX,
+                top: event.clientY
             };
         }
     }
 
     @HostListener('contextmenu', ['$event'])
-    onShowContextMenu(event?: MouseEvent) {
+    public onShowContextMenu(event?: MouseEvent): void {
         if (event) {
             event.preventDefault();
         }

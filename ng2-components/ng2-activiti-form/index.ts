@@ -94,7 +94,7 @@ export const ACTIVITI_FORM_PROVIDERS: any[] = [
     ]
 })
 export class ActivitiFormModule {
-    static forRoot(): ModuleWithProviders {
+    public static forRoot(): ModuleWithProviders {
         return {
             ngModule: ActivitiFormModule,
             providers: [

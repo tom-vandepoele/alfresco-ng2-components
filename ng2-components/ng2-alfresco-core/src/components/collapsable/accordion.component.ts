@@ -28,7 +28,7 @@ import { AccordionGroupComponent } from './accordion-group.component';
     }
 })
 export class AccordionComponent {
-    groups: Array<AccordionGroupComponent> = [];
+    private groups: Array<AccordionGroupComponent> = [];
 
     addGroup(group: AccordionGroupComponent): void {
         this.groups.push(group);

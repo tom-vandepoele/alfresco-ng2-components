@@ -14,7 +14,7 @@
  */
 
 import { Injectable } from '@angular/core';
-
+import { PDFThumbnailViewer, PDFViewer } from 'pdfjs-dist';
 /**
  *
  * RenderingQueueServices rendering of the views for pages and thumbnails.
@@ -24,35 +24,35 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class RenderingQueueServices {
 
-    renderingStates = {
+    public renderingStates = {
         INITIAL: 0,
         RUNNING: 1,
         PAUSED: 2,
         FINISHED: 3
     };
 
-    CLEANUP_TIMEOUT: number = 30000;
+    public CLEANUP_TIMEOUT: number = 30000;
 
-    pdfViewer: any = null;
-    pdfThumbnailViewer: any = null;
-    onIdle: any = null;
+    public pdfViewer: PDFViewer = null;
+    public pdfThumbnailViewer: PDFThumbnailViewer = null;
+    public onIdle: any = null;
 
-    highestPriorityPage: any = null;
-    idleTimeout: any = null;
-    printing: any = false;
-    isThumbnailViewEnabled: any = false;
+    public highestPriorityPage: any = null;
+    public idleTimeout: any = null;
+    public printing: any = false;
+    public isThumbnailViewEnabled: any = false;
 
     /**
      * @param {PDFViewer} pdfViewer
      */
-    setViewer(pdfViewer) {
+    public setViewer(pdfViewer): PDFViewer {
         this.pdfViewer = pdfViewer;
     }
 
     /**
      * @param {PDFThumbnailViewer} pdfThumbnailViewer
      */
-    setThumbnailViewer(pdfThumbnailViewer) {
+    public setThumbnailViewer(pdfThumbnailViewer): PDFThumbnailViewer {
         this.pdfThumbnailViewer = pdfThumbnailViewer;
     }
 
@@ -60,11 +60,11 @@ export class RenderingQueueServices {
      * @param {IRenderableView} view
      * @returns {boolean}
      */
-    isHighestPriority(view: any) {
+    public isHighestPriority(view: any): boolean {
         return this.highestPriorityPage === view.renderingId;
     }
 
-    renderHighestPriority(currentlyVisiblePages) {
+    public renderHighestPriority(currentlyVisiblePages) {
         if (this.idleTimeout) {
             clearTimeout(this.idleTimeout);
             this.idleTimeout = null;
@@ -91,7 +91,7 @@ export class RenderingQueueServices {
         }
     }
 
-    getHighestPriority(visible, views, scrolledDown) {
+    public getHighestPriority(visible, views, scrolledDown): number {
         // The state has changed figure out which page has the highest priority to
         // render next (if any).
         // Priority:
@@ -132,7 +132,7 @@ export class RenderingQueueServices {
      * @param {IRenderableView} view
      * @returns {boolean}
      */
-    isViewFinished(view) {
+    public isViewFinished(view): boolean {
         return view.renderingState === this.renderingStates.FINISHED;
     }
 
@@ -141,8 +141,9 @@ export class RenderingQueueServices {
      * based on the views state. If the view is already rendered it will return
      * false.
      * @param {IRenderableView} view
+     * @returns {boolean}
      */
-    renderView(view: any) {
+    public renderView(view: any): boolean {
         let state = view.renderingState;
         switch (state) {
             case this.renderingStates.FINISHED:

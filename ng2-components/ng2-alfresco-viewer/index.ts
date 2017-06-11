@@ -24,17 +24,17 @@
  *          </alfresco-viewer>
  */
 
-import { NgModule, ModuleWithProviders } from '@angular/core';
+import { ModuleWithProviders, NgModule } from '@angular/core';
 import { CoreModule } from 'ng2-alfresco-core';
 
-import { ViewerComponent } from './src/components/viewer.component';
-import { RenderingQueueServices } from './src/services/rendering-queue.services';
 import { ImgViewerComponent } from './src/components/imgViewer.component';
 import { MediaPlayerComponent } from './src/components/mediaPlayer.component';
 import { NotSupportedFormat } from './src/components/notSupportedFormat.component';
 import { PdfViewerComponent } from './src/components/pdfViewer.component';
 import { TxtViewerComponent } from './src/components/txtViewer.component';
+import { ViewerComponent } from './src/components/viewer.component';
 import { ExtensionViewerDirective } from './src/directives/extension-viewer.directive';
+import { RenderingQueueServices } from './src/services/rendering-queue.services';
 
 export * from './src/components/viewer.component';
 export * from './src/services/rendering-queue.services';
@@ -73,7 +73,7 @@ export const VIEWER_PROVIDERS: any[] = [
     ]
 })
 export class ViewerModule {
-    static forRoot(): ModuleWithProviders {
+    public static forRoot(): ModuleWithProviders {
         return {
             ngModule: ViewerModule,
             providers: [

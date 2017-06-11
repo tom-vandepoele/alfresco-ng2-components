@@ -97,7 +97,7 @@ export const DOCUMENT_LIST_PROVIDERS: any[] = [
     ]
 })
 export class DocumentListModule {
-    static forRoot(): ModuleWithProviders {
+    public static forRoot(): ModuleWithProviders {
         return {
             ngModule: DocumentListModule,
             providers: [

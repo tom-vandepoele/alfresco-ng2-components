@@ -42,7 +42,7 @@ describe('ContextMenuDirective', () => {
         let event = new MouseEvent('click');
         spyOn(event, 'preventDefault').and.callThrough();
 
-        directive.onShowContextMenu(event);
+        directive.onShowContextMenu(event: Event);
         expect(event.preventDefault).toHaveBeenCalled();
     });
 
@@ -51,10 +51,10 @@ describe('ContextMenuDirective', () => {
 
         contextMenuService.show.subscribe(e => {
             expect(e.event).toBeDefined();
-            expect(e.event).toBe(event);
+            expect(e.event).toBe(event: Event);
         });
 
-        directive.onShowContextMenu(event);
+        directive.onShowContextMenu(event: Event);
     });
 
     it('should forward menu items to service', () => {

@@ -16,40 +16,41 @@
  */
 
 import { Injectable } from '@angular/core';
-import { Response } from '@angular/http';
+import { AlfrescoApiService, LogService } from 'ng2-alfresco-core';
+import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 import { Observable } from 'rxjs/Rx';
-import { AlfrescoApiService } from 'ng2-alfresco-core';
 
 @Injectable()
 export class RatingService {
 
-    constructor(private apiService: AlfrescoApiService) {
+    constructor(private apiService: AlfrescoApiService, private logService: LogService) {
+
     }
 
-    getRating(nodeId: string, ratingType: any): any {
+    public getRating(nodeId: string, ratingType: any): any {
         return Observable.fromPromise(this.apiService.getInstance().core.ratingsApi.getRating(nodeId, ratingType))
-            .map(res => res)
+            .map((res) => res)
             .catch(this.handleError);
     }
 
-    postRating(nodeId: string, ratingType: string, vote: any): any {
+    public postRating(nodeId: string, ratingType: string, vote: any): any {
         let ratingBody = {
-            'id': ratingType,
-            'myRating': vote
+            id: ratingType,
+            myRating: vote
         };
         return Observable.fromPromise(this.apiService.getInstance().core.ratingsApi.rate(nodeId, ratingBody))
-            .map(res => res)
+            .map((res) => res)
             .catch(this.handleError);
     }
 
-    deleteRating(nodeId: string, ratingId: string): any {
+    public deleteRating(nodeId: string, ratingId: string): any {
         return Observable.fromPromise(this.apiService.getInstance().core.ratingsApi.removeRating(nodeId, ratingId))
-            .map(res => res)
+            .map((res) => res)
             .catch(this.handleError);
     }
 
-    private handleError(error: Response): any {
-        console.error(error);
+    private handleError(error: Response): ErrorObservable<string | Response> {
+        this.logService.error(error);
         return Observable.throw(error || 'Server error');
     }
 }

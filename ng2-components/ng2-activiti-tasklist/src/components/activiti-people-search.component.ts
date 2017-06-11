@@ -58,7 +58,7 @@ export class ActivitiPeopleSearch implements OnInit, AfterViewInit {
             .debounceTime(200)
             .subscribe((event: string) => {
                 if (event && event.trim()) {
-                    this.onSearch.emit(event);
+                    this.onSearch.emit(event: Event);
                 } else {
                     this.userList = [];
                 }

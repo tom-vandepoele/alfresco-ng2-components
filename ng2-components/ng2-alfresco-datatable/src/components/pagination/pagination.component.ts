@@ -15,9 +15,9 @@
  * limitations under the License.
  */
 
-import { SimpleChanges, OnChanges, EventEmitter, Output, Component, Input, OnInit } from '@angular/core';
-import { PaginationData } from '../../models/pagination.data';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Pagination } from 'alfresco-js-api';
+import { PaginationData } from '../../models/pagination.data';
 
 @Component({
     selector: 'alfresco-pagination',
@@ -26,27 +26,27 @@ import { Pagination } from 'alfresco-js-api';
 })
 export class PaginationComponent implements OnInit, OnChanges {
 
-    static DEFAULT_PAGE_SIZE: number = 20;
+    private static DEFAULT_PAGE_SIZE: number = 20;
 
     private summary: string = '';
 
     @Input()
-    supportedPageSizes: number[] = [5, 10, 20, 50, 100];
+    public supportedPageSizes: number[] = [5, 10, 20, 50, 100];
 
     @Input()
-    maxItems: number = PaginationComponent.DEFAULT_PAGE_SIZE;
+    public maxItems: number = PaginationComponent.DEFAULT_PAGE_SIZE;
 
     @Input()
-    pagination: Pagination;
+    public pagination: Pagination;
 
     @Output()
-    changePageSize: EventEmitter<Pagination> = new EventEmitter<Pagination>();
+    public changePageSize: EventEmitter<Pagination> = new EventEmitter<Pagination>();
 
     @Output()
-    nextPage: EventEmitter<Pagination> = new EventEmitter<Pagination>();
+    public nextPage: EventEmitter<Pagination> = new EventEmitter<Pagination>();
 
     @Output()
-    prevPage: EventEmitter<Pagination> = new EventEmitter<Pagination>();
+    public prevPage: EventEmitter<Pagination> = new EventEmitter<Pagination>();
 
     constructor() {
     }
@@ -58,41 +58,41 @@ export class PaginationComponent implements OnInit, OnChanges {
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        if (changes['pagination']) {
-            if (changes['pagination'].currentValue) {
-                this.pagination = changes['pagination'].currentValue;
+        if (changes.pagination) {
+            if (changes.pagination.currentValue) {
+                this.pagination = changes.pagination.currentValue;
                 this.updateSummary();
             }
         }
     }
 
-    setPageSize(value: number) {
+    protected setPageSize(value: number) {
         this.pagination.maxItems = value;
         this.updateSummary();
         this.changePageSize.emit(this.pagination);
     }
 
-    nextPageAvail(): boolean {
+    protected nextPageAvail(): boolean {
         return this.pagination.hasMoreItems;
     }
 
-    prevPageAvail(): boolean {
+    protected prevPageAvail(): boolean {
         return this.pagination.skipCount > 0;
     }
 
-    showNextPage() {
+    protected showNextPage() {
         this.pagination.skipCount += this.pagination.maxItems;
         this.updateSummary();
         this.nextPage.emit(this.pagination);
     }
 
-    showPrevPage() {
+    protected showPrevPage() {
         this.pagination.skipCount -= this.pagination.maxItems;
         this.updateSummary();
         this.prevPage.emit(this.pagination);
     }
 
-    updateSummary() {
+    protected updateSummary() {
         let from = this.pagination.skipCount;
         if (from === 0) {
             from = 1;

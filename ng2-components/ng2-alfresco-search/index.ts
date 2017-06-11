@@ -61,7 +61,7 @@ export const ALFRESCO_SEARCH_PROVIDERS: [any] = [
     ]
 })
 export class SearchModule {
-    static forRoot(): ModuleWithProviders {
+    public static forRoot(): ModuleWithProviders {
         return {
             ngModule: SearchModule,
             providers: [

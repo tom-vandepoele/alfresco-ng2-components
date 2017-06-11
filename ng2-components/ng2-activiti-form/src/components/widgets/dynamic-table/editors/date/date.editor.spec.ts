@@ -142,7 +142,7 @@ describe('DateEditorComponent', () => {
         const input = '14-03-2016';
         let event = { target: { value: input } };
         component.ngOnInit();
-        component.onDateChanged(event);
+        component.onDateChanged(event: Event);
 
         expect(component.datePicker.time.isSame(moment(input, 'DD-MM-YYYY'))).toBeTruthy();
     });
@@ -152,7 +152,7 @@ describe('DateEditorComponent', () => {
         let event = { target: { value: input } };
 
         component.ngOnInit();
-        component.onDateChanged(event);
+        component.onDateChanged(event: Event);
 
         let actual = row.value[column.id];
         expect(actual).toBe('2016-03-14T00:00:00.000Z');
@@ -163,7 +163,7 @@ describe('DateEditorComponent', () => {
         let event = { target: { value: 'value' } };
 
         component.ngOnInit();
-        component.onDateChanged(event);
+        component.onDateChanged(event: Event);
 
         expect(table.flushValue).toHaveBeenCalled();
     });

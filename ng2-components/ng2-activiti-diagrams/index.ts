@@ -44,7 +44,7 @@ export * from './src/components/raphael/index';
     ]
 })
 export class DiagramsModule {
-    static forRoot(): ModuleWithProviders {
+    public static forRoot(): ModuleWithProviders {
         return {
             ngModule: DiagramsModule,
             providers: [

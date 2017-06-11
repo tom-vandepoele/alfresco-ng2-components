@@ -17,7 +17,7 @@
 
 import { Component, Input } from '@angular/core';
 import { SimpleChanges }    from '@angular/core';
-import { Http, Response, RequestOptions, ResponseContentType }  from '@angular/http';
+import { Http, RequestOptions, Response, ResponseContentType }  from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 
 @Component({
@@ -28,24 +28,24 @@ import 'rxjs/add/operator/toPromise';
 export class TxtViewerComponent {
 
     @Input()
-    urlFile: any;
+    public urlFile: string;
 
     @Input()
-    blobFile: Blob;
+    public blobFile: Blob;
 
-    content: string;
+    private content: string;
 
     constructor(private http: Http) {
     }
 
-    ngOnChanges(changes: SimpleChanges): Promise<any> {
+    public ngOnChanges(changes: SimpleChanges): Promise<any> {
 
-        let blobFile = changes['blobFile'];
+        let blobFile = changes.blobFile;
         if (blobFile && blobFile.currentValue) {
             return this.readBlob(blobFile.currentValue);
         }
 
-        let urlFile = changes['urlFile'];
+        let urlFile = changes.urlFile;
         if (urlFile && urlFile.currentValue) {
             return this.getUrlContent(urlFile.currentValue);
         }
@@ -64,8 +64,8 @@ export class TxtViewerComponent {
                 (res: Response) => {
                     this.content = res.text();
                     resolve();
-                }, (event) => {
-                    reject(event);
+                }, (event: Event) => {
+                    reject(event: Event);
                 });
         });
     }

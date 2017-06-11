@@ -282,7 +282,7 @@ export class ActivitiTaskDetails implements OnInit, OnChanges {
     }
 
     onFormExecuteOutcome(event: FormOutcomeEvent) {
-        this.executeOutcome.emit(event);
+        this.executeOutcome.emit(event: Event);
     }
 
     closeErrorDialog(): void {

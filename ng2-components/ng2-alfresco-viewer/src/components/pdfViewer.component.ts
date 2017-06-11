@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import { Component, Input, HostListener } from '@angular/core';
+import { Component, HostListener, Input } from '@angular/core';
 import { LogService } from 'ng2-alfresco-core';
 import { RenderingQueueServices } from '../services/rendering-queue.services';
 
@@ -30,36 +30,36 @@ declare let PDFJS: any;
 export class PdfViewerComponent {
 
     @Input()
-    urlFile: string;
+    public urlFile: string;
 
     @Input()
-    blobFile: Blob;
+    public blobFile: Blob;
 
     @Input()
-    nameFile: string;
+    public nameFile: string;
 
     @Input()
-    showToolbar: boolean = true;
+    public showToolbar: boolean = true;
 
-    currentPdfDocument: any;
-    page: number;
-    displayPage: number;
-    totalPages: number;
-    laodingPercent: number;
-    pdfViewer: any;
-    currentScaleMode: string = 'auto';
-    currentScale: number;
+    public currentPdfDocument: any;
+    public page: number;
+    public displayPage: number;
+    public totalPages: number;
+    public loadingPercent: number;
+    private pdfViewer: any;
+    private currentScaleMode: string = 'auto';
+    private currentScale: number;
 
-    MAX_AUTO_SCALE: number = 1.25;
-    DEFAULT_SCALE_DELTA: number = 1.1;
-    MIN_SCALE: number = 0.25;
-    MAX_SCALE: number = 10.0;
+    private MAX_AUTO_SCALE: number = 1.25;
+    private DEFAULT_SCALE_DELTA: number = 1.1;
+    private MIN_SCALE: number = 0.25;
+    private MAX_SCALE: number = 10.0;
 
     constructor(private renderingQueueServices: RenderingQueueServices,
                 private logService: LogService) {
     }
 
-    ngOnChanges(changes) {
+    public ngOnChanges() {
         if (!this.urlFile && !this.blobFile) {
             throw new Error('Attribute urlFile or blobFile is required');
         }
@@ -79,12 +79,12 @@ export class PdfViewerComponent {
         }
     }
 
-    executePdf(src, resolve, reject) {
+    private executePdf(src, resolve, reject): void {
         let loadingTask = this.getPDFJS().getDocument(src);
 
         loadingTask.onProgress = (progressData) => {
             let level = progressData.loaded / progressData.total;
-            this.laodingPercent = Math.round(level * 100);
+            this.loadingPercent = Math.round(level * 100);
         };
 
         loadingTask.then((pdfDocument) => {
@@ -111,24 +111,24 @@ export class PdfViewerComponent {
      *
      * @returns {PDFJS}
      */
-    getPDFJS() {
+    private getPDFJS(): PDFJS {
         return PDFJS;
     }
 
-    initPDFViewer(pdfDocument: any) {
+    private initPDFViewer(pdfDocument: any): void {
         PDFJS.verbosity = 1;
         PDFJS.disableWorker = false;
 
         let documentContainer = document.getElementById('viewer-pdf-container');
         let viewer: any = document.getElementById('viewer-viewerPdf');
 
-        window.document.addEventListener('scroll', (event) => {
+        window.document.addEventListener('scroll', (event: Event) => {
             this.watchScroll(event.target);
         }, true);
 
         this.pdfViewer = new PDFJS.PDFViewer({
             container: documentContainer,
-            viewer: viewer,
+            viewer,
             renderingQueue: this.renderingQueueServices
         });
 
@@ -142,7 +142,7 @@ export class PdfViewerComponent {
      *
      * @param {string} scaleMode - new scale mode
      */
-    scalePage(scaleMode) {
+    private scalePage(scaleMode): void {
         this.currentScaleMode = scaleMode;
 
         if (this.pdfViewer) {
@@ -206,7 +206,7 @@ export class PdfViewerComponent {
      *
      * @param {number} newScale - new scale page
      */
-    setScaleUpdatePages(newScale: number) {
+    private setScaleUpdatePages(newScale: number): void {
         if (!this.isSameScale(this.currentScale, newScale)) {
             this.currentScale = newScale;
 
@@ -226,7 +226,7 @@ export class PdfViewerComponent {
      *
      * @returns {boolean}
      */
-    isSameScale(oldScale: number, newScale: number) {
+    private isSameScale(oldScale: number, newScale: number): boolean {
         return (newScale === oldScale);
     }
 
@@ -238,21 +238,21 @@ export class PdfViewerComponent {
      *
      * @returns {boolean}
      */
-    isLandscape(width: number, height: number) {
+    private  isLandscape(width: number, height: number): boolean {
         return (width > height);
     }
 
     /**
      * Method triggered when the page is resized
      */
-    onResize() {
+    onResize(): void {
         this.scalePage(this.currentScaleMode);
     }
 
     /**
      * toggle the fit page pdf
      */
-    pageFit() {
+    private pageFit(): void {
         if (this.currentScaleMode !== 'page-fit') {
             this.scalePage('page-fit');
         } else {
@@ -265,7 +265,7 @@ export class PdfViewerComponent {
      *
      * @param {number} ticks
      */
-    zoomIn(ticks: number) {
+    private zoomIn(ticks: number): void {
         let newScale: any = this.currentScale;
         do {
             newScale = (newScale * this.DEFAULT_SCALE_DELTA).toFixed(2);
@@ -281,7 +281,7 @@ export class PdfViewerComponent {
      *
      * @param {number} ticks
      */
-    zoomOut(ticks: number) {
+    private zoomOut(ticks: number): void {
         let newScale: any = this.currentScale;
         do {
             newScale = (newScale / this.DEFAULT_SCALE_DELTA).toFixed(2);
@@ -295,7 +295,7 @@ export class PdfViewerComponent {
     /**
      * load the previous page
      */
-    previousPage() {
+    private previousPage(): void {
         if (this.pdfViewer && this.page > 1) {
             this.page--;
             this.displayPage = this.page;
@@ -307,7 +307,7 @@ export class PdfViewerComponent {
     /**
      * load the next page
      */
-    nextPage() {
+    private nextPage(): void {
         if (this.pdfViewer && this.page < this.totalPages) {
             this.page++;
             this.displayPage = this.page;
@@ -321,7 +321,7 @@ export class PdfViewerComponent {
      *
      * @param {string} page - page to load
      */
-    inputPage(page: string) {
+    private inputPage(page: string): void {
         let pageInput = parseInt(page, 10);
 
         if (!isNaN(pageInput) && pageInput > 0 && pageInput <= this.totalPages) {
@@ -338,7 +338,7 @@ export class PdfViewerComponent {
      *
      * @param {any} target
      */
-    watchScroll(target) {
+    private watchScroll(target): void {
         let outputPage = this.getVisibleElement(target);
 
         if (outputPage) {
@@ -354,7 +354,7 @@ export class PdfViewerComponent {
      *
      * @returns {Object} page
      */
-    getVisibleElement(target) {
+    private getVisibleElement(target) {
         return this.pdfViewer._pages.find((page) => {
             return this.isOnScreen(page, target);
         });
@@ -368,7 +368,7 @@ export class PdfViewerComponent {
      *
      * @returns {boolean}
      */
-    isOnScreen(page: any, target: any) {
+    isOnScreen(page: any, target: any): boolean {
         let viewport: any = {};
         viewport.top = target.scrollTop;
         viewport.bottom = viewport.top + target.scrollHeight;
@@ -383,7 +383,7 @@ export class PdfViewerComponent {
      * @param {KeyboardEvent} event
      */
     @HostListener('document:keydown', ['$event'])
-    handleKeyboardEvent(event: KeyboardEvent) {
+    handleKeyboardEvent(event: KeyboardEvent): void {
         let key = event.keyCode;
         if (key === 39) { // right arrow
             this.nextPage();

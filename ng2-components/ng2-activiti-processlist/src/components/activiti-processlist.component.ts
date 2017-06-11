@@ -16,9 +16,9 @@
  */
 
 import { DatePipe } from '@angular/common';
-import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, ContentChild, AfterContentInit } from '@angular/core';
+import { AfterContentInit, Component, ContentChild, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { AlfrescoTranslationService, DataColumnListComponent } from 'ng2-alfresco-core';
-import { ObjectDataTableAdapter, DataTableAdapter, DataRowEvent, ObjectDataRow, DataSorting, DataColumn } from 'ng2-alfresco-datatable';
+import { DataColumn, DataRowEvent, DataSorting, DataTableAdapter, ObjectDataRow, ObjectDataTableAdapter } from 'ng2-alfresco-datatable';
 import { ProcessFilterRequestRepresentation } from '../models/process-instance-filter.model';
 import { ProcessInstance } from '../models/process-instance.model';
 import { ActivitiProcessService } from '../services/activiti-process.service';
@@ -30,38 +30,39 @@ import { ActivitiProcessService } from '../services/activiti-process.service';
 })
 export class ActivitiProcessInstanceListComponent implements OnChanges, AfterContentInit {
 
-    @ContentChild(DataColumnListComponent) columnList: DataColumnListComponent;
+    @ContentChild(DataColumnListComponent)
+    public columnList: DataColumnListComponent;
 
     @Input()
-    appId: string;
+    public  appId: string;
 
     @Input()
-    processDefinitionKey: string;
+    publicprocessDefinitionKey: string;
 
     @Input()
-    state: string;
+    public state: string;
 
     @Input()
-    sort: string;
+    public sort: string;
 
     @Input()
-    name: string;
+    public name: string;
 
-    requestNode: ProcessFilterRequestRepresentation;
+    private  requestNode: ProcessFilterRequestRepresentation;
 
     @Input()
-    data: DataTableAdapter;
+    public data: DataTableAdapter;
 
     @Output()
-    rowClick: EventEmitter<string> = new EventEmitter<string>();
+    public rowClick: EventEmitter<string> = new EventEmitter<string>();
 
     @Output()
-    onSuccess: EventEmitter<ProcessInstance[]> = new EventEmitter<ProcessInstance[]>();
+    public onSuccess: EventEmitter<ProcessInstance[]> = new EventEmitter<ProcessInstance[]>();
 
     @Output()
-    onError: EventEmitter<any> = new EventEmitter<any>();
+    public onError: EventEmitter<any> = new EventEmitter<any>();
 
-    currentInstanceId: string;
+    private currentInstanceId: string;
 
     private defaultSchema: DataColumn[] = [
         { type: 'text', key: 'name', title: 'Name', cssClass: 'full-width name-column', sortable: true },
@@ -87,11 +88,11 @@ export class ActivitiProcessInstanceListComponent implements OnChanges, AfterCon
      * Setup html-based (html definitions) or code behind (data adapter) schema.
      * If component is assigned with an empty data adater the default schema settings applied.
      */
-    setupSchema() {
+    protected  setupSchema() {
         let schema: DataColumn[] = [];
 
         if (this.columnList && this.columnList.columns && this.columnList.columns.length > 0) {
-            schema = this.columnList.columns.map(c => <DataColumn> c);
+            schema = this.columnList.columns.map((c) => <DataColumn> c);
         }
 
         if (!this.data) {
@@ -148,7 +149,7 @@ export class ActivitiProcessInstanceListComponent implements OnChanges, AfterCon
                     this.selectFirst();
                     this.onSuccess.emit(response);
                 },
-                error => {
+                (error) => {
                     this.onError.emit(error);
                 });
     }
@@ -195,7 +196,7 @@ export class ActivitiProcessInstanceListComponent implements OnChanges, AfterCon
     /**
      * Select the first instance of a list if present
      */
-    selectFirst() {
+    protected selectFirst() {
         if (!this.isListEmpty()) {
             let row = this.data.getRows()[0];
             this.data.selectedRow = row;
@@ -212,7 +213,7 @@ export class ActivitiProcessInstanceListComponent implements OnChanges, AfterCon
      * Return the current id
      * @returns {string}
      */
-    getCurrentId(): string {
+    protected getCurrentId(): string {
         return this.currentInstanceId;
     }
 
@@ -220,7 +221,7 @@ export class ActivitiProcessInstanceListComponent implements OnChanges, AfterCon
      * Check if the list is empty
      * @returns {ObjectDataTableAdapter|boolean}
      */
-    isListEmpty(): boolean {
+    protected isListEmpty(): boolean {
         return this.data === undefined ||
             (this.data && this.data.getRows() && this.data.getRows().length === 0);
     }
@@ -229,7 +230,7 @@ export class ActivitiProcessInstanceListComponent implements OnChanges, AfterCon
      * Emit the event rowClick passing the current task id when the row is clicked
      * @param event
      */
-    onRowClick(event: DataRowEvent) {
+    protected onRowClick(event: DataRowEvent) {
         let item = event;
         this.currentInstanceId = item.value.getValue('id');
         this.rowClick.emit(this.currentInstanceId);
@@ -241,14 +242,14 @@ export class ActivitiProcessInstanceListComponent implements OnChanges, AfterCon
      * @returns {any[]}
      */
     private optimizeNames(instances: any[]) {
-        instances = instances.map(t => {
+        instances = instances.map((t) => {
             t.obj.name = this.getProcessNameOrDescription(t.obj, 'medium');
             return t;
         });
         return instances;
     }
 
-    getProcessNameOrDescription(processInstance, dateFormat): string {
+    protected getProcessNameOrDescription(processInstance, dateFormat): string {
         let name = '';
         if (processInstance) {
             name = processInstance.name ||
@@ -257,7 +258,7 @@ export class ActivitiProcessInstanceListComponent implements OnChanges, AfterCon
         return name;
     }
 
-    getFormatDate(value, format: string) {
+    protected getFormatDate(value, format: string) {
         let datePipe = new DatePipe('en-US');
         try {
             return datePipe.transform(value, format);

@@ -25,64 +25,65 @@ import { AccordionComponent } from './accordion.component';
 
 })
 export class AccordionGroupComponent implements OnDestroy {
-    private _isOpen: boolean = false;
-    private _isSelected: boolean = false;
 
     @ViewChild('contentWrapper')
-    contentWrapper: any;
+    public contentWrapper: any;
 
     @Input()
-    heading: string;
+    public heading: string;
 
     @Input()
-    headingIcon: string;
+    public headingIcon: string;
 
     @Input()
-    hasAccordionIcon: boolean = true;
+    public hasAccordionIcon: boolean = true;
 
     @Output()
-    headingClick: EventEmitter<any> = new EventEmitter<any>();
+    public headingClick: EventEmitter<any> = new EventEmitter<any>();
+
+    public isOpen: boolean = false;
+    public isSelected: boolean = false;
 
     @Input()
     set isOpen(value: boolean) {
-        this._isOpen = value;
+        this.isOpen = value;
         if (value) {
             this.accordion.closeOthers(this);
         }
     }
 
     get isOpen() {
-        return this._isOpen;
+        return this.isOpen;
     }
 
     @Input()
     set isSelected(value: boolean) {
-        this._isSelected = value;
+        this.isSelected = value;
     }
 
     get isSelected() {
-        return this._isSelected;
+        return this.isSelected;
     }
 
     constructor(private accordion: AccordionComponent) {
         this.accordion.addGroup(this);
     }
 
-    ngOnDestroy() {
+    public ngOnDestroy() {
         this.accordion.removeGroup(this);
     }
 
-    hasHeadingIcon() {
+    public hasHeadingIcon() {
         return this.headingIcon ? true : false;
     }
 
-    toggleOpen(event: MouseEvent): void {
+    public toggleOpen(event: MouseEvent): void {
         event.preventDefault();
         this.isOpen = !this.isOpen;
         this.headingClick.emit(this.heading);
     }
 
-    getAccordionIcon(): string {
+    public getAccordionIcon(): string {
         return this.isOpen ? 'expand_less' : 'expand_more';
     }
 

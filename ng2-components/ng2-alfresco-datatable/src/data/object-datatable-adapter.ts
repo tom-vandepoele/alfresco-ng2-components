@@ -15,10 +15,10 @@
  * limitations under the License.
  */
 
-import { TemplateRef } from '@angular/core';
 import { DatePipe } from '@angular/common';
+import { TemplateRef } from '@angular/core';
 import { ObjectUtils } from 'ng2-alfresco-core';
-import { DataTableAdapter, DataRow, DataColumn, DataSorting } from './datatable-adapter';
+import { DataColumn, DataRow, DataSorting, DataTableAdapter } from './datatable-adapter';
 
 declare var require: any;
 
@@ -69,7 +69,7 @@ export class ObjectDataTableAdapter implements DataTableAdapter {
                     if (rowToExaminate.hasOwnProperty(key)) {
                         schema.push({
                             type: 'text',
-                            key: key,
+                            key,
                             title: key,
                             sortable: false
                         });
@@ -86,38 +86,38 @@ export class ObjectDataTableAdapter implements DataTableAdapter {
         this._columns = [];
 
         if (data && data.length > 0) {
-            this._rows = data.map(item => {
+            this._rows = data.map((item) => {
                 return new ObjectDataRow(item);
             });
         }
 
         if (schema && schema.length > 0) {
-            this._columns = schema.map(item => {
+            this._columns = schema.map((item) => {
                 return new ObjectDataColumn(item);
             });
 
             // Sort by first sortable or just first column
-            let sortable = this._columns.filter(c => c.sortable);
+            let sortable = this._columns.filter((c) => c.sortable);
             if (sortable.length > 0) {
                 this.sort(sortable[0].key, 'asc');
             }
         }
     }
 
-    getRows(): Array<DataRow> {
+    getRows(): DataRow[] {
         return this._rows;
     }
 
-    setRows(rows: Array<DataRow>) {
+    setRows(rows: DataRow[]) {
         this._rows = rows || [];
         this.sort();
     }
 
-    getColumns(): Array<DataColumn> {
+    getColumns(): DataColumn[] {
         return this._columns;
     }
 
-    setColumns(columns: Array<DataColumn>) {
+    setColumns(columns: DataColumn[]) {
         this._columns = columns || [];
     }
 

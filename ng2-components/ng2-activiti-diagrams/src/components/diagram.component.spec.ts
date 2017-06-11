@@ -91,7 +91,7 @@ describe('Test ng2-activiti-diagrams ', () => {
                 fixture.whenStable().then(() => {
                     expect(res).not.toBeNull();
                     let event: any = element.querySelector('diagram-start-event > diagram-event > raphael-circle');
-                    expect(event).not.toBeNull();
+                    expect(event: Event).not.toBeNull();
                     let tooltip: any = element.querySelector('diagram-tooltip > div');
                     expect(tooltip.textContent).toContain(res.elements[0].id);
                     expect(tooltip.textContent).toContain(res.elements[0].type);
@@ -112,7 +112,7 @@ describe('Test ng2-activiti-diagrams ', () => {
                 fixture.whenStable().then(() => {
                     expect(res).toBeDefined();
                     let event: any = element.querySelector('diagram-start-event > diagram-event > raphael-circle');
-                    expect(event).not.toBeNull();
+                    expect(event: Event).not.toBeNull();
 
                     let iconEvent: any = element.querySelector('diagram-start-event > diagram-event >' +
                         ' diagram-container-icon-event > div > div > diagram-icon-timer > raphael-icon-timer');
@@ -138,7 +138,7 @@ describe('Test ng2-activiti-diagrams ', () => {
                 fixture.whenStable().then(() => {
                     expect(res).toBeDefined();
                     let event: any = element.querySelector('diagram-start-event > diagram-event > raphael-circle');
-                    expect(event).not.toBeNull();
+                    expect(event: Event).not.toBeNull();
 
                     let iconEvent: any = element.querySelector('diagram-start-event > diagram-event >' +
                         ' diagram-container-icon-event > div > div > diagram-icon-signal > raphael-icon-signal');
@@ -163,7 +163,7 @@ describe('Test ng2-activiti-diagrams ', () => {
                 fixture.whenStable().then(() => {
                     expect(res).toBeDefined();
                     let event: any = element.querySelector('diagram-start-event > diagram-event > raphael-circle');
-                    expect(event).not.toBeNull();
+                    expect(event: Event).not.toBeNull();
 
                     let iconEvent: any = element.querySelector('diagram-start-event > diagram-event >' +
                         ' diagram-container-icon-event > div > div > diagram-icon-message > raphael-icon-message');
@@ -188,7 +188,7 @@ describe('Test ng2-activiti-diagrams ', () => {
                 fixture.whenStable().then(() => {
                     expect(res).toBeDefined();
                     let event: any = element.querySelector('diagram-start-event > diagram-event > raphael-circle');
-                    expect(event).not.toBeNull();
+                    expect(event: Event).not.toBeNull();
 
                     let iconEvent: any = element.querySelector('diagram-start-event > diagram-event >' +
                         ' diagram-container-icon-event > div > div > diagram-icon-error > raphael-icon-error');
@@ -213,7 +213,7 @@ describe('Test ng2-activiti-diagrams ', () => {
                 fixture.whenStable().then(() => {
                     expect(res).toBeDefined();
                     let event: any = element.querySelector('diagram-end-event > diagram-event > raphael-circle');
-                    expect(event).not.toBeNull();
+                    expect(event: Event).not.toBeNull();
                     let tooltip: any = element.querySelector('diagram-tooltip > div');
                     expect(tooltip.textContent).toContain(res.elements[0].id);
                     expect(tooltip.textContent).toContain(res.elements[0].type);
@@ -234,7 +234,7 @@ describe('Test ng2-activiti-diagrams ', () => {
                 fixture.whenStable().then(() => {
                     expect(res).toBeDefined();
                     let event: any = element.querySelector('diagram-end-event > diagram-event > raphael-circle');
-                    expect(event).not.toBeNull();
+                    expect(event: Event).not.toBeNull();
 
                     let iconEvent: any = element.querySelector('diagram-end-event > diagram-event >' +
                         ' diagram-container-icon-event > div > div > diagram-icon-error > raphael-icon-error');
@@ -1414,7 +1414,7 @@ describe('Test ng2-activiti-diagrams ', () => {
                 fixture.whenStable().then(() => {
                     expect(res).not.toBeNull();
                     let event: any = element.querySelector('diagram-start-event > diagram-event > raphael-circle');
-                    expect(event).not.toBeNull();
+                    expect(event: Event).not.toBeNull();
                     let tooltip: any = element.querySelector('diagram-tooltip > div');
                     expect(tooltip.textContent).toContain(res.elements[0].id);
                     expect(tooltip.textContent).toContain(res.elements[0].type);
@@ -1435,7 +1435,7 @@ describe('Test ng2-activiti-diagrams ', () => {
                 fixture.whenStable().then(() => {
                     expect(res).not.toBeNull();
                     let event: any = element.querySelector('diagram-start-event > diagram-event > raphael-circle[ng-reflect-stroke="#017501"]');
-                    expect(event).not.toBeNull();
+                    expect(event: Event).not.toBeNull();
                     let tooltip: any = element.querySelector('diagram-tooltip > div');
                     expect(tooltip.textContent).toContain(res.elements[0].id);
                     expect(tooltip.textContent).toContain(res.elements[0].type);
@@ -1456,7 +1456,7 @@ describe('Test ng2-activiti-diagrams ', () => {
                 fixture.whenStable().then(() => {
                     expect(res).not.toBeNull();
                     let event: any = element.querySelector('diagram-start-event > diagram-event > raphael-circle[ng-reflect-stroke="#2632aa"]');
-                    expect(event).not.toBeNull();
+                    expect(event: Event).not.toBeNull();
                     let tooltip: any = element.querySelector('diagram-tooltip > div');
                     expect(tooltip.textContent).toContain(res.elements[0].id);
                     expect(tooltip.textContent).toContain(res.elements[0].type);
@@ -1477,7 +1477,7 @@ describe('Test ng2-activiti-diagrams ', () => {
                 fixture.whenStable().then(() => {
                     expect(res).toBeDefined();
                     let event: any = element.querySelector('diagram-start-event > diagram-event > raphael-circle');
-                    expect(event).not.toBeNull();
+                    expect(event: Event).not.toBeNull();
 
                     let iconEvent: any = element.querySelector('diagram-start-event > diagram-event >' +
                         ' diagram-container-icon-event > div > div > diagram-icon-timer > raphael-icon-timer');
@@ -1503,7 +1503,7 @@ describe('Test ng2-activiti-diagrams ', () => {
                 fixture.whenStable().then(() => {
                     expect(res).toBeDefined();
                     let event: any = element.querySelector('diagram-start-event > diagram-event > raphael-circle[ng-reflect-stroke="#017501"]');
-                    expect(event).not.toBeNull();
+                    expect(event: Event).not.toBeNull();
 
                     let iconEvent: any = element.querySelector('diagram-start-event > diagram-event >' +
                         ' diagram-container-icon-event > div > div > diagram-icon-timer > raphael-icon-timer');
@@ -1529,7 +1529,7 @@ describe('Test ng2-activiti-diagrams ', () => {
                 fixture.whenStable().then(() => {
                     expect(res).toBeDefined();
                     let event: any = element.querySelector('diagram-start-event > diagram-event > raphael-circle[ng-reflect-stroke="#2632aa"]');
-                    expect(event).not.toBeNull();
+                    expect(event: Event).not.toBeNull();
 
                     let iconEvent: any = element.querySelector('diagram-start-event > diagram-event >' +
                         ' diagram-container-icon-event > div > div > diagram-icon-timer > raphael-icon-timer');
@@ -1555,7 +1555,7 @@ describe('Test ng2-activiti-diagrams ', () => {
                 fixture.whenStable().then(() => {
                     expect(res).toBeDefined();
                     let event: any = element.querySelector('diagram-start-event > diagram-event > raphael-circle');
-                    expect(event).not.toBeNull();
+                    expect(event: Event).not.toBeNull();
 
                     let iconEvent: any = element.querySelector('diagram-start-event > diagram-event >' +
                         ' diagram-container-icon-event > div > div > diagram-icon-signal > raphael-icon-signal');
@@ -1580,7 +1580,7 @@ describe('Test ng2-activiti-diagrams ', () => {
                 fixture.whenStable().then(() => {
                     expect(res).toBeDefined();
                     let event: any = element.querySelector('diagram-start-event > diagram-event > raphael-circle[ng-reflect-stroke="#017501"]');
-                    expect(event).not.toBeNull();
+                    expect(event: Event).not.toBeNull();
 
                     let iconEvent: any = element.querySelector('diagram-start-event > diagram-event >' +
                         ' diagram-container-icon-event > div > div > diagram-icon-signal > raphael-icon-signal');
@@ -1605,7 +1605,7 @@ describe('Test ng2-activiti-diagrams ', () => {
                 fixture.whenStable().then(() => {
                     expect(res).toBeDefined();
                     let event: any = element.querySelector('diagram-start-event > diagram-event > raphael-circle[ng-reflect-stroke="#2632aa"]');
-                    expect(event).not.toBeNull();
+                    expect(event: Event).not.toBeNull();
 
                     let iconEvent: any = element.querySelector('diagram-start-event > diagram-event >' +
                         ' diagram-container-icon-event > div > div > diagram-icon-signal > raphael-icon-signal');
@@ -1630,7 +1630,7 @@ describe('Test ng2-activiti-diagrams ', () => {
                 fixture.whenStable().then(() => {
                     expect(res).toBeDefined();
                     let event: any = element.querySelector('diagram-start-event > diagram-event > raphael-circle');
-                    expect(event).not.toBeNull();
+                    expect(event: Event).not.toBeNull();
 
                     let iconEvent: any = element.querySelector('diagram-start-event > diagram-event >' +
                         ' diagram-container-icon-event > div > div > diagram-icon-message > raphael-icon-message');
@@ -1655,7 +1655,7 @@ describe('Test ng2-activiti-diagrams ', () => {
                 fixture.whenStable().then(() => {
                     expect(res).toBeDefined();
                     let event: any = element.querySelector('diagram-start-event > diagram-event > raphael-circle[ng-reflect-stroke="#017501"]');
-                    expect(event).not.toBeNull();
+                    expect(event: Event).not.toBeNull();
 
                     let iconEvent: any = element.querySelector('diagram-start-event > diagram-event >' +
                         ' diagram-container-icon-event > div > div > diagram-icon-message > raphael-icon-message');
@@ -1680,7 +1680,7 @@ describe('Test ng2-activiti-diagrams ', () => {
                 fixture.whenStable().then(() => {
                     expect(res).toBeDefined();
                     let event: any = element.querySelector('diagram-start-event > diagram-event > raphael-circle[ng-reflect-stroke="#2632aa"]');
-                    expect(event).not.toBeNull();
+                    expect(event: Event).not.toBeNull();
 
                     let iconEvent: any = element.querySelector('diagram-start-event > diagram-event >' +
                         ' diagram-container-icon-event > div > div > diagram-icon-message > raphael-icon-message');
@@ -1705,7 +1705,7 @@ describe('Test ng2-activiti-diagrams ', () => {
                 fixture.whenStable().then(() => {
                     expect(res).toBeDefined();
                     let event: any = element.querySelector('diagram-start-event > diagram-event > raphael-circle');
-                    expect(event).not.toBeNull();
+                    expect(event: Event).not.toBeNull();
 
                     let iconEvent: any = element.querySelector('diagram-start-event > diagram-event >' +
                         ' diagram-container-icon-event > div > div > diagram-icon-error > raphael-icon-error');
@@ -1730,7 +1730,7 @@ describe('Test ng2-activiti-diagrams ', () => {
                 fixture.whenStable().then(() => {
                     expect(res).toBeDefined();
                     let event: any = element.querySelector('diagram-start-event > diagram-event > raphael-circle[ng-reflect-stroke="#017501"]');
-                    expect(event).not.toBeNull();
+                    expect(event: Event).not.toBeNull();
 
                     let iconEvent: any = element.querySelector('diagram-start-event > diagram-event >' +
                         ' diagram-container-icon-event > div > div > diagram-icon-error > raphael-icon-error');
@@ -1755,7 +1755,7 @@ describe('Test ng2-activiti-diagrams ', () => {
                 fixture.whenStable().then(() => {
                     expect(res).toBeDefined();
                     let event: any = element.querySelector('diagram-start-event > diagram-event > raphael-circle[ng-reflect-stroke="#2632aa"]');
-                    expect(event).not.toBeNull();
+                    expect(event: Event).not.toBeNull();
 
                     let iconEvent: any = element.querySelector('diagram-start-event > diagram-event >' +
                         ' diagram-container-icon-event > div > div > diagram-icon-error > raphael-icon-error');
@@ -1780,7 +1780,7 @@ describe('Test ng2-activiti-diagrams ', () => {
                 fixture.whenStable().then(() => {
                     expect(res).toBeDefined();
                     let event: any = element.querySelector('diagram-end-event > diagram-event > raphael-circle');
-                    expect(event).not.toBeNull();
+                    expect(event: Event).not.toBeNull();
                     let tooltip: any = element.querySelector('diagram-tooltip > div');
                     expect(tooltip.textContent).toContain(res.elements[0].id);
                     expect(tooltip.textContent).toContain(res.elements[0].type);
@@ -1801,7 +1801,7 @@ describe('Test ng2-activiti-diagrams ', () => {
                 fixture.whenStable().then(() => {
                     expect(res).toBeDefined();
                     let event: any = element.querySelector('diagram-end-event > diagram-event > raphael-circle[ng-reflect-stroke="#017501"]');
-                    expect(event).not.toBeNull();
+                    expect(event: Event).not.toBeNull();
                     let tooltip: any = element.querySelector('diagram-tooltip > div');
                     expect(tooltip.textContent).toContain(res.elements[0].id);
                     expect(tooltip.textContent).toContain(res.elements[0].type);
@@ -1822,7 +1822,7 @@ describe('Test ng2-activiti-diagrams ', () => {
                 fixture.whenStable().then(() => {
                     expect(res).toBeDefined();
                     let event: any = element.querySelector('diagram-end-event > diagram-event > raphael-circle[ng-reflect-stroke="#2632aa"]');
-                    expect(event).not.toBeNull();
+                    expect(event: Event).not.toBeNull();
                     let tooltip: any = element.querySelector('diagram-tooltip > div');
                     expect(tooltip.textContent).toContain(res.elements[0].id);
                     expect(tooltip.textContent).toContain(res.elements[0].type);
@@ -1843,7 +1843,7 @@ describe('Test ng2-activiti-diagrams ', () => {
                 fixture.whenStable().then(() => {
                     expect(res).toBeDefined();
                     let event: any = element.querySelector('diagram-end-event > diagram-event > raphael-circle');
-                    expect(event).not.toBeNull();
+                    expect(event: Event).not.toBeNull();
 
                     let iconEvent: any = element.querySelector('diagram-end-event > diagram-event >' +
                         ' diagram-container-icon-event > div > div > diagram-icon-error > raphael-icon-error');
@@ -1868,7 +1868,7 @@ describe('Test ng2-activiti-diagrams ', () => {
                 fixture.whenStable().then(() => {
                     expect(res).toBeDefined();
                     let event: any = element.querySelector('diagram-end-event > diagram-event > raphael-circle[ng-reflect-stroke="#017501"]');
-                    expect(event).not.toBeNull();
+                    expect(event: Event).not.toBeNull();
 
                     let iconEvent: any = element.querySelector('diagram-end-event > diagram-event >' +
                         ' diagram-container-icon-event > div > div > diagram-icon-error > raphael-icon-error');
@@ -1893,7 +1893,7 @@ describe('Test ng2-activiti-diagrams ', () => {
                 fixture.whenStable().then(() => {
                     expect(res).toBeDefined();
                     let event: any = element.querySelector('diagram-end-event > diagram-event > raphael-circle[ng-reflect-stroke="#2632aa"]');
-                    expect(event).not.toBeNull();
+                    expect(event: Event).not.toBeNull();
 
                     let iconEvent: any = element.querySelector('diagram-end-event > diagram-event >' +
                         ' diagram-container-icon-event > div > div > diagram-icon-error > raphael-icon-error');

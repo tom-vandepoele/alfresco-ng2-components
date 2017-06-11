@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { RatingService } from './../services/rating.service';
 
 @Component({
@@ -27,21 +27,21 @@ import { RatingService } from './../services/rating.service';
 export class LikeComponent {
 
     @Input()
-    nodeId: string;
-
-    likesCounter: number = 0;
-
-    ratingType: string = 'likes';
-
-    isLike: boolean = false;
+    public nodeId: string;
 
     @Output()
-    changeVote = new EventEmitter();
+    public changeVote = new EventEmitter();
+
+    public likesCounter: number = 0;
+
+    private ratingType: string = 'likes';
+
+    private isLike: boolean = false;
 
     constructor(private ratingService: RatingService) {
     }
 
-    ngOnChanges() {
+    public ngOnChanges(): Promise<PushSubscription> {
         this.clean();
 
         let ratingObserver = this.ratingService.getRating(this.nodeId, this.ratingType);
@@ -60,7 +60,7 @@ export class LikeComponent {
         return ratingObserver;
     }
 
-    likeClick() {
+    public likeClick(): void {
         if (this.isLike) {
             this.ratingService.deleteRating(this.nodeId, this.ratingType).subscribe(
                 () => {
@@ -80,8 +80,8 @@ export class LikeComponent {
         this.changeVote.emit(this.likesCounter);
     }
 
-    clean() {
-     this.isLike = false;
-     this.likesCounter = 0;
+    private clean(): void {
+        this.isLike = false;
+        this.likesCounter = 0;
     }
 }

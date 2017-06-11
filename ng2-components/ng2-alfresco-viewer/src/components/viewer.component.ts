@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import { Component, ElementRef, Input, Output, HostListener, EventEmitter, Inject, TemplateRef } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Inject, Input, Output, TemplateRef } from '@angular/core';
 import { DOCUMENT } from '@angular/platform-browser';
 import { MinimalNodeEntryEntity } from 'alfresco-js-api';
 import { AlfrescoApiService, LogService } from 'ng2-alfresco-core';
@@ -28,41 +28,41 @@ import { AlfrescoApiService, LogService } from 'ng2-alfresco-core';
 export class ViewerComponent {
 
     @Input()
-    urlFile: string = '';
+    public urlFile: string = '';
 
     @Input()
-    blobFile: Blob;
+    public blobFile: Blob;
 
     @Input()
-    fileNodeId: string = null;
+    public fileNodeId: string = null;
 
     @Input()
-    overlayMode: boolean = false;
+    public overlayMode: boolean = false;
 
     @Input()
-    showViewer: boolean = true;
+    public showViewer: boolean = true;
 
     @Input()
-    showToolbar: boolean = true;
+    public showToolbar: boolean = true;
 
     @Input()
-    displayName: string;
+    public displayName: string;
 
     @Output()
-    showViewerChange: EventEmitter<boolean> = new EventEmitter<boolean>();
+    public showViewerChange: EventEmitter<boolean> = new EventEmitter<boolean>();
 
     @Output()
-    extensionChange: EventEmitter<String> = new EventEmitter<String>();
+    public extensionChange: EventEmitter<String> = new EventEmitter<String>();
 
-    extensionTemplates: { template: TemplateRef<any>, isVisible: boolean }[] = [];
+    private extensionTemplates: Array<{ template: TemplateRef<any>, isVisible: boolean }> = [];
 
-    externalExtensions: string[] = [];
+    private externalExtensions: string[] = [];
 
-    urlFileContent: string;
-    otherMenu: any;
-    extension: string;
-    mimeType: string;
-    loaded: boolean = false;
+    private urlFileContent: string;
+    private otherMenu: HTMLElement;
+    private extension: string;
+    private mimeType: string;
+    private loaded: boolean = false;
 
     constructor(private apiService: AlfrescoApiService,
                 private element: ElementRef,
@@ -70,7 +70,7 @@ export class ViewerComponent {
                 private logService: LogService) {
     }
 
-    ngOnChanges(changes) {
+    public ngOnChanges() : void {
         if (this.showViewer) {
             if (this.overlayMode) {
                 this.hideOtherHeaderBar();
@@ -110,10 +110,14 @@ export class ViewerComponent {
         }
     }
 
+    public ngOnDestroy() : void {
+        this.cleanup();
+    }
+
     /**
      * close the viewer
      */
-    close() {
+    private close(): void {
         this.unblockOtherScrollBar();
         if (this.otherMenu) {
             this.otherMenu.hidden = false;
@@ -126,7 +130,7 @@ export class ViewerComponent {
     /**
      * cleanup before the close
      */
-    cleanup() {
+    private cleanup(): void {
         this.urlFileContent = '';
         this.displayName = '';
         this.fileNodeId = null;
@@ -135,17 +139,13 @@ export class ViewerComponent {
         this.mimeType = null;
     }
 
-    ngOnDestroy() {
-        this.cleanup();
-    }
-
     /**
      * get File name from url
      *
      * @param {string} url - url file
      * @returns {string} name file
      */
-    getFilenameFromUrl(url: string): string {
+    private getFilenameFromUrl(url: string): string {
         let anchor = url.indexOf('#');
         let query = url.indexOf('?');
         let end = Math.min(
@@ -247,7 +247,7 @@ export class ViewerComponent {
      *
      * @returns {boolean}
      */
-    supportedExtension(): boolean {
+    private supportedExtension(): boolean {
         return this.isImage() || this.isPdf() || this.isMedia() || this.isText() || this.isExternalSupportedExtension();
     }
 
@@ -256,7 +256,7 @@ export class ViewerComponent {
      *
      * @returns {boolean}
      */
-    isExternalSupportedExtension(): boolean {
+    private isExternalSupportedExtension(): boolean {
         let externalType: string;
 
         if (this.externalExtensions && (this.externalExtensions instanceof Array)) {
@@ -274,7 +274,7 @@ export class ViewerComponent {
      * @param {KeyboardEvent} event
      */
     @HostListener('document:keydown', ['$event'])
-    handleKeyboardEvent(event: KeyboardEvent) {
+    private handleKeyboardEvent(event: KeyboardEvent): void {
         let key = event.keyCode;
         if (key === 27 && this.overlayMode) { // esc
             this.close();
@@ -284,7 +284,7 @@ export class ViewerComponent {
     /**
      * Check if in the document there are scrollable main area and disable it
      */
-    private blockOtherScrollBar() {
+    private blockOtherScrollBar(): void {
         let mainElements: any = document.getElementsByTagName('main');
 
         for (let i = 0; i < mainElements.length; i++) {
@@ -334,7 +334,7 @@ export class ViewerComponent {
     /**
      * Hide the other possible menu in the application
      */
-    private hideOtherHeaderBar() {
+    private hideOtherHeaderBar() : void {
         if (this.overlayMode && !this.isParentElementHeaderBar()) {
             this.otherMenu = document.querySelector('header');
             if (this.otherMenu) {
@@ -348,7 +348,7 @@ export class ViewerComponent {
      *
      * @returns {boolean}
      */
-    isLoaded(): boolean {
+    private isLoaded(): boolean {
         return this.fileNodeId ? this.loaded : true;
     }
 }

@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { RatingService } from './../services/rating.service';
 
 @Component({
@@ -27,21 +27,21 @@ import { RatingService } from './../services/rating.service';
 export class RatingComponent {
 
     @Input()
-    nodeId: string;
+    public nodeId: string;
 
-    average: number = 0;
-
-    ratingType: string = 'fiveStar';
+    public average: number = 0;
 
     @Output()
-    changeVote = new EventEmitter();
+    public changeVote = new EventEmitter();
 
-    stars: Array<any> = [];
+    private ratingType: string = 'fiveStar';
+
+    private stars: any[] = [];
 
     constructor(private ratingService: RatingService) {
     }
 
-    ngOnChanges() {
+    public ngOnChanges(): Promise<PushSubscription> {
         let ratingObserver = this.ratingService.getRating(this.nodeId, this.ratingType);
 
         ratingObserver.subscribe(
@@ -56,7 +56,20 @@ export class RatingComponent {
         return ratingObserver;
     }
 
-    calculateStars() {
+    public updateVote(vote: number): void {
+        this.ratingService.postRating(this.nodeId, this.ratingType, vote).subscribe(
+            (data) => {
+                if (data.entry.aggregate) {
+                    if (this.average !== data.entry.aggregate.average) {
+                        this.average = data.entry.aggregate.average;
+                        this.calculateStars();
+                    }
+                }
+            }
+        );
+    }
+
+    private calculateStars(): void {
         this.stars = [];
 
         for (let i = 0; i < 5; i++) {
@@ -70,16 +83,4 @@ export class RatingComponent {
         this.changeVote.emit(this.average);
     }
 
-    updateVote(vote: number) {
-        this.ratingService.postRating(this.nodeId, this.ratingType, vote).subscribe(
-            (data) => {
-                if (data.entry.aggregate) {
-                    if (this.average !== data.entry.aggregate.average) {
-                        this.average = data.entry.aggregate.average;
-                        this.calculateStars();
-                    }
-                }
-            }
-        );
-    }
 }

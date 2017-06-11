@@ -20,10 +20,10 @@ import { BaseUIEvent } from 'ng2-alfresco-core';
 
 export interface DataTableAdapter {
     selectedRow: DataRow;
-    getRows(): Array<DataRow>;
-    setRows(rows: Array<DataRow>): void;
-    getColumns(): Array<DataColumn>;
-    setColumns(columns: Array<DataColumn>): void;
+    getRows(): DataRow[];
+    setRows(rows: DataRow[]): void;
+    getColumns(): DataColumn[];
+    setColumns(columns: DataColumn[]): void;
     getValue(row: DataRow, col: DataColumn): any;
     getSorting(): DataSorting;
     setSorting(sorting: DataSorting): void;

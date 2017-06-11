@@ -85,7 +85,7 @@ export const ACTIVITI_TASKLIST_PROVIDERS: any[] = [
     ]
 })
 export class ActivitiTaskListModule {
-    static forRoot(): ModuleWithProviders {
+    public static forRoot(): ModuleWithProviders {
         return {
             ngModule: ActivitiTaskListModule,
             providers: [

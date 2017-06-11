@@ -359,7 +359,7 @@ describe('DynamicTableWidget', () => {
 
             let event: any = new Event('keyup');
             event.keyCode = 32;
-            rowElement.dispatchEvent(event);
+            rowElement.dispatchEvent(event: Event);
             fixture.detectChanges();
 
             fixture.whenStable().then(() => {

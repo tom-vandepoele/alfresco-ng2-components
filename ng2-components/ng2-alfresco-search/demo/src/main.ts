@@ -87,7 +87,7 @@ class SearchDemo implements OnInit {
             });
     }
 
-    searchTermChange(event) {
+    searchTermChange(event: Event) {
         this.logService.info('Search term changed', event);
         this.searchTerm = event.value;
     }

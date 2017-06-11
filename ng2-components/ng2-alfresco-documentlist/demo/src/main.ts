@@ -162,12 +162,12 @@ class DocumentListDemo implements OnInit {
         window.alert('my custom action handler');
     }
 
-    myCustomAction1(event) {
+    myCustomAction1(event: Event) {
         let entry = event.value.entry;
         alert(`Custom document action for ${entry.name}`);
     }
 
-    myFolderAction1(event) {
+    myFolderAction1(event: Event) {
         let entry = event.value.entry;
         alert(`Custom folder action for ${entry.name}`);
     }

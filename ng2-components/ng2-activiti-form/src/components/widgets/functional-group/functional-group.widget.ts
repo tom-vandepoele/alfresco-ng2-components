@@ -102,7 +102,7 @@ export class FunctionalGroupWidget extends WidgetComponent implements OnInit {
             this.field.value = item;
             this.value = item.name;
         }
-        if (event) {
+        if (event: Event) {
             event.preventDefault();
         }
     }
