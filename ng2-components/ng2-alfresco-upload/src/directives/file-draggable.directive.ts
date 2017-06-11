@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import { Directive, EventEmitter, Input, Output, OnInit, OnDestroy, ElementRef, NgZone } from '@angular/core';
+import { Directive, ElementRef, EventEmitter, Input, NgZone, OnDestroy, OnInit, Output } from '@angular/core';
 import { FileUtils } from 'ng2-alfresco-core';
 
 @Directive({
@@ -23,19 +23,19 @@ import { FileUtils } from 'ng2-alfresco-core';
 })
 export class FileDraggableDirective implements OnInit, OnDestroy {
 
-    files: File [];
-
     @Input('file-draggable')
-    enabled: boolean = true;
+    public enabled: boolean = true;
 
     @Output()
-    onFilesDropped: EventEmitter<File[]> = new EventEmitter<File[]>();
+    public onFilesDropped: EventEmitter<File[]> = new EventEmitter<File[]>();
 
     @Output()
-    onFilesEntityDropped: EventEmitter<any> = new EventEmitter();
+    public onFilesEntityDropped: EventEmitter<any> = new EventEmitter();
 
     @Output()
-    onFolderEntityDropped: EventEmitter<any> = new EventEmitter();
+    public onFolderEntityDropped: EventEmitter<any> = new EventEmitter();
+
+    public files: File [];
 
     private cssClassName: string = 'file-draggable__input-focus';
     private element: HTMLElement;
@@ -44,7 +44,7 @@ export class FileDraggableDirective implements OnInit, OnDestroy {
         this.element = el.nativeElement;
     }
 
-    ngOnInit() {
+    public ngOnInit(): void {
         this.ngZone.runOutsideAngular(() => {
             this.element.addEventListener('dragenter', this.onDragEnter.bind(this));
             this.element.addEventListener('dragover', this.onDragOver.bind(this));
@@ -53,7 +53,7 @@ export class FileDraggableDirective implements OnInit, OnDestroy {
         });
     }
 
-    ngOnDestroy() {
+    public ngOnDestroy(): void {
         this.element.removeEventListener('dragenter', this.onDragEnter);
         this.element.removeEventListener('dragover', this.onDragOver);
         this.element.removeEventListener('dragleave', this.onDragLeave);
@@ -64,15 +64,15 @@ export class FileDraggableDirective implements OnInit, OnDestroy {
      * Method called when files is dropped in the drag and drop area.
      * @param event DOM event.
      */
-    onDropFiles(event: any): void {
+    public onDropFiles(event: any): void {
         if (this.enabled && !event.defaultPrevented) {
             this.preventDefault(event);
 
-            let items = event.dataTransfer.items;
+            let items: DataTransferItem [] = event.dataTransfer.items;
             if (items) {
-                for (let i = 0; i < items.length; i++) {
-                    if (typeof items[i].webkitGetAsEntry !== 'undefined') {
-                        let item = items[i].webkitGetAsEntry();
+                items.forEach((currentItem) => {
+                    if (currentItem.hasOwnProperty('webkitGetAsEntry')) {
+                        let item: any = currentItem.webkitGetAsEntry();
                         if (item) {
                             if (item.isFile) {
                                 this.onFilesEntityDropped.emit(item);
@@ -84,7 +84,7 @@ export class FileDraggableDirective implements OnInit, OnDestroy {
                         let files = FileUtils.toFileArray(event.dataTransfer.files);
                         this.onFilesDropped.emit(files);
                     }
-                }
+                });
             } else {
                 // safari or FF
                 let files = FileUtils.toFileArray(event.dataTransfer.files);
@@ -100,7 +100,7 @@ export class FileDraggableDirective implements OnInit, OnDestroy {
      *
      * @param {event} event - DOM event.
      */
-    onDragEnter(event: Event): void {
+    public onDragEnter(event: Event): void {
         if (this.enabled && !event.defaultPrevented) {
             this.preventDefault(event);
             this.element.classList.add(this.cssClassName);
@@ -112,7 +112,7 @@ export class FileDraggableDirective implements OnInit, OnDestroy {
      *
      * @param {event} event - DOM event.
      */
-    onDragLeave(event: Event): void {
+    public onDragLeave(event: Event): void {
         if (this.enabled && !event.defaultPrevented) {
             this.preventDefault(event);
             this.element.classList.remove(this.cssClassName);
@@ -124,7 +124,7 @@ export class FileDraggableDirective implements OnInit, OnDestroy {
      *
      * @param event
      */
-    onDragOver(event: Event): void {
+    public onDragOver(event: Event): void {
         if (this.enabled && !event.defaultPrevented) {
             this.preventDefault(event);
             this.element.classList.add(this.cssClassName);
@@ -136,7 +136,7 @@ export class FileDraggableDirective implements OnInit, OnDestroy {
      *
      * @param {event} $event - DOM event.
      */
-    preventDefault(event: Event): void {
+    public preventDefault(event: Event): void {
         event.stopPropagation();
         event.preventDefault();
     }

@@ -16,9 +16,9 @@
  */
 
 export interface FileUploadProgress {
-    public loaded: number;
-    public total: number;
-    public percent: number;
+    loaded: number;
+    total: number;
+    percent: number;
 }
 
 export interface FileUploadOptions {
@@ -38,10 +38,10 @@ export enum FileUploadStatus {
 }
 
 export class FileModel {
-    public readonly id: string;
-    public readonly name: string;
-    public readonly size: number;
-    public readonly file: File;
+    public id: string;
+    public name: string;
+    public size: number;
+    public file: File;
 
     public status: FileUploadStatus = FileUploadStatus.Pending;
     public progress: FileUploadProgress;
@@ -66,8 +66,9 @@ export class FileModel {
     }
 
     private generateId(): string {
-        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-            let r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+            let r = Math.random() * 16 | 0;
+            let v = c === 'x' ? r : (r & 0x3 | 0x8);
             return v.toString(16);
         });
     }

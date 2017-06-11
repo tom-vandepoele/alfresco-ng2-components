@@ -16,9 +16,9 @@
  */
 
 export class PermissionModel {
-    type: string;
-    action: string;
-    permission: string;
+    public type: string;
+    public action: string;
+    public permission: string;
 
     constructor(obj?: any) {
         if (obj) {

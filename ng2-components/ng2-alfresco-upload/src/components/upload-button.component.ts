@@ -15,13 +15,14 @@
  * limitations under the License.
  */
 
-import { Component, ElementRef, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChanges } from '@angular/core';
-import { Observable, Subject } from 'rxjs/Rx';
-import { AlfrescoApiService, AlfrescoContentService, AlfrescoTranslationService, LogService, NotificationService, AlfrescoSettingsService, FileUtils } from 'ng2-alfresco-core';
+import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { MinimalNodeEntryEntity } from 'alfresco-js-api';
-import { UploadService } from '../services/upload.service';
+import { AlfrescoApiService, AlfrescoContentService, AlfrescoSettingsService, AlfrescoTranslationService, FileUtils, LogService, NotificationService } from 'ng2-alfresco-core';
+import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
+import { Observable, Subject } from 'rxjs/Rx';
 import { FileModel } from '../models/file.model';
 import { PermissionModel } from '../models/permissions.model';
+import { UploadService } from '../services/upload.service';
 
 @Component({
     selector: 'alfresco-upload-button',
@@ -31,7 +32,7 @@ import { PermissionModel } from '../models/permissions.model';
 export class UploadButtonComponent implements OnInit, OnChanges {
 
     @Input()
-    disabled: boolean = false;
+    public disabled: boolean = false;
 
     /**
      * @deprecated Deprecated in 1.6.0, you can use UploadService events and NotificationService api instead.
@@ -40,22 +41,22 @@ export class UploadButtonComponent implements OnInit, OnChanges {
      * @memberof UploadButtonComponent
      */
     @Input()
-    showNotificationBar: boolean = true;
+    public showNotificationBar: boolean = true;
 
     @Input()
-    uploadFolders: boolean = false;
+    public uploadFolders: boolean = false;
 
     @Input()
-    multipleFiles: boolean = false;
+    public multipleFiles: boolean = false;
 
     @Input()
-    versioning: boolean = false;
+    public versioning: boolean = false;
 
     @Input()
-    acceptedFilesType: string = '*';
+    public acceptedFilesType: string = '*';
 
     @Input()
-    staticTitle: string;
+    public staticTitle: string;
 
     /**
      * @deprecated Deprecated in 1.6.0, this property is not used for couple of releases already.
@@ -64,25 +65,25 @@ export class UploadButtonComponent implements OnInit, OnChanges {
      * @memberof UploadDragAreaComponent
      */
     @Input()
-    currentFolderPath: string = '/';
+    public currentFolderPath: string = '/';
 
     @Input()
-    rootFolderId: string = '-root-';
+    public rootFolderId: string = '-root-';
 
     @Input()
-    disableWithNoPermission: boolean = false;
+    public disableWithNoPermission: boolean = false;
 
     @Output()
-    onSuccess = new EventEmitter();
+    public onSuccess = new EventEmitter();
 
     @Output()
-    onError = new EventEmitter();
+    public onError = new EventEmitter();
 
     @Output()
-    createFolder = new EventEmitter();
+    public createFolder = new EventEmitter();
 
     @Output()
-    permissionEvent: EventEmitter<PermissionModel> = new EventEmitter<PermissionModel>();
+    public permissionEvent: EventEmitter<PermissionModel> = new EventEmitter<PermissionModel>();
 
     private hasPermission: boolean = false;
 
@@ -101,7 +102,7 @@ export class UploadButtonComponent implements OnInit, OnChanges {
         }
     }
 
-    ngOnInit() {
+    public ngOnInit(): void {
         this.settingsService.ecmHostSubject.subscribe((hostEcm: string) => {
             this.checkPermission();
         });
@@ -111,26 +112,26 @@ export class UploadButtonComponent implements OnInit, OnChanges {
         });
     }
 
-    ngOnChanges(changes: SimpleChanges) {
-        let rootFolderId = changes['rootFolderId'];
+    public ngOnChanges(changes: SimpleChanges): void {
+        let rootFolderId = changes.rootFolderId;
         if (rootFolderId && rootFolderId.currentValue) {
             this.checkPermission();
         }
     }
 
-    isButtonDisabled(): boolean {
+    public isButtonDisabled(): boolean {
         return this.isForceDisable() || this.isDisableWithNoPermission();
     }
 
-    isForceDisable(): boolean {
+    public isForceDisable(): boolean {
         return this.disabled ? true : undefined;
     }
 
-    isDisableWithNoPermission(): boolean {
+    public isDisableWithNoPermission(): boolean {
         return !this.hasPermission && this.disableWithNoPermission ? true : undefined;
     }
 
-    onFilesAdded($event: any): void {
+    public onFilesAdded($event: any): void {
         let files: File[] = FileUtils.toFileArray($event.currentTarget.files);
 
         if (this.hasPermission) {
@@ -142,7 +143,7 @@ export class UploadButtonComponent implements OnInit, OnChanges {
         $event.target.value = '';
     }
 
-    onDirectoryAdded($event: any): void {
+    public onDirectoryAdded($event: any): void {
         if (this.hasPermission) {
             let files: File[] = FileUtils.toFileArray($event.currentTarget.files);
             this.uploadFiles(files);
@@ -158,9 +159,9 @@ export class UploadButtonComponent implements OnInit, OnChanges {
      * @param files
      * @param path
      */
-    uploadFiles(files: File[]): void {
+    public uploadFiles(files: File[]): void {
         if (files.length > 0) {
-            const latestFilesAdded = files.map(file => new FileModel(file, {
+            const latestFilesAdded = files.map((file) => new FileModel(file, {
                 newVersion: this.versioning,
                 parentId: this.rootFolderId,
                 path: (file.webkitRelativePath || '').replace(/\/[^\/]*$/, '')
@@ -173,13 +174,26 @@ export class UploadButtonComponent implements OnInit, OnChanges {
         }
     }
 
+    // TODO: move to AlfrescoContentService
+    public getFolderNode(nodeId: string): Observable<MinimalNodeEntryEntity> {
+        let opts: any = {
+            includeSource: true,
+            include: ['allowableOperations']
+        };
+
+        return Observable.fromPromise(this.apiService.getInstance().nodes.getNodeInfo(nodeId, opts))
+            .catch((err) => this.handleError(err));
+    }
+
     /**
      * Show undo notification bar.
      *
      * @param {FileModel[]} latestFilesAdded - files in the upload queue enriched with status flag and xhr object.
      */
     private showUndoNotificationBar(latestFilesAdded: FileModel[]): void {
-        let messageTranslate: any, actionTranslate: any;
+        let messageTranslate: any;
+        let actionTranslate: any;
+
         messageTranslate = this.translateService.get('FILE_UPLOAD.MESSAGES.PROGRESS');
         actionTranslate = this.translateService.get('FILE_UPLOAD.ACTION.UNDO');
 
@@ -188,27 +202,16 @@ export class UploadButtonComponent implements OnInit, OnChanges {
         });
     }
 
-    checkPermission() {
+    private checkPermission(): void {
         if (this.rootFolderId) {
             this.getFolderNode(this.rootFolderId).subscribe(
-                res => this.permissionValue.next(this.hasCreatePermission(res)),
-                error => this.onError.emit(error)
+                (res) => this.permissionValue.next(this.hasCreatePermission(res)),
+                (error) => this.onError.emit(error)
             );
         }
     }
 
-    // TODO: move to AlfrescoContentService
-    getFolderNode(nodeId: string): Observable<MinimalNodeEntryEntity> {
-        let opts: any = {
-            includeSource: true,
-            include: ['allowableOperations']
-        };
-
-        return Observable.fromPromise(this.apiService.getInstance().nodes.getNodeInfo(nodeId, opts))
-            .catch(err => this.handleError(err));
-    }
-
-    private handleError(error: Response) {
+    private handleError(error: Response): ErrorObservable<string | Response> {
         // in a real world app, we may send the error to some remote logging infrastructure
         // instead of just logging it to the console
         this.logService.error(error);
@@ -217,7 +220,7 @@ export class UploadButtonComponent implements OnInit, OnChanges {
 
     private hasCreatePermission(node: any): boolean {
         if (node && node.allowableOperations) {
-            return node.allowableOperations.find(permision => permision === 'create') ? true : false;
+            return node.allowableOperations.find((permision) => permision === 'create') ? true : false;
         }
         return false;
     }
