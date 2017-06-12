@@ -17,10 +17,10 @@
 
 import { Component, OnInit } from '@angular/core';
 import { LogService } from 'ng2-alfresco-core';
-import { WidgetComponent } from './../widget.component';
 import { FormService } from '../../../services/form.service';
-import { FormFieldOption } from './../core/form-field-option';
 import { WidgetVisibilityService } from '../../../services/widget-visibility.service';
+import { FormFieldOption } from './../core/form-field-option';
+import { WidgetComponent } from './../widget.component';
 
 @Component({
     selector: 'radio-buttons-widget',
@@ -35,7 +35,7 @@ export class RadioButtonsWidget extends WidgetComponent implements OnInit {
         super();
     }
 
-    ngOnInit() {
+    public ngOnInit(): void {
         if (this.field && this.field.restUrl) {
             if (this.field.form.taskId) {
                 this.getOptionsByTaskId();
@@ -45,7 +45,7 @@ export class RadioButtonsWidget extends WidgetComponent implements OnInit {
         }
     }
 
-    getOptionsByTaskId() {
+    public getOptionsByTaskId(): void {
         this.formService
             .getRestFieldValues(
                 this.field.form.taskId,
@@ -56,11 +56,11 @@ export class RadioButtonsWidget extends WidgetComponent implements OnInit {
                     this.field.options = result || [];
                     this.field.updateForm();
                 },
-                err => this.handleError(err)
+                (err) => this.handleError(err)
             );
     }
 
-    getOptionsByProcessDefinitionId() {
+    public getOptionsByProcessDefinitionId(): void {
         this.formService
             .getRestFieldValuesByProcessId(
                 this.field.form.processDefinitionId,
@@ -71,20 +71,20 @@ export class RadioButtonsWidget extends WidgetComponent implements OnInit {
                     this.field.options = result || [];
                     this.field.updateForm();
                 },
-                err => this.handleError(err)
+                (err) => this.handleError(err)
             );
     }
 
-    onOptionClick(optionSelected: any) {
+    public onOptionClick(optionSelected: any): void {
         this.field.value = optionSelected;
         this.checkVisibility();
     }
 
-    checkVisibility() {
+    public checkVisibility(): void {
         this.visibilityService.refreshVisibility(this.field.form);
     }
 
-    handleError(error: any) {
+    public handleError(error: any): void {
         this.logService.error(error);
     }
 

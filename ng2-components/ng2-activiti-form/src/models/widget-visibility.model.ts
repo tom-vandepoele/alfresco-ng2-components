@@ -16,13 +16,13 @@
  */
 
 export class WidgetVisibilityModel {
-        leftFormFieldId: string;
-        leftRestResponseId: string;
-        nextCondition: WidgetVisibilityModel;
-        nextConditionOperator: string;
-        operator: string;
-        rightFormFieldId: string;
-        rightRestResponseId: string;
-        rightType: string;
-        rightValue: string;
+    public leftFormFieldId: string;
+    public leftRestResponseId: string;
+    public nextCondition: WidgetVisibilityModel;
+    public nextConditionOperator: string;
+    public operator: string;
+    public rightFormFieldId: string;
+    public rightRestResponseId: string;
+    public rightType: string;
+    public rightValue: string;
 }

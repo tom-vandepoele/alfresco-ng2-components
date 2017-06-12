@@ -16,7 +16,7 @@
  */
 
 export class TaskProcessVariableModel {
-    id: string;
-    type: string;
-    value: string;
+    public id: string;
+    public type: string;
+    public value: string;
 }

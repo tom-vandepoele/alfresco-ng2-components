@@ -15,9 +15,9 @@
  * limitations under the License.
  */
 
-import { FormFieldModel } from './form-field.model';
-import { FormFieldTypes } from './form-field-types';
 import * as moment from 'moment';
+import { FormFieldTypes } from './form-field-types';
+import { FormFieldModel } from './form-field.model';
 
 export interface FormFieldValidator {
 
@@ -61,7 +61,7 @@ export class RequiredFieldValidator implements FormFieldValidator {
             }
 
             if (field.type === FormFieldTypes.RADIO_BUTTONS) {
-                let option = field.options.find(opt => opt.id === field.value);
+                let option = field.options.find((opt) => opt.id === field.value);
                 return !!option;
             }
 

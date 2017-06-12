@@ -25,11 +25,11 @@ import { WidgetComponent } from './../widget.component';
 })
 export class AmountWidget extends WidgetComponent implements OnInit {
 
-    static DEFAULT_CURRENCY: string = '$';
+    public static DEFAULT_CURRENCY: string = '$';
 
-    currency: string = AmountWidget.DEFAULT_CURRENCY;
+    public currency: string = AmountWidget.DEFAULT_CURRENCY;
 
-    ngOnInit() {
+    public ngOnInit(): void {
         if (this.field && this.field.currency) {
             this.currency = this.field.currency;
         }

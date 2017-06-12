@@ -22,14 +22,14 @@ import { FormFieldModel } from './../core/form-field.model';
 
 export class ContainerWidgetModel extends ContainerModel {
 
-    columns: ContainerColumnModel[] = [];
-    isExpanded: boolean = true;
+    public columns: ContainerColumnModel[] = [];
+    public isExpanded: boolean = true;
 
-    isGroup(): boolean {
+    public isGroup(): boolean {
         return this.type === FormFieldTypes.GROUP;
     }
 
-    isCollapsible(): boolean {
+    public isCollapsible(): boolean {
         let allowCollapse = false;
 
         if (this.isGroup() && this.field.params['allowCollapse']) {
@@ -39,7 +39,7 @@ export class ContainerWidgetModel extends ContainerModel {
         return allowCollapse;
     }
 
-    isCollapsedByDefault(): boolean {
+    public isCollapsedByDefault(): boolean {
         let collapseByDefault = false;
 
         if (this.isCollapsible() && this.field.params['collapseByDefault']) {

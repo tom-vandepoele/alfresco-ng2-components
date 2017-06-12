@@ -16,22 +16,22 @@
  */
 
 import {
-    Component,
     AfterViewChecked,
-    OnChanges,
-    SimpleChanges,
-    Input,
-    ViewChild,
+    Component,
     ElementRef,
+    EventEmitter,
+    Input,
+    OnChanges,
     Output,
-    EventEmitter
+    SimpleChanges,
+    ViewChild
 } from '@angular/core';
 import { AlfrescoTranslationService, LogService } from 'ng2-alfresco-core';
-import { ActivitiForm } from './activiti-form.component';
 import { FormService } from './../services/form.service';
 import { WidgetVisibilityService }  from './../services/widget-visibility.service';
-import { FormOutcomeModel } from './widgets/core/index';
+import { ActivitiForm } from './activiti-form.component';
 import { ContentLinkModel } from './widgets/core/content-link.model';
+import { FormOutcomeModel } from './widgets/core/index';
 
 /**
  * Displays the start form for a named process definition, which can be used to retrieve values to start a new process.
@@ -58,28 +58,28 @@ import { ContentLinkModel } from './widgets/core/content-link.model';
 export class ActivitiStartForm extends ActivitiForm implements AfterViewChecked, OnChanges {
 
     @Input()
-    processDefinitionId: string;
+    public processDefinitionId: string;
 
     @Input()
-    processId: string;
+    public processId: string;
 
     @Input()
-    showOutcomeButtons: boolean = true;
+    public showOutcomeButtons: boolean = true;
 
     @Input()
-    showRefreshButton: boolean = true;
+    public showRefreshButton: boolean = true;
 
     @Input()
     readOnlyForm: boolean = false;
 
     @Output()
-    outcomeClick: EventEmitter<any> = new EventEmitter<any>();
+    public outcomeClick: EventEmitter<any> = new EventEmitter<any>();
 
     @Output()
-    formContentClicked: EventEmitter<ContentLinkModel> = new EventEmitter<ContentLinkModel>();
+    public formContentClicked: EventEmitter<ContentLinkModel> = new EventEmitter<ContentLinkModel>();
 
     @ViewChild('outcomesContainer', {})
-    outcomesContainer: ElementRef = null;
+    public outcomesContainer: ElementRef = null;
 
     constructor(private translate: AlfrescoTranslationService,
                 formService: FormService,
@@ -94,21 +94,21 @@ export class ActivitiStartForm extends ActivitiForm implements AfterViewChecked,
         this.showTitle = false;
     }
 
-    ngOnInit() {
+    public ngOnInit(): void {
         this.formService.formContentClicked.subscribe((content: ContentLinkModel) => {
             this.formContentClicked.emit(content);
         });
     }
 
-    ngOnChanges(changes: SimpleChanges) {
-        let processDefinitionId = changes['processDefinitionId'];
+    public ngOnChanges(changes: SimpleChanges): any {
+        let processDefinitionId = changes.processDefinitionId;
         if (processDefinitionId && processDefinitionId.currentValue) {
             this.visibilityService.cleanProcessVariable();
             this.getStartFormDefinition(processDefinitionId.currentValue);
             return;
         }
 
-        let processId = changes['processId'];
+        let processId = changes.processId;
         if (processId && processId.currentValue) {
             this.visibilityService.cleanProcessVariable();
             this.loadStartForm(processId.currentValue);
@@ -116,11 +116,11 @@ export class ActivitiStartForm extends ActivitiForm implements AfterViewChecked,
         }
     }
 
-    loadStartForm(processId: string) {
+    public loadStartForm(processId: string): void {
         this.formService
             .getStartFormInstance(processId)
             .subscribe(
-                form => {
+                (form) => {
                     this.formName = form.name;
                     form.processDefinitionId = this.processDefinitionId;
                     this.form = this.parseForm(form);
@@ -128,26 +128,26 @@ export class ActivitiStartForm extends ActivitiForm implements AfterViewChecked,
                     // this.form.processDefinitionId = this.processDefinitionId;
                     this.onFormLoaded(this.form);
                 },
-                error => this.handleError(error)
+                (error) => this.handleError(error)
             );
     }
 
-    getStartFormDefinition(processId: string) {
+    public getStartFormDefinition(processId: string): void {
         this.formService
             .getStartFormDefinition(processId)
             .subscribe(
-                form => {
+                (form) => {
                     this.formName = form.processDefinitionName;
                     this.form = this.parseForm(form);
                     this.form.readOnly = this.readOnlyForm;
                     this.onFormLoaded(this.form);
                 },
-                error => this.handleError(error)
+                (error) => this.handleError(error)
             );
     }
 
     /** @override */
-    isOutcomeButtonVisible(outcome: FormOutcomeModel, isFormReadOnly: boolean): boolean {
+    public isOutcomeButtonVisible(outcome: FormOutcomeModel, isFormReadOnly: boolean): boolean {
         if (outcome && outcome.isSystem && ( outcome.name === FormOutcomeModel.SAVE_ACTION ||
             outcome.name === FormOutcomeModel.COMPLETE_ACTION )) {
             return false;
@@ -158,12 +158,12 @@ export class ActivitiStartForm extends ActivitiForm implements AfterViewChecked,
     }
 
     /** @override */
-    saveTaskForm() {
+    public saveTaskForm(): any {
         // do nothing
     }
 
     /** @override */
-    onRefreshClicked() {
+    public onRefreshClicked(): void {
         if (this.processDefinitionId) {
             this.visibilityService.cleanProcessVariable();
             this.getStartFormDefinition(this.processDefinitionId);
@@ -173,7 +173,7 @@ export class ActivitiStartForm extends ActivitiForm implements AfterViewChecked,
         }
     }
 
-    completeTaskForm(outcome?: string) {
+    public completeTaskForm(outcome?: string): void {
         this.outcomeClick.emit(outcome);
     }
 }

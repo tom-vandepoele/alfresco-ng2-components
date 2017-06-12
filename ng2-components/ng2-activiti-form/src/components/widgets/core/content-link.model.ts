@@ -17,20 +17,20 @@
 
 export class ContentLinkModel {
 
-    contentAvailable: boolean;
-    created: string;
-    createdBy: any;
-    id: number;
-    link: boolean;
-    mimeType: string;
-    name: string;
-    previewStatus: string;
-    relatedContent: boolean;
-    simpleType: string;
-    thumbnailUrl: string;
-    contentRawUrl: string;
-    contentBlob: Blob;
-    thumbnailStatus: string;
+    public contentAvailable: boolean;
+    public created: string;
+    public createdBy: any;
+    public id: number;
+    public link: boolean;
+    public  mimeType: string;
+    public name: string;
+    public previewStatus: string;
+    public relatedContent: boolean;
+    public  simpleType: string;
+    public thumbnailUrl: string;
+    public contentRawUrl: string;
+    public contentBlob: Blob;
+    public thumbnailStatus: string;
 
     constructor(obj?: any) {
         this.contentAvailable = obj && obj.contentAvailable;
@@ -46,27 +46,27 @@ export class ContentLinkModel {
         this.thumbnailStatus = obj && obj.thumbnailStatus;
     }
 
-    hasPreviewStatus(): boolean {
+    public hasPreviewStatus(): boolean {
         return this.previewStatus === 'supported' ? true : false;
     }
 
-    isTypeImage(): boolean {
+    public isTypeImage(): boolean {
         return this.simpleType === 'image' ? true : false;
     }
 
-    isTypePdf(): boolean {
+    public isTypePdf(): boolean {
         return this.simpleType === 'pdf' ? true : false;
     }
 
-    isTypeDoc(): boolean {
+    public isTypeDoc(): boolean {
         return this.simpleType === 'word' || this.simpleType === 'content' ? true : false;
     }
 
-    isThumbnailReady(): boolean {
+    public isThumbnailReady(): boolean {
         return this.thumbnailStatus === 'created';
     }
 
-    isThumbnailSupported(): boolean {
+    public isThumbnailSupported(): boolean {
         return this.isTypeImage() || ((this.isTypePdf() || this.isTypeDoc()) && this.isThumbnailReady());
     }
 }

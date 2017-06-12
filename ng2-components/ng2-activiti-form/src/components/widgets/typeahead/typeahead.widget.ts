@@ -17,10 +17,10 @@
 
 import { Component, OnInit } from '@angular/core';
 import { LogService } from 'ng2-alfresco-core';
-import { FormService } from './../../../services/form.service';
-import { WidgetComponent } from './../widget.component';
-import { FormFieldOption } from './../core/form-field-option';
 import { WidgetVisibilityService } from '../../../services/widget-visibility.service';
+import { FormService } from './../../../services/form.service';
+import { FormFieldOption } from './../core/form-field-option';
+import { WidgetComponent } from './../widget.component';
 
 @Component({
     selector: 'typeahead-widget',
@@ -61,7 +61,7 @@ export class TypeaheadWidget extends WidgetComponent implements OnInit {
 
                     let fieldValue = this.field.value;
                     if (fieldValue) {
-                        let toSelect = options.find(item => item.id === fieldValue);
+                        let toSelect = options.find((item) => item.id === fieldValue);
                         if (toSelect) {
                             this.value = toSelect.name;
                         }
@@ -69,7 +69,7 @@ export class TypeaheadWidget extends WidgetComponent implements OnInit {
                     this.field.updateForm();
                     this.visibilityService.refreshEntityVisibility(this.field);
                 },
-                err => this.handleError(err)
+                (err) => this.handleError(err)
             );
     }
 
@@ -86,7 +86,7 @@ export class TypeaheadWidget extends WidgetComponent implements OnInit {
 
                     let fieldValue = this.field.value;
                     if (fieldValue) {
-                        let toSelect = options.find(item => item.id === fieldValue);
+                        let toSelect = options.find((item) => item.id === fieldValue);
                         if (toSelect) {
                             this.value = toSelect.name;
                         }
@@ -94,13 +94,13 @@ export class TypeaheadWidget extends WidgetComponent implements OnInit {
                     this.field.updateForm();
                     this.visibilityService.refreshEntityVisibility(this.field);
                 },
-                err => this.handleError(err)
+                (err) => this.handleError(err)
             );
     }
 
     public getOptions(): FormFieldOption[] {
         let val = this.value.toLocaleLowerCase();
-        return this.field.options.filter(item => {
+        return this.field.options.filter((item) => {
             let name = item.name.toLocaleLowerCase();
             return name.indexOf(val) > -1;
         });
@@ -128,7 +128,7 @@ export class TypeaheadWidget extends WidgetComponent implements OnInit {
         let options = this.field.options || [];
         let lValue = this.value ? this.value.toLocaleLowerCase() : null;
 
-        let field = options.find(item => item.name && item.name.toLocaleLowerCase() === lValue);
+        let field = options.find((item) => item.name && item.name.toLocaleLowerCase() === lValue);
         if (field) {
             this.field.value = field.id;
             this.value = field.name;

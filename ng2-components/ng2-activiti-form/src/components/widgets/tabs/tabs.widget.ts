@@ -15,8 +15,8 @@
  * limitations under the License.
  */
 
-import { Component, Input, AfterViewInit, AfterContentChecked, EventEmitter, Output } from '@angular/core';
-import { TabModel, FormFieldModel } from './../core/index';
+import { AfterContentChecked, AfterViewInit, Component, EventEmitter, Input, Output } from '@angular/core';
+import { FormFieldModel, TabModel } from './../core/index';
 
 declare var componentHandler: any;
 
@@ -27,32 +27,32 @@ declare var componentHandler: any;
 export class TabsWidget implements AfterContentChecked, AfterViewInit {
 
     @Input()
-    tabs: TabModel[] = [];
+    public tabs: TabModel[] = [];
 
     @Output()
-    formTabChanged: EventEmitter<FormFieldModel> = new EventEmitter<FormFieldModel>();
+    public formTabChanged: EventEmitter<FormFieldModel> = new EventEmitter<FormFieldModel>();
 
-    visibleTabs: TabModel[] = [];
+    public visibleTabs: TabModel[] = [];
 
-    hasTabs() {
+    public hasTabs(): boolean {
         return this.tabs && this.tabs.length > 0;
     }
 
-    ngAfterContentChecked() {
+    public ngAfterContentChecked(): void {
         this.filterVisibleTabs();
     }
 
-    ngAfterViewInit() {
+    public ngAfterViewInit(): void {
         this.setupMaterialComponents();
     }
 
-    filterVisibleTabs() {
-        this.visibleTabs = this.tabs.filter(tab => {
+    public filterVisibleTabs(): void {
+        this.visibleTabs = this.tabs.filter((tab) => {
             return tab.isVisible;
         });
     }
 
-    setupMaterialComponents(): boolean {
+    public setupMaterialComponents(): boolean {
         // workaround for MDL issues with dynamic components
         if (componentHandler) {
             componentHandler.upgradeAllRegistered();

@@ -16,17 +16,18 @@
  */
 
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Rx';
 import { AlfrescoApiService, LogService } from 'ng2-alfresco-core';
+import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
+import { Observable } from 'rxjs/Rx';
 
 @Injectable()
 export class ActivitiContentService {
 
-    static UNKNOWN_ERROR_MESSAGE: string = 'Unknown error';
-    static GENERIC_ERROR_MESSAGE: string = 'Server error';
-    static DEFAULT_MIME_TYPE_ICON: string = 'ft_ic_miscellaneous.svg';
+    public static UNKNOWN_ERROR_MESSAGE: string = 'Unknown error';
+    public static GENERIC_ERROR_MESSAGE: string = 'Server error';
+    public static DEFAULT_MIME_TYPE_ICON: string = 'ft_ic_miscellaneous.svg';
 
-    mimeTypeIcons: any = {
+    public mimeTypeIcons: any = {
         'image/png': 'ft_ic_raster_image.svg',
         'image/jpeg': 'ft_ic_raster_image.svg',
         'image/gif': 'ft_ic_raster_image.svg',
@@ -59,10 +60,10 @@ export class ActivitiContentService {
                 private logService: LogService) {
     }
 
-    getFileRawContent(contentId: number): Observable<any> {
+    public getFileRawContent(contentId: number): Observable<any> {
         let alfrescoApi = this.apiService.getInstance();
         return Observable.fromPromise(alfrescoApi.activiti.contentApi.getRawContent(contentId))
-            .catch(err => this.handleError(err));
+            .catch((err) => this.handleError(err));
     }
 
     /**
@@ -70,9 +71,9 @@ export class ActivitiContentService {
      * @param taskId
      * @returns {any}
      */
-    getTaskRelatedContent(taskId: string): Observable<any> {
+    public getTaskRelatedContent(taskId: string): Observable<any> {
         return Observable.fromPromise(this.apiService.getInstance().activiti.contentApi.getRelatedContentForTask(taskId))
-            .catch(err => this.handleError(err));
+            .catch((err) => this.handleError(err));
     }
 
     /**
@@ -80,9 +81,9 @@ export class ActivitiContentService {
      * @param processId
      * @returns {any}
      */
-    getProcessRelatedContent(processId: string): Observable<any> {
+    public getProcessRelatedContent(processId: string): Observable<any> {
         return Observable.fromPromise(this.apiService.getInstance().activiti.contentApi.getRelatedContentForProcessInstance(processId))
-            .catch(err => this.handleError(err));
+            .catch((err) => this.handleError(err));
     }
 
     /**
@@ -90,9 +91,9 @@ export class ActivitiContentService {
      * @param contentId
      * @returns {any}
      */
-    deleteRelatedContent(contentId: string): Observable<any> {
+    public deleteRelatedContent(contentId: string): Observable<any> {
         return Observable.fromPromise(this.apiService.getInstance().activiti.contentApi.deleteContent(contentId))
-            .catch(err => this.handleError(err));
+            .catch((err) => this.handleError(err));
     }
 
     /**
@@ -100,26 +101,26 @@ export class ActivitiContentService {
      * @param processInstanceId
      * @returns {any}
      */
-    createProcessRelatedContent(processInstanceId: string, content: any): Observable<any> {
+    public createProcessRelatedContent(processInstanceId: string, content: any): Observable<any> {
         return Observable.fromPromise(this.apiService.getInstance().activiti.contentApi.createRelatedContentOnProcessInstance(processInstanceId, content))
-            .catch(err => this.handleError(err));
+            .catch((err) => this.handleError(err));
     }
 
-    toJson(res: any) {
+    public toJson(res: any) {
         if (res) {
             return res || {};
         }
         return {};
     }
 
-    toJsonArray(res: any) {
+    public toJsonArray(res: any): any {
         if (res) {
             return res.data || [];
         }
         return [];
     }
 
-    handleError(error: any): Observable<any> {
+    private handleError(error: Response): ErrorObservable<string | Response> {
         let errMsg = ActivitiContentService.UNKNOWN_ERROR_MESSAGE;
         if (error) {
             errMsg = (error.message) ? error.message :
@@ -129,13 +130,13 @@ export class ActivitiContentService {
         return Observable.throw(errMsg);
     }
 
-    getMimeTypeIcon(mimeType: string): string {
+    public getMimeTypeIcon(mimeType: string): string {
         let icon = this.mimeTypeIcons[mimeType];
         return icon || ActivitiContentService.DEFAULT_MIME_TYPE_ICON;
     }
 
-    createTaskRelatedContent(taskId: string, file: any) {
+    public createTaskRelatedContent(taskId: string, file: any): Observable<any> {
         return Observable.fromPromise(this.apiService.getInstance().activiti.contentApi.createRelatedContentOnTask(taskId, file))
-            .catch(err => this.handleError(err));
+            .catch((err) => this.handleError(err));
     }
 }

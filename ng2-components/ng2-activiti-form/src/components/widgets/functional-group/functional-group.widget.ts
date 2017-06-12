@@ -15,10 +15,10 @@
  * limitations under the License.
  */
 
-import { Component, OnInit, ElementRef } from '@angular/core';
-import { WidgetComponent } from './../widget.component';
+import { Component, ElementRef, OnInit } from '@angular/core';
 import { FormService } from '../../../services/form.service';
 import { GroupModel } from './../core/group.model';
+import { WidgetComponent } from './../widget.component';
 
 @Component({
     selector: 'functional-group-widget',
@@ -27,11 +27,11 @@ import { GroupModel } from './../core/group.model';
 })
 export class FunctionalGroupWidget extends WidgetComponent implements OnInit {
 
-    value: string;
-    popupVisible: boolean = false;
-    groups: GroupModel[] = [];
-    minTermLength: number = 1;
-    groupId: string;
+    public value: string;
+    public popupVisible: boolean = false;
+    public groups: GroupModel[] = [];
+    public minTermLength: number = 1;
+    public groupId: string;
 
     constructor(private formService: FormService,
                 private elementRef: ElementRef) {
@@ -40,7 +40,7 @@ export class FunctionalGroupWidget extends WidgetComponent implements OnInit {
 
     // TODO: investigate, called 2 times
     // https://github.com/angular/angular/issues/6782
-    ngOnInit() {
+    public ngOnInit(): void {
         if (this.field) {
             let group = this.field.value;
             if (group) {
@@ -62,7 +62,7 @@ export class FunctionalGroupWidget extends WidgetComponent implements OnInit {
         }
     }
 
-    onKeyUp(event: KeyboardEvent) {
+    public onKeyUp(event: KeyboardEvent): void {
         if (this.value && this.value.length >= this.minTermLength) {
             this.formService.getWorkflowGroups(this.value, this.groupId)
                 .subscribe((result: GroupModel[]) => {
@@ -74,16 +74,16 @@ export class FunctionalGroupWidget extends WidgetComponent implements OnInit {
         }
     }
 
-    onBlur() {
+    public onBlur(): void {
         setTimeout(() => {
             this.flushValue();
         }, 200);
     }
 
-    flushValue() {
+    public flushValue(): void {
         this.popupVisible = false;
 
-        let option = this.groups.find(item => item.name.toLocaleLowerCase() === this.value.toLocaleLowerCase());
+        let option = this.groups.find((item) => item.name.toLocaleLowerCase() === this.value.toLocaleLowerCase());
 
         if (option) {
             this.field.value = option;
@@ -97,7 +97,7 @@ export class FunctionalGroupWidget extends WidgetComponent implements OnInit {
     }
 
     // TODO: still causes onBlur execution
-    onItemClick(item: GroupModel, event: Event) {
+    public onItemClick(item: GroupModel, event: Event): void {
         if (item) {
             this.field.value = item;
             this.value = item.name;
@@ -107,7 +107,7 @@ export class FunctionalGroupWidget extends WidgetComponent implements OnInit {
         }
     }
 
-    setupMaterialComponents(handler: any): boolean {
+    public setupMaterialComponents(handler: any): boolean {
         super.setupMaterialComponents(handler);
         if (handler) {
             if (this.elementRef && this.value) {

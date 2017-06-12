@@ -15,12 +15,12 @@
  * limitations under the License.
  */
 
-import { FormWidgetModel } from './form-widget.model';
 import { FormFieldModel } from './form-field.model';
+import { FormWidgetModel } from './form-widget.model';
 
 export class ContainerModel extends FormWidgetModel {
 
-    field: FormFieldModel;
+    public field: FormFieldModel;
 
     get isVisible(): boolean {
         return this.field.isVisible;

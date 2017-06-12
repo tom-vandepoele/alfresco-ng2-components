@@ -16,17 +16,17 @@
  */
 
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Rx';
+import { AlfrescoApi } from  'alfresco-js-api';
 import { AlfrescoApiService, LogService } from 'ng2-alfresco-core';
+import { Observable } from 'rxjs/Rx';
 import { ExternalContent } from '../components/widgets/core/external-content';
 import { ExternalContentLink } from '../components/widgets/core/external-content-link';
-import { AlfrescoApi } from  'alfresco-js-api';
 
 @Injectable()
 export class ActivitiAlfrescoContentService {
 
-    static UNKNOWN_ERROR_MESSAGE: string = 'Unknown error';
-    static GENERIC_ERROR_MESSAGE: string = 'Server error';
+    public static UNKNOWN_ERROR_MESSAGE: string = 'Unknown error';
+    public static GENERIC_ERROR_MESSAGE: string = 'Server error';
 
     constructor(private apiService: AlfrescoApiService,
                 private logService: LogService) {
@@ -39,12 +39,12 @@ export class ActivitiAlfrescoContentService {
      * @param folderId
      * @returns {null}
      */
-    getAlfrescoNodes(accountId: string, folderId: string): Observable<[ExternalContent]> {
+    public  getAlfrescoNodes(accountId: string, folderId: string): Observable<[ExternalContent]> {
         let apiService: AlfrescoApi = this.apiService.getInstance();
         let accountShortId = accountId.replace('alfresco-', '');
         return Observable.fromPromise(apiService.activiti.alfrescoApi.getContentInFolder(accountShortId, folderId))
             .map(this.toJsonArray)
-            .catch(err => this.handleError(err));
+            .catch((err) => this.handleError(err));
     }
 
     /**
@@ -55,7 +55,7 @@ export class ActivitiAlfrescoContentService {
      * @param siteId
      * @returns {null}
      */
-    linkAlfrescoNode(accountId: string, node: ExternalContent, siteId: string): Observable<ExternalContentLink> {
+    public linkAlfrescoNode(accountId: string, node: ExternalContent, siteId: string): Observable<ExternalContentLink> {
         let apiService: AlfrescoApi = this.apiService.getInstance();
         return Observable.fromPromise(apiService.activiti.contentApi.createTemporaryRelatedContent({
             link: true,
@@ -63,17 +63,17 @@ export class ActivitiAlfrescoContentService {
             simpleType: node.simpleType,
             source: accountId,
             sourceId: node.id + '@' + siteId
-        })).map(this.toJson).catch(err => this.handleError(err));
+        })).map(this.toJson).catch((err) => this.handleError(err));
     }
 
-    toJson(res: any) {
+    private toJson(res: any): any {
         if (res) {
             return res || {};
         }
         return {};
     }
 
-    toJsonArray(res: any) {
+    private  toJsonArray(res: any): any  {
         if (res) {
             return res.data || [];
         }

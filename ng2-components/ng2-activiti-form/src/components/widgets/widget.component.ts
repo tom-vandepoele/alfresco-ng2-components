@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import { Input, AfterViewInit, Output, EventEmitter, ElementRef } from '@angular/core';
+import { AfterViewInit, ElementRef, EventEmitter, Input, Output } from '@angular/core';
 import { FormFieldModel } from './core/index';
 
 declare var componentHandler: any;
@@ -25,41 +25,41 @@ declare var componentHandler: any;
  */
 export class WidgetComponent implements AfterViewInit {
 
-    static DEFAULT_HYPERLINK_URL: string = '#';
-    static DEFAULT_HYPERLINK_SCHEME: string = 'http://';
+    public static DEFAULT_HYPERLINK_URL: string = '#';
+    public static DEFAULT_HYPERLINK_SCHEME: string = 'http://';
 
     @Input()
-    field: FormFieldModel;
+    public field: FormFieldModel;
 
     /** @deprecated used only to trigger visibility engine, components should do that internally if needed */
     @Output()
-    fieldChanged: EventEmitter<FormFieldModel> = new EventEmitter<FormFieldModel>();
+    public fieldChanged: EventEmitter<FormFieldModel> = new EventEmitter<FormFieldModel>();
 
-    hasField() {
+    public hasField(): boolean {
         return this.field ? true : false;
     }
 
     // Note for developers:
     // returns <any> object to be able binding it to the <element reguired="required"> attribute
-    isRequired(): any {
+    public isRequired(): any {
         if (this.field && this.field.required) {
             return true;
         }
         return null;
     }
 
-    hasValue(): boolean {
+    public hasValue(): boolean {
         return this.field &&
             this.field.value !== null &&
             this.field.value !== undefined;
     }
 
-    ngAfterViewInit() {
+    public ngAfterViewInit(): void {
         this.setupMaterialComponents(componentHandler);
         this.fieldChanged.emit(this.field);
     }
 
-    setupMaterialComponents(handler?: any): boolean {
+    public  setupMaterialComponents(handler?: any): boolean {
         // workaround for MDL issues with dynamic components
         if (handler) {
             handler.upgradeAllRegistered();
@@ -68,7 +68,7 @@ export class WidgetComponent implements AfterViewInit {
         return false;
     }
 
-    setupMaterialTextField(elementRef: ElementRef, handler: any, value: string): boolean {
+    public setupMaterialTextField(elementRef: ElementRef, handler: any, value: string): boolean {
         if (elementRef && handler) {
             let el = elementRef.nativeElement;
             if (el) {
@@ -83,18 +83,18 @@ export class WidgetComponent implements AfterViewInit {
     }
 
     /** @deprecated used only to trigger visibility engine, components should do that internally if needed */
-    checkVisibility(field: FormFieldModel) {
+    public checkVisibility(field: FormFieldModel): void {
         console.log('WidgetComponent.checkVisibility was used only to trigger visibility engine, components should do that internally if needed');
         this.fieldChanged.emit(field);
     }
 
     /** @deprecated used only to trigger visibility engine, components should do that internally if needed */
-    onFieldChanged(field: FormFieldModel) {
+    public onFieldChanged(field: FormFieldModel): void {
         console.log('WidgetComponent.onFieldChanged was used only to trigger visibility engine, components should do that internally if needed');
         this.fieldChanged.emit(field);
     }
 
-    protected getHyperlinkUrl(field: FormFieldModel) {
+    protected getHyperlinkUrl(field: FormFieldModel): string {
         let url = WidgetComponent.DEFAULT_HYPERLINK_URL;
         if (field && field.hyperlinkUrl) {
             url = field.hyperlinkUrl;
@@ -105,7 +105,7 @@ export class WidgetComponent implements AfterViewInit {
         return url;
     }
 
-    protected getHyperlinkText(field: FormFieldModel) {
+    protected getHyperlinkText(field: FormFieldModel): string {
         if (field) {
             return field.displayText || field.hyperlinkUrl;
         }

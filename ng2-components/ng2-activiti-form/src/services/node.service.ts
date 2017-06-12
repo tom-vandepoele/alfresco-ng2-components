@@ -64,9 +64,9 @@ export class NodeService {
      */
     public createNode(name: string, nodeType: string, properties: any, path: string): Observable<any> {
         let body = {
-            name: name,
-            nodeType: nodeType,
-            properties: properties,
+            name,
+            nodeType,
+            properties,
             relativePath: path
         };
 

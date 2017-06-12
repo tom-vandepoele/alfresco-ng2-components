@@ -19,14 +19,14 @@ import { FormModel } from './form.model';
 
 export abstract class FormWidgetModel {
 
-    readonly fieldType: string;
-    readonly id: string;
-    readonly name: string;
-    readonly type: string;
-    readonly tab: string;
+    public readonly fieldType: string;
+    public readonly id: string;
+    public readonly name: string;
+    public readonly type: string;
+    public readonly tab: string;
 
-    readonly form: FormModel;
-    readonly json: any;
+    public readonly form: FormModel;
+    public readonly json: any;
 
     constructor(form: FormModel, json: any) {
         this.form = form;

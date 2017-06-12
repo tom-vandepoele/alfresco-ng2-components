@@ -17,8 +17,8 @@
 
 import { Component, Input, OnInit } from '@angular/core';
 import { LogService } from 'ng2-alfresco-core';
-import { DynamicTableModel, DynamicTableRow, DynamicTableColumn, DynamicTableColumnOption } from './../../dynamic-table.widget.model';
 import { FormService } from './../../../../../services/form.service';
+import { DynamicTableColumn, DynamicTableColumnOption, DynamicTableModel, DynamicTableRow } from './../../dynamic-table.widget.model';
 
 @Component({
     selector: 'alf-dropdown-editor',
@@ -72,7 +72,7 @@ export class DropdownEditorComponent implements OnInit {
                     this.options = this.column.options;
                     this.value = this.table.getCellValue(this.row, this.column);
                 },
-                err => this.handleError(err)
+                (err) => this.handleError(err)
             );
     }
 
@@ -89,13 +89,13 @@ export class DropdownEditorComponent implements OnInit {
                     this.options = this.column.options;
                     this.value = this.table.getCellValue(this.row, this.column);
                 },
-                err => this.handleError(err)
+                (err) => this.handleError(err)
             );
     }
 
     onValueChanged(row: DynamicTableRow, column: DynamicTableColumn, event: any) {
         let value: any = (<HTMLInputElement>event.target).value;
-        value = column.options.find(opt => opt.name === value);
+        value = column.options.find((opt) => opt.name === value);
         row.value[column.id] = value;
     }
 

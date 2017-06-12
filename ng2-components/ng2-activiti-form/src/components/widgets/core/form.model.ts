@@ -15,57 +15,57 @@
  * limitations under the License.
  */
 
-import { FormWidgetModel, FormWidgetModelCache } from './form-widget.model';
-import { FormValues } from './form-values';
-import { ContainerModel } from './container.model';
-import { TabModel } from './tab.model';
-import { FormOutcomeModel } from './form-outcome.model';
-import { FormFieldModel } from './form-field.model';
-import { FormFieldTypes } from './form-field-types';
-import { FormFieldTemplates } from './form-field-templates';
-import { FormService } from './../../../services/form.service';
 import { FormFieldEvent } from './../../../events/index';
+import { FormService } from './../../../services/form.service';
+import { ContainerModel } from './container.model';
+import { FormFieldTemplates } from './form-field-templates';
+import { FormFieldTypes } from './form-field-types';
+import { FormFieldModel } from './form-field.model';
+import { FormOutcomeModel } from './form-outcome.model';
+import { FormValues } from './form-values';
+import { FormWidgetModel, FormWidgetModelCache } from './form-widget.model';
+import { TabModel } from './tab.model';
 
 export class FormModel {
 
-    static UNSET_TASK_NAME: string = 'Nameless task';
-    static SAVE_OUTCOME: string = '$save';
-    static COMPLETE_OUTCOME: string = '$complete';
-    static START_PROCESS_OUTCOME: string = '$startProcess';
+    public static UNSET_TASK_NAME: string = 'Nameless task';
+    public static SAVE_OUTCOME: string = '$save';
+    public static COMPLETE_OUTCOME: string = '$complete';
+    public static START_PROCESS_OUTCOME: string = '$startProcess';
 
-    readonly id: string;
-    readonly name: string;
-    readonly taskId: string;
-    readonly taskName: string = FormModel.UNSET_TASK_NAME;
-    processDefinitionId: string;
+    public readonly id: string;
+    public readonly name: string;
+    public readonly taskId: string;
+    public readonly taskName: string = FormModel.UNSET_TASK_NAME;
+    public processDefinitionId: string;
     private _isValid: boolean = true;
 
     get isValid(): boolean {
         return this._isValid;
     }
 
-    className: string;
-    readOnly: boolean = false;
-    tabs: TabModel[] = [];
+    public className: string;
+    public readOnly: boolean = false;
+    public tabs: TabModel[] = [];
     /** Stores root containers */
-    fields: FormWidgetModel[] = [];
-    outcomes: FormOutcomeModel[] = [];
-    customFieldTemplates: FormFieldTemplates = {};
-    readonly selectedOutcome: string;
+    public fields: FormWidgetModel[] = [];
+    public outcomes: FormOutcomeModel[] = [];
+    public customFieldTemplates: FormFieldTemplates = {};
+    public readonly selectedOutcome: string;
 
-    values: FormValues = {};
+    public values: FormValues = {};
 
-    readonly json: any;
+    public readonly json: any;
 
-    hasTabs(): boolean {
+    public hasTabs(): boolean {
         return this.tabs && this.tabs.length > 0;
     }
 
-    hasFields(): boolean {
+    public hasFields(): boolean {
         return this.fields && this.fields.length > 0;
     }
 
-    hasOutcomes(): boolean {
+    public hasOutcomes(): boolean {
         return this.outcomes && this.outcomes.length > 0;
     }
 
@@ -86,7 +86,7 @@ export class FormModel {
 
             let tabCache: FormWidgetModelCache<TabModel> = {};
 
-            this.tabs = (json.tabs || []).map(t => {
+            this.tabs = (json.tabs || []).map((t) => {
                 let model = new TabModel(this, t);
                 tabCache[model.id] = model;
                 return model;
@@ -112,7 +112,7 @@ export class FormModel {
                 let completeOutcome = new FormOutcomeModel(this, {id: FormModel.COMPLETE_OUTCOME, name: 'Complete', isSystem: true });
                 let startProcessOutcome = new FormOutcomeModel(this, { id: FormModel.START_PROCESS_OUTCOME, name: 'Start Process', isSystem: true });
 
-                let customOutcomes = (json.outcomes || []).map(obj => new FormOutcomeModel(this, obj));
+                let customOutcomes = (json.outcomes || []).map((obj) => new FormOutcomeModel(this, obj));
 
                 this.outcomes = [saveOutcome].concat(
                     customOutcomes.length > 0 ? customOutcomes : [completeOutcome, startProcessOutcome]
@@ -122,7 +122,7 @@ export class FormModel {
         this.validateForm();
     }
 
-    onFormFieldChanged(field: FormFieldModel) {
+    public onFormFieldChanged(field: FormFieldModel): void {
         this.validateField(field);
         if (this.formService) {
             this.formService.formFieldValueChanged.next(new FormFieldEvent(this, field));
@@ -130,7 +130,7 @@ export class FormModel {
     }
 
     // TODO: consider evaluating and caching once the form is loaded
-    getFormFields(): FormFieldModel[] {
+    public getFormFields(): FormFieldModel[] {
         let result: FormFieldModel[] = [];
 
         for (let i = 0; i < this.fields.length; i++) {
@@ -146,7 +146,7 @@ export class FormModel {
         return result;
     }
 
-    private validateForm() {
+    private validateForm(): void {
         this._isValid = true;
         let fields = this.getFormFields();
         for (let i = 0; i < fields.length; i++) {

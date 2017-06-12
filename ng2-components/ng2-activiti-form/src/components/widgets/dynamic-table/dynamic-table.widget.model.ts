@@ -15,16 +15,16 @@
  * limitations under the License.
  */
 
-import { FormWidgetModel } from './../core/form-widget.model';
-import { FormFieldModel } from './../core/form-field.model';
 import * as moment from 'moment';
+import { FormFieldModel } from './../core/form-field.model';
+import { FormWidgetModel } from './../core/form-widget.model';
 
 export class DynamicTableModel extends FormWidgetModel {
 
-    field: FormFieldModel;
-    columns: DynamicTableColumn[] = [];
-    visibleColumns: DynamicTableColumn[] = [];
-    rows: DynamicTableRow[] = [];
+    public field: FormFieldModel;
+    public columns: DynamicTableColumn[] = [];
+    public visibleColumns: DynamicTableColumn[] = [];
+    public rows: DynamicTableRow[] = [];
 
     private _selectedRow: DynamicTableRow;
     private _validators: CellValidator[] = [];
@@ -40,7 +40,7 @@ export class DynamicTableModel extends FormWidgetModel {
             return;
         }
 
-        this.rows.forEach(row => row.selected = false);
+        this.rows.forEach((row) => row.selected = false);
 
         this._selectedRow = value;
 
@@ -57,11 +57,11 @@ export class DynamicTableModel extends FormWidgetModel {
             const columns = this.getColumns(field);
             if (columns) {
                 this.columns = columns;
-                this.visibleColumns = this.columns.filter(col => col.visible);
+                this.visibleColumns = this.columns.filter((col) => col.visible);
             }
 
             if (field.json.value) {
-                this.rows = field.json.value.map(obj => <DynamicTableRow> {selected: false, value: obj});
+                this.rows = field.json.value.map((obj) => <DynamicTableRow> {selected: false, value: obj});
             }
         }
 
@@ -80,20 +80,20 @@ export class DynamicTableModel extends FormWidgetModel {
             }
 
             if (definitions) {
-                return definitions.map(obj => <DynamicTableColumn> obj);
+                return definitions.map((obj) => <DynamicTableColumn> obj);
             }
         }
         return null;
     }
 
-    flushValue() {
+    public flushValue(): void {
         if (this.field) {
-            this.field.value = this.rows.map(r => r.value);
+            this.field.value = this.rows.map((r) => r.value);
             this.field.updateForm();
         }
     }
 
-    moveRow(row: DynamicTableRow, offset: number) {
+    public moveRow(row: DynamicTableRow, offset: number): void {
         let oldIndex = this.rows.indexOf(row);
         if (oldIndex > -1) {
             let newIndex = (oldIndex + offset);
@@ -113,7 +113,7 @@ export class DynamicTableModel extends FormWidgetModel {
         }
     }
 
-    deleteRow(row: DynamicTableRow) {
+    public deleteRow(row: DynamicTableRow): void {
         if (row) {
             if (this.selectedRow === row) {
                 this.selectedRow = null;
@@ -126,14 +126,13 @@ export class DynamicTableModel extends FormWidgetModel {
         }
     }
 
-    addRow(row: DynamicTableRow) {
+    public addRow(row: DynamicTableRow): void {
         if (row) {
             this.rows.push(row);
-            // this.selectedRow = row;
         }
     }
 
-    validateRow(row: DynamicTableRow): DynamicRowValidationSummary {
+    public  validateRow(row: DynamicTableRow): DynamicRowValidationSummary {
         let summary = <DynamicRowValidationSummary> {
             isValid: true,
             text: null
@@ -152,7 +151,7 @@ export class DynamicTableModel extends FormWidgetModel {
         return summary;
     }
 
-    getCellValue(row: DynamicTableRow, column: DynamicTableColumn): any {
+    public getCellValue(row: DynamicTableRow, column: DynamicTableColumn): any {
         let result = row.value[column.id];
 
         if (column.type === 'Dropdown') {
@@ -174,7 +173,7 @@ export class DynamicTableModel extends FormWidgetModel {
         return result || '';
     }
 
-    getDisplayText(column: DynamicTableColumn): string {
+    public getDisplayText(column: DynamicTableColumn): string {
         let result = column.name;
         if (column.type === 'Amount') {
             let currency = column.amountCurrency || '$';
@@ -208,11 +207,11 @@ export class RequiredCellValidator implements CellValidator {
         'Dropdown'
     ];
 
-    isSupported(column: DynamicTableColumn): boolean {
+    public isSupported(column: DynamicTableColumn): boolean {
         return column && column.required && this.supportedTypes.indexOf(column.type) > -1;
     }
 
-    validate(row: DynamicTableRow, column: DynamicTableColumn, summary?: DynamicRowValidationSummary): boolean {
+    public validate(row: DynamicTableRow, column: DynamicTableColumn, summary?: DynamicRowValidationSummary): boolean {
         if (this.isSupported(column)) {
             let value = row.value[column.id];
             if (column.required) {
@@ -236,11 +235,11 @@ export class DateCellValidator implements CellValidator {
         'Date'
     ];
 
-    isSupported(column: DynamicTableColumn): boolean {
+    public isSupported(column: DynamicTableColumn): boolean {
         return column && column.editable && this.supportedTypes.indexOf(column.type) > -1;
     }
 
-    validate(row: DynamicTableRow, column: DynamicTableColumn, summary?: DynamicRowValidationSummary): boolean {
+    public validate(row: DynamicTableRow, column: DynamicTableColumn, summary?: DynamicRowValidationSummary): boolean {
 
         if (this.isSupported(column)) {
             let value = row.value[column.id];
@@ -265,11 +264,11 @@ export class NumberCellValidator implements CellValidator {
         'Amount'
     ];
 
-    isSupported(column: DynamicTableColumn): boolean {
+    public isSupported(column: DynamicTableColumn): boolean {
         return column && column.required && this.supportedTypes.indexOf(column.type) > -1;
     }
 
-    isNumber(value: any): boolean {
+    public isNumber(value: any): boolean {
         if (value === null || value === undefined || value === '') {
             return false;
         }
@@ -277,7 +276,7 @@ export class NumberCellValidator implements CellValidator {
         return !isNaN(+value);
     }
 
-    validate(row: DynamicTableRow, column: DynamicTableColumn, summary?: DynamicRowValidationSummary): boolean {
+    public validate(row: DynamicTableRow, column: DynamicTableColumn, summary?: DynamicRowValidationSummary): boolean {
 
         if (this.isSupported(column)) {
             let value = row.value[column.id];

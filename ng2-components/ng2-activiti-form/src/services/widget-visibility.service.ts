@@ -16,12 +16,13 @@
  */
 
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Rx';
 import * as moment from 'moment';
 import { AlfrescoApiService, LogService } from 'ng2-alfresco-core';
-import { FormModel, FormFieldModel, TabModel, ContainerModel, ContainerColumnModel } from '../components/widgets/core/index';
-import { WidgetVisibilityModel } from '../models/widget-visibility.model';
+import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
+import { Observable } from 'rxjs/Rx';
+import { ContainerColumnModel, ContainerModel, FormFieldModel, FormModel, TabModel } from '../components/widgets/core/index';
 import { TaskProcessVariableModel } from '../models/task-process-variable.model';
+import { WidgetVisibilityModel } from '../models/widget-visibility.model';
 
 @Injectable()
 export class WidgetVisibilityService {
@@ -34,20 +35,20 @@ export class WidgetVisibilityService {
 
     public refreshVisibility(form: FormModel) {
         if (form && form.tabs && form.tabs.length > 0) {
-            form.tabs.map(tabModel => this.refreshEntityVisibility(tabModel));
+            form.tabs.map((tabModel) => this.refreshEntityVisibility(tabModel));
         }
 
         if (form) {
-            form.getFormFields().map(field => this.refreshEntityVisibility(field));
+            form.getFormFields().map((field) => this.refreshEntityVisibility(field));
         }
     }
 
-    refreshEntityVisibility(element: FormFieldModel | TabModel) {
+    public refreshEntityVisibility(element: FormFieldModel | TabModel) {
         let visible = this.evaluateVisibility(element.form, element.visibilityCondition);
         element.isVisible = visible;
     }
 
-    evaluateVisibility(form: FormModel, visibilityObj: WidgetVisibilityModel): boolean {
+    public evaluateVisibility(form: FormModel, visibilityObj: WidgetVisibilityModel): boolean {
         let isLeftFieldPresent = visibilityObj && ( visibilityObj.leftFormFieldId || visibilityObj.leftRestResponseId );
         if (!isLeftFieldPresent || isLeftFieldPresent === 'null') {
             return true;
@@ -56,7 +57,7 @@ export class WidgetVisibilityService {
         }
     }
 
-    isFieldVisible(form: FormModel, visibilityObj: WidgetVisibilityModel): boolean {
+    public isFieldVisible(form: FormModel, visibilityObj: WidgetVisibilityModel): boolean {
         let leftValue = this.getLeftValue(form, visibilityObj);
         let rightValue = this.getRightValue(form, visibilityObj);
         let actualResult = this.evaluateCondition(leftValue, rightValue, visibilityObj.operator);
@@ -71,7 +72,7 @@ export class WidgetVisibilityService {
         }
     }
 
-    getLeftValue(form: FormModel, visibilityObj: WidgetVisibilityModel) {
+    public getLeftValue(form: FormModel, visibilityObj: WidgetVisibilityModel) {
         let leftValue = '';
         if (visibilityObj.leftRestResponseId && visibilityObj.leftRestResponseId !== 'null') {
             leftValue = this.getVariableValue(form, visibilityObj.leftRestResponseId, this.processVarList);
@@ -82,7 +83,7 @@ export class WidgetVisibilityService {
         return leftValue;
     }
 
-    getRightValue(form: FormModel, visibilityObj: WidgetVisibilityModel) {
+    public getRightValue(form: FormModel, visibilityObj: WidgetVisibilityModel) {
         let valueFound = '';
         if (visibilityObj.rightRestResponseId) {
             valueFound = this.getVariableValue(form, visibilityObj.rightRestResponseId, this.processVarList);
@@ -98,12 +99,12 @@ export class WidgetVisibilityService {
         return valueFound;
     }
 
-    getFormValue(form: FormModel, field: string) {
+    public getFormValue(form: FormModel, field: string) {
         let value = this.getFieldValue(form.values, field);
         return value ? value : this.searchForm(form, field);
     }
 
-    getFieldValue(valueList: any, fieldName: string) {
+    public getFieldValue(valueList: any, fieldName: string) {
         let dropDownFilterByName, valueFound = '';
         if (fieldName && fieldName.indexOf('_LABEL') > 0) {
             dropDownFilterByName = fieldName.substring(0, fieldName.length - 6);
@@ -118,11 +119,11 @@ export class WidgetVisibilityService {
         return valueFound;
     }
 
-    searchForm(form: FormModel, name: string) {
+    public searchForm(form: FormModel, name: string) {
         let fieldValue = '';
         form.fields.forEach((containerModel: ContainerModel) => {
             containerModel.field.columns.forEach((containerColumnModel: ContainerColumnModel) => {
-                let fieldFound = containerColumnModel.fields.find(field => this.isSearchedField(field, name));
+                let fieldFound = containerColumnModel.fields.find((field) => this.isSearchedField(field, name));
                 if (fieldFound) {
                     fieldValue = this.getObjectValue(fieldFound);
                     if (!fieldValue) {
@@ -143,7 +144,7 @@ export class WidgetVisibilityService {
         if (field.value && field.value.name) {
             value = field.value.name;
         } else if (field.options) {
-            let option = field.options.find(opt => opt.id === field.value);
+            let option = field.options.find((opt) => opt.id === field.value);
             if (option) {
                 value = option.name;
             } else {
@@ -166,26 +167,26 @@ export class WidgetVisibilityService {
         return formattedFieldName;
     }
 
-    getVariableValue(form: FormModel, name: string, processVarList: TaskProcessVariableModel[]) {
+    public getVariableValue(form: FormModel, name: string, processVarList: TaskProcessVariableModel[]) {
         return this.getFormVariableValue(form, name) ||
             this.getProcessVariableValue(name, processVarList);
     }
 
-    private getFormVariableValue(form: FormModel, name: string) {
+    private getFormVariableValue(form: FormModel, name: string): any {
         if (form.json.variables) {
-            let formVariable = form.json.variables.find(formVar => formVar.name === name);
+            let formVariable = form.json.variables.find((formVar) => formVar.name === name);
             return formVariable ? formVariable.value : formVariable;
         }
     }
 
-    private getProcessVariableValue(name: string, processVarList: TaskProcessVariableModel[]) {
+    private getProcessVariableValue(name: string, processVarList: TaskProcessVariableModel[]): any {
         if (this.processVarList) {
-            let processVariable = this.processVarList.find(variable => variable.id === name);
+            let processVariable = this.processVarList.find((variable) => variable.id === name);
             return processVariable ? processVariable.value : processVariable;
         }
     }
 
-    evaluateLogicalOperation(logicOp, previousValue, newValue): boolean {
+    public evaluateLogicalOperation(logicOp, previousValue, newValue): boolean {
         switch (logicOp) {
             case 'and':
                 return previousValue && newValue;
@@ -201,7 +202,7 @@ export class WidgetVisibilityService {
         }
     }
 
-    evaluateCondition(leftValue, rightValue, operator): boolean {
+    public evaluateCondition(leftValue, rightValue, operator): boolean {
         switch (operator) {
             case '==':
                 return leftValue + '' === rightValue + '';
@@ -226,26 +227,31 @@ export class WidgetVisibilityService {
         return;
     }
 
-    cleanProcessVariable() {
+    public cleanProcessVariable(): void {
         this.processVarList = [];
     }
 
-    getTaskProcessVariable(taskId: string): Observable<TaskProcessVariableModel[]> {
+    public getTaskProcessVariable(taskId: string): Observable<TaskProcessVariableModel[]> {
         return Observable.fromPromise(this.apiService.getInstance().activiti.taskFormsApi.getTaskFormVariables(taskId))
-            .map(res => {
+            .map((res) => {
                 let jsonRes = this.toJson(res);
                 this.processVarList = <TaskProcessVariableModel[]>jsonRes;
                 return jsonRes;
             })
-            .catch(err => this.handleError(err));
+            .catch((err) => this.handleError(err));
     }
 
-    toJson(res: any) {
+    private  toJson(res: any): any {
         return res || {};
     }
 
-    private handleError(err) {
-        this.logService.error('Error while performing a call');
-        return Observable.throw('Error while performing a call - Server error');
+    /**
+     * Throw the error
+     * @param error
+     * @returns {ErrorObservable}
+     */
+    private handleError(error: Response): ErrorObservable<string | Response> {
+        this.logService.error(error);
+        return Observable.throw(error || 'Server error');
     }
 }

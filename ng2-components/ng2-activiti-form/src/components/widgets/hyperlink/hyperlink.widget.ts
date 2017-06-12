@@ -25,10 +25,10 @@ import { WidgetComponent } from './../widget.component';
 })
 export class HyperlinkWidget extends WidgetComponent implements OnInit {
 
-    linkUrl: string = WidgetComponent.DEFAULT_HYPERLINK_URL;
-    linkText: string = null;
+    public linkUrl: string = WidgetComponent.DEFAULT_HYPERLINK_URL;
+    public linkText: string = null;
 
-    ngOnInit() {
+    public ngOnInit(): void {
         if (this.field) {
             this.linkUrl = this.getHyperlinkUrl(this.field);
             this.linkText = this.getHyperlinkText(this.field);

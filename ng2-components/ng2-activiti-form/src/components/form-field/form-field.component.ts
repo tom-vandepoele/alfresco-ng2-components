@@ -16,25 +16,25 @@
  */
 
 import {
-    Component,
-    OnInit, OnDestroy,
-    ViewChild,
-    ViewContainerRef,
-    Input,
-    ComponentRef,
-    ComponentFactoryResolver,
-    ComponentFactory,
     Compiler,
+    Component, ComponentFactory,
+    ComponentFactoryResolver,
+    ComponentRef,
+    Input,
+    ModuleWithComponentFactories,
     NgModule,
-    ModuleWithComponentFactories
+    OnDestroy,
+    OnInit,
+    ViewChild,
+    ViewContainerRef
 } from '@angular/core';
 
 import { CoreModule } from 'ng2-alfresco-core';
 
-import { WidgetVisibilityService } from './../../services/widget-visibility.service';
 import { FormRenderingService } from './../../services/form-rendering.service';
-import { WidgetComponent } from './../widgets/widget.component';
+import { WidgetVisibilityService } from './../../services/widget-visibility.service';
 import { FormFieldModel } from './../widgets/core/index';
+import { WidgetComponent } from './../widgets/widget.component';
 
 declare var adf: any;
 
@@ -48,22 +48,21 @@ declare var adf: any;
 })
 export class FormFieldComponent implements OnInit, OnDestroy {
 
-    @ViewChild('container', { read: ViewContainerRef })
-    container: ViewContainerRef;
+    @ViewChild('container', {read: ViewContainerRef})
+    public container: ViewContainerRef;
 
     @Input()
-    field: FormFieldModel = null;
+    public field: FormFieldModel = null;
 
-    componentRef: ComponentRef<{}>;
+    public componentRef: ComponentRef<{}>;
 
-    constructor(
-        private formRenderingService: FormRenderingService,
-        private componentFactoryResolver: ComponentFactoryResolver,
-        private visibilityService: WidgetVisibilityService,
-        private compiler: Compiler) {
+    constructor(private formRenderingService: FormRenderingService,
+                private componentFactoryResolver: ComponentFactoryResolver,
+                private visibilityService: WidgetVisibilityService,
+                private compiler: Compiler) {
     }
 
-    ngOnInit() {
+    public ngOnInit(): void {
         if (this.field) {
             let customTemplate = this.field.form.customFieldTemplates[this.field.type];
             if (customTemplate && this.hasController(this.field.type)) {
@@ -80,7 +79,7 @@ export class FormFieldComponent implements OnInit, OnDestroy {
                     this.componentRef = this.container.createComponent(factory);
                     let instance = <WidgetComponent>this.componentRef.instance;
                     instance.field = this.field;
-                    instance.fieldChanged.subscribe(field => {
+                    instance.fieldChanged.subscribe((field) => {
                         if (field && field.form) {
                             this.visibilityService.refreshVisibility(field.form);
                         }
@@ -90,7 +89,7 @@ export class FormFieldComponent implements OnInit, OnDestroy {
         }
     }
 
-    ngOnDestroy() {
+    public ngOnDestroy(): void {
         if (this.componentRef) {
             this.componentRef.destroy();
             this.componentRef = null;
@@ -110,7 +109,7 @@ export class FormFieldComponent implements OnInit, OnDestroy {
 
         let metadata = {
             selector: `runtime-component-${type}`,
-            template: template
+            template
         };
 
         let factory = this.createComponentFactorySync(this.compiler, metadata, componentInfo.class);
@@ -119,14 +118,16 @@ export class FormFieldComponent implements OnInit, OnDestroy {
     }
 
     private createComponentFactorySync(compiler: Compiler, metadata: Component, componentClass: any): ComponentFactory<any> {
-        const cmpClass = componentClass || class RuntimeComponent { };
+        const cmpClass = componentClass || class RuntimeComponent {
+            };
         const decoratedCmp = Component(metadata)(cmpClass);
 
-        @NgModule({ imports: [CoreModule], declarations: [decoratedCmp] })
-        class RuntimeComponentModule { }
+        @NgModule({imports: [CoreModule], declarations: [decoratedCmp]})
+        class RuntimeComponentModule {
+        }
 
         let module: ModuleWithComponentFactories<any> = compiler.compileModuleAndAllComponentsSync(RuntimeComponentModule);
-        return module.componentFactories.find(x => x.componentType === decoratedCmp);
+        return module.componentFactories.find((x) => x.componentType === decoratedCmp);
     }
 
 }

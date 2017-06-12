@@ -19,7 +19,7 @@ import { FormModel } from './../components/widgets/core/index';
 
 export class FormEvent {
 
-    readonly form: FormModel;
+    public readonly form: FormModel;
 
     constructor(form: FormModel) {
         this.form = form;

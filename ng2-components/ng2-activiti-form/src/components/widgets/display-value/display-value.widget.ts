@@ -15,14 +15,14 @@
  * limitations under the License.
  */
 
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import * as moment from 'moment';
-import { WidgetComponent } from './../widget.component';
-import { FormFieldTypes } from '../core/form-field-types';
 import { FormService } from '../../../services/form.service';
-import { FormFieldOption } from './../core/form-field-option';
 import { WidgetVisibilityService } from '../../../services/widget-visibility.service';
+import { FormFieldTypes } from '../core/form-field-types';
 import { NumberFieldValidator } from '../core/form-field-validator';
+import { FormFieldOption } from './../core/form-field-option';
+import { WidgetComponent } from './../widget.component';
 
 @Component({
     selector: 'display-value-widget',
@@ -32,29 +32,29 @@ import { NumberFieldValidator } from '../core/form-field-validator';
 export class DisplayValueWidget extends WidgetComponent implements OnInit {
 
     @Output()
-    error: EventEmitter<any> = new EventEmitter<any>();
+    public error: EventEmitter<any> = new EventEmitter<any>();
 
-    value: any;
-    fieldType: string;
-    id: any;
+    public value: any;
+    public fieldType: string;
+    public id: any;
 
     // hyperlink
-    linkUrl: string;
-    linkText: string;
+    public linkUrl: string;
+    public linkText: string;
 
     // dynamic table
-    tableEditable = false;
+    public tableEditable = false;
 
     // upload/attach
-    hasFile: boolean = false;
-    showDocumentContent: boolean = true;
+    public hasFile: boolean = false;
+    public showDocumentContent: boolean = true;
 
     constructor(private formService: FormService,
                 private visibilityService: WidgetVisibilityService) {
         super();
     }
 
-    ngOnInit() {
+    public ngOnInit(): void {
         if (this.field) {
             this.value = this.field.value;
             this.visibilityService.refreshEntityVisibility(this.field);
@@ -160,9 +160,9 @@ export class DisplayValueWidget extends WidgetComponent implements OnInit {
         }
     }
 
-    loadRadioButtonValue() {
+    public loadRadioButtonValue(): void {
         let options = this.field.options || [];
-        let toSelect = options.find(item => item.id === this.field.value);
+        let toSelect = options.find((item) => item.id === this.field.value);
         if (toSelect) {
             this.value = toSelect.name;
         } else {
@@ -170,7 +170,7 @@ export class DisplayValueWidget extends WidgetComponent implements OnInit {
         }
     }
 
-    loadRestFieldValue() {
+    public loadRestFieldValue(): void {
         if (this.field.form.taskId) {
             this.getValuesByTaskId();
         } else {
@@ -178,7 +178,7 @@ export class DisplayValueWidget extends WidgetComponent implements OnInit {
         }
     }
 
-    getValuesByProcessDefinitionId() {
+    public getValuesByProcessDefinitionId(): void {
         this.formService
             .getRestFieldValuesByProcessId(
                 this.field.form.processDefinitionId,
@@ -187,7 +187,7 @@ export class DisplayValueWidget extends WidgetComponent implements OnInit {
             .subscribe(
                 (result: FormFieldOption[]) => {
                     let options = result || [];
-                    let toSelect = options.find(item => item.id === this.field.value);
+                    let toSelect = options.find((item) => item.id === this.field.value);
                     this.field.options = options;
                     if (toSelect) {
                         this.value = toSelect.name;
@@ -202,13 +202,13 @@ export class DisplayValueWidget extends WidgetComponent implements OnInit {
             );
     }
 
-    getValuesByTaskId() {
+    public getValuesByTaskId(): void {
         this.formService
             .getRestFieldValues(this.field.form.taskId, this.field.id)
             .subscribe(
                 (result: FormFieldOption[]) => {
                     let options = result || [];
-                    let toSelect = options.find(item => item.id === this.field.value);
+                    let toSelect = options.find((item) => item.id === this.field.value);
                     this.field.options = options;
                     if (toSelect) {
                         this.value = toSelect.name;

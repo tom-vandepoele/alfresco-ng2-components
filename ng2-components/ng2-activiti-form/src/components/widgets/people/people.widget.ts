@@ -15,11 +15,11 @@
  * limitations under the License.
  */
 
-import { Component, OnInit, ElementRef } from '@angular/core';
-import { WidgetComponent } from './../widget.component';
+import { Component, ElementRef, OnInit } from '@angular/core';
 import { FormService } from '../../../services/form.service';
-import { GroupModel } from '../core/group.model';
 import { GroupUserModel } from '../core/group-user.model';
+import { GroupModel } from '../core/group.model';
+import { WidgetComponent } from './../widget.component';
 
 @Component({
     selector: 'people-widget',
@@ -84,7 +84,7 @@ export class PeopleWidget extends WidgetComponent implements OnInit {
     public  flushValue(): void {
         this.popupVisible = false;
 
-        let option = this.users.find(item => {
+        let option = this.users.find((item) => {
             let fullName = this.getDisplayName(item).toLocaleLowerCase();
             return fullName === this.value.toLocaleLowerCase();
         });

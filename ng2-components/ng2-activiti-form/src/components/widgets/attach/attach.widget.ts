@@ -15,13 +15,13 @@
  * limitations under the License.
  */
 
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { LogService } from 'ng2-alfresco-core';
-import { WidgetComponent } from './../widget.component';
 import { ActivitiAlfrescoContentService } from '../../../services/activiti-alfresco.service';
 import { ExternalContent } from '../core/external-content';
 import { ExternalContentLink } from '../core/external-content-link';
 import { FormFieldModel } from '../core/form-field.model';
+import { WidgetComponent } from './../widget.component';
 
 declare let dialogPolyfill: any;
 
@@ -32,32 +32,32 @@ declare let dialogPolyfill: any;
 })
 export class AttachWidget extends WidgetComponent implements OnInit {
 
-    selectedFolderPathId: string;
-    selectedFolderSiteId: string;
-    selectedFolderSiteName: string;
-    selectedFolderAccountId: string;
-    fileName: string;
-    selectedFolderNodes: [ExternalContent];
-    selectedFile: ExternalContent;
+    public selectedFolderPathId: string;
+    public selectedFolderSiteId: string;
+    public selectedFolderSiteName: string;
+    public selectedFolderAccountId: string;
+    public fileName: string;
+    public selectedFolderNodes: [ExternalContent];
+    public selectedFile: ExternalContent;
 
     @Input()
-    field: FormFieldModel;
+    public field: FormFieldModel;
 
     @Output()
-    fieldChanged: EventEmitter<FormFieldModel> = new EventEmitter<FormFieldModel>();
+    public fieldChanged: EventEmitter<FormFieldModel> = new EventEmitter<FormFieldModel>();
 
     @Output()
-    error: EventEmitter<any> = new EventEmitter<any>();
+    public error: EventEmitter<any> = new EventEmitter<any>();
 
     @ViewChild('dialog')
-    dialog: any;
+    public dialog: any;
 
     constructor(private contentService: ActivitiAlfrescoContentService,
                 private logService: LogService) {
         super();
     }
 
-    ngOnInit() {
+    public ngOnInit(): void {
         if (this.field) {
             let params = this.field.params;
 
@@ -72,7 +72,7 @@ export class AttachWidget extends WidgetComponent implements OnInit {
         }
     }
 
-    setupFileBrowser() {
+    public setupFileBrowser(): void {
         if (this.field) {
             let params = this.field.params;
             this.selectedFolderPathId = params.fileSource.selectedFolder.pathId;
@@ -80,7 +80,7 @@ export class AttachWidget extends WidgetComponent implements OnInit {
         }
     }
 
-    getLinkedFileName(): string {
+    public getLinkedFileName(): string {
         let result = this.fileName;
 
         if (this.selectedFile &&
@@ -97,17 +97,17 @@ export class AttachWidget extends WidgetComponent implements OnInit {
         return result;
     }
 
-    getExternalContentNodes() {
+    public getExternalContentNodes(): void {
         this.contentService.getAlfrescoNodes(this.selectedFolderAccountId, this.selectedFolderPathId)
             .subscribe(
-                nodes => this.selectedFolderNodes = nodes,
+                (nodes) => this.selectedFolderNodes = nodes,
                 (err) => {
                     this.error.emit(err);
                 }
             );
     }
 
-    selectFile(node: ExternalContent, $event: any) {
+    public selectFile(node: ExternalContent): void {
         this.contentService.linkAlfrescoNode(this.selectedFolderAccountId, node, this.selectedFolderSiteId).subscribe(
             (link: ExternalContentLink) => {
                 this.selectedFile = node;
@@ -119,12 +119,12 @@ export class AttachWidget extends WidgetComponent implements OnInit {
         );
     }
 
-    selectFolder(node: ExternalContent, $event: any) {
+    public selectFolder(node: ExternalContent): void {
         this.selectedFolderPathId = node.id;
         this.getExternalContentNodes();
     }
 
-    showDialog(): boolean {
+    public showDialog(): boolean {
         this.setupFileBrowser();
         this.getExternalContentNodes();
 
@@ -139,22 +139,22 @@ export class AttachWidget extends WidgetComponent implements OnInit {
         return false;
     }
 
-    private closeDialog() {
+    private closeDialog(): void {
         if (this.dialog) {
             this.dialog.nativeElement.close();
         }
     }
 
-    cancel() {
+    public cancel(): void {
         this.closeDialog();
     }
 
-    reset() {
+    public reset(): void {
         this.field.value = null;
         this.field.json.value = null;
     }
 
-    hasFile(): boolean {
+    public hasFile(): boolean {
         return this.field && this.field.value;
     }
 

@@ -15,12 +15,12 @@
  * limitations under the License.
  */
 
-import { FormEvent } from './form.event';
 import { FormModel } from './../components/widgets/core/index';
+import { FormEvent } from './form.event';
 
 export class FormErrorEvent extends FormEvent {
 
-    readonly error: any;
+    public readonly error: any;
 
     constructor(form: FormModel, error: any) {
         super(form);

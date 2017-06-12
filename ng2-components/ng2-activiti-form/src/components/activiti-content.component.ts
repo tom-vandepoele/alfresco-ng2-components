@@ -15,11 +15,11 @@
  * limitations under the License.
  */
 
-import { Component, OnChanges, SimpleChanges, Input, Output, EventEmitter } from '@angular/core';
-import { AlfrescoTranslationService, LogService, ContentService } from 'ng2-alfresco-core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { AlfrescoTranslationService, ContentService, LogService } from 'ng2-alfresco-core';
+import { Observable } from 'rxjs/Rx';
 import { FormService } from './../services/form.service';
 import { ContentLinkModel } from './widgets/core/content-link.model';
-import { Observable } from 'rxjs/Rx';
 
 @Component({
     selector: 'activiti-content',
@@ -29,24 +29,24 @@ import { Observable } from 'rxjs/Rx';
 export class ActivitiContent implements OnChanges {
 
     @Input()
-    id: string;
+    public id: string;
 
     @Input()
-    showDocumentContent: boolean = true;
+    public showDocumentContent: boolean = true;
 
     @Output()
-    contentClick = new EventEmitter();
+    public contentClick = new EventEmitter();
 
     @Output()
-    thumbnailLoaded: EventEmitter<any> = new EventEmitter<any>();
+    public thumbnailLoaded: EventEmitter<any> = new EventEmitter<any>();
 
     @Output()
-    contentLoaded: EventEmitter<any> = new EventEmitter<any>();
+    public contentLoaded: EventEmitter<any> = new EventEmitter<any>();
 
     @Output()
-    error: EventEmitter<any> = new EventEmitter<any>();
+    public error: EventEmitter<any> = new EventEmitter<any>();
 
-    content: ContentLinkModel;
+    public content: ContentLinkModel;
 
     constructor(private translate: AlfrescoTranslationService,
                 protected formService: FormService,
@@ -57,14 +57,14 @@ export class ActivitiContent implements OnChanges {
         }
     }
 
-    ngOnChanges(changes: SimpleChanges) {
-        const contentId = changes['id'];
+    public ngOnChanges(changes: SimpleChanges): void {
+        const contentId = changes.id;
         if (contentId && contentId.currentValue) {
             this.loadContent(contentId.currentValue);
         }
     }
 
-    loadContent(id: number) {
+    public loadContent(id: number): void {
         this.formService
             .getFileContent(id)
             .subscribe(
@@ -79,7 +79,7 @@ export class ActivitiContent implements OnChanges {
             );
     }
 
-    loadThumbnailUrl(content: ContentLinkModel) {
+    public loadThumbnailUrl(content: ContentLinkModel): void {
         if (this.content.isThumbnailSupported()) {
             let observable: Observable<any>;
 
@@ -104,7 +104,7 @@ export class ActivitiContent implements OnChanges {
         }
     }
 
-    openViewer(content: ContentLinkModel): void {
+    public openViewer(content: ContentLinkModel): void {
         this.formService.getFileRawContent(content.id).subscribe(
             (blob: Blob) => {
                 content.contentBlob = blob;
@@ -121,7 +121,7 @@ export class ActivitiContent implements OnChanges {
     /**
      * Invoke content download.
      */
-    download(content: ContentLinkModel): void {
+    public download(content: ContentLinkModel): void {
         this.formService.getFileRawContent(content.id).subscribe(
             (blob: Blob) => this.contentService.downloadBlob(blob, content.name),
             (error) => {

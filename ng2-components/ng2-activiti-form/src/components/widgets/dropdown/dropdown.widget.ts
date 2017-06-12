@@ -18,9 +18,9 @@
 import { Component, OnInit } from '@angular/core';
 import { LogService } from 'ng2-alfresco-core';
 import { FormService } from '../../../services/form.service';
-import { WidgetComponent } from './../widget.component';
-import { FormFieldOption } from './../core/form-field-option';
 import { WidgetVisibilityService } from '../../../services/widget-visibility.service';
+import { FormFieldOption } from './../core/form-field-option';
+import { WidgetComponent } from './../widget.component';
 
 @Component({
     selector: 'dropdown-widget',
@@ -35,7 +35,7 @@ export class DropdownWidget extends WidgetComponent implements OnInit {
         super();
     }
 
-    ngOnInit() {
+    public  ngOnInit(): void {
         if (this.field && this.field.restUrl) {
             if (this.field.form.taskId) {
                 this.getValuesByTaskId();
@@ -45,7 +45,7 @@ export class DropdownWidget extends WidgetComponent implements OnInit {
         }
     }
 
-    getValuesByTaskId() {
+    public getValuesByTaskId(): void {
         this.formService
             .getRestFieldValues(
                 this.field.form.taskId,
@@ -60,11 +60,11 @@ export class DropdownWidget extends WidgetComponent implements OnInit {
                     this.field.options = options.concat((result || []));
                     this.field.updateForm();
                 },
-                err => this.handleError(err)
+                (err) => this.handleError(err)
             );
     }
 
-    getValuesByProcessDefinitionId() {
+    public getValuesByProcessDefinitionId(): void {
         this.formService
             .getRestFieldValuesByProcessId(
                 this.field.form.processDefinitionId,
@@ -79,11 +79,11 @@ export class DropdownWidget extends WidgetComponent implements OnInit {
                     this.field.options = options.concat((result || []));
                     this.field.updateForm();
                 },
-                err => this.handleError(err)
+                (err) => this.handleError(err)
             );
     }
 
-    getOptionValue(option: FormFieldOption, fieldValue: string): string {
+    public getOptionValue(option: FormFieldOption, fieldValue: string): string {
         let optionValue: string = '';
         if (option.id === 'empty' || option.name !== fieldValue) {
             optionValue = option.id;
@@ -93,11 +93,11 @@ export class DropdownWidget extends WidgetComponent implements OnInit {
         return optionValue;
     }
 
-    checkVisibility() {
+    public checkVisibility(): void {
         this.visibilityService.refreshVisibility(this.field.form);
     }
 
-    handleError(error: any) {
+    public handleError(error: any): any {
         this.logService.error(error);
     }
 

@@ -20,12 +20,12 @@ import { FormModel } from './form.model';
 
 export class FormOutcomeModel extends FormWidgetModel {
 
-    static SAVE_ACTION: string = 'Save';            // Activiti 'Save' action name
-    static COMPLETE_ACTION: string = 'Complete';    // Activiti 'Complete' action name
-    static START_PROCESS_ACTION: string = 'Start Process';    // Activiti 'Start Process' action name
+    public static SAVE_ACTION: string = 'Save';            // Activiti 'Save' action name
+    public static COMPLETE_ACTION: string = 'Complete';    // Activiti 'Complete' action name
+    public static START_PROCESS_ACTION: string = 'Start Process';    // Activiti 'Start Process' action name
 
-    isSystem: boolean = false;
-    isSelected: boolean = false;
+    public isSystem: boolean = false;
+    public isSelected: boolean = false;
 
     constructor(form: FormModel, json?: any) {
         super(form, json);

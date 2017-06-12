@@ -16,8 +16,8 @@
  */
 
 import { Component } from '@angular/core';
-import { WidgetComponent } from './../widget.component';
 import { WidgetVisibilityService } from '../../../services/widget-visibility.service';
+import { WidgetComponent } from './../widget.component';
 
 @Component({
     selector: 'checkbox-widget',
@@ -29,7 +29,7 @@ export class CheckboxWidget extends WidgetComponent {
         super();
     }
 
-    onChange() {
+    public onChange(): void {
         this.visibilityService.refreshVisibility(this.field.form);
     }
 

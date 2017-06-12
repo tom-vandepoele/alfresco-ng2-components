@@ -16,33 +16,33 @@
  */
 
 export class FormFieldTypes {
-    static CONTAINER: string = 'container';
-    static GROUP: string = 'group';
-    static DYNAMIC_TABLE: string = 'dynamic-table';
-    static TEXT: string = 'text';
-    static MULTILINE_TEXT: string = 'multi-line-text';
-    static DROPDOWN: string = 'dropdown';
-    static HYPERLINK: string = 'hyperlink';
-    static RADIO_BUTTONS: string = 'radio-buttons';
-    static DISPLAY_VALUE: string = 'readonly';
-    static READONLY_TEXT: string = 'readonly-text';
-    static UPLOAD: string = 'upload';
-    static TYPEAHEAD: string = 'typeahead';
-    static FUNCTIONAL_GROUP: string = 'functional-group';
-    static PEOPLE: string = 'people';
-    static BOOLEAN: string = 'boolean';
-    static NUMBER: string = 'integer';
-    static DATE: string = 'date';
-    static AMOUNT: string = 'amount';
-    static DOCUMENT: string = 'document';
+    public static CONTAINER: string = 'container';
+    public static GROUP: string = 'group';
+    public static DYNAMIC_TABLE: string = 'dynamic-table';
+    public static TEXT: string = 'text';
+    public static MULTILINE_TEXT: string = 'multi-line-text';
+    public static DROPDOWN: string = 'dropdown';
+    public static HYPERLINK: string = 'hyperlink';
+    public static RADIO_BUTTONS: string = 'radio-buttons';
+    public static DISPLAY_VALUE: string = 'readonly';
+    public static READONLY_TEXT: string = 'readonly-text';
+    public static UPLOAD: string = 'upload';
+    public static TYPEAHEAD: string = 'typeahead';
+    public static FUNCTIONAL_GROUP: string = 'functional-group';
+    public static PEOPLE: string = 'people';
+    public static BOOLEAN: string = 'boolean';
+    public static NUMBER: string = 'integer';
+    public static DATE: string = 'date';
+    public static AMOUNT: string = 'amount';
+    public static DOCUMENT: string = 'document';
 
-    static READONLY_TYPES: string[] = [
+    public static READONLY_TYPES: string[] = [
         FormFieldTypes.HYPERLINK,
         FormFieldTypes.DISPLAY_VALUE,
         FormFieldTypes.READONLY_TEXT
     ];
 
-    static isReadOnlyType(type: string) {
+    public static isReadOnlyType(type: string) {
         return FormFieldTypes.READONLY_TYPES.indexOf(type) > -1;
     }
 }

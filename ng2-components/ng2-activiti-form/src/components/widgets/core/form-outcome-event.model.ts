@@ -30,11 +30,11 @@ export class FormOutcomeEvent {
         return this._defaultPrevented;
     }
 
-    constructor(outcome: FormOutcomeModel) {
+    constructor(outcome: FormOutcomeModel): void {
         this._outcome = outcome;
     }
 
-    preventDefault() {
+    public preventDefault(): void {
         this._defaultPrevented = true;
     }
 

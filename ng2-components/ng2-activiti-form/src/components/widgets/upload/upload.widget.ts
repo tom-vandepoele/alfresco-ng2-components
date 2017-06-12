@@ -17,8 +17,8 @@
 
 import { Component, OnInit } from '@angular/core';
 import { LogService } from 'ng2-alfresco-core';
-import { WidgetComponent } from './../widget.component';
 import { FormService } from '../../../services/form.service';
+import { WidgetComponent } from './../widget.component';
 
 @Component({
     selector: 'upload-widget',
@@ -27,16 +27,16 @@ import { FormService } from '../../../services/form.service';
 })
 export class UploadWidget extends WidgetComponent implements OnInit {
 
-    hasFile: boolean;
-    fileName: string;
-    displayText: string;
+    public  hasFile: boolean;
+    public fileName: string;
+    public displayText: string;
 
     constructor(private formService: FormService,
                 private logService: LogService) {
         super();
     }
 
-    ngOnInit() {
+    public ngOnInit(): void {
         if (this.field &&
             this.field.value &&
             this.field.value.length > 0) {
@@ -47,7 +47,7 @@ export class UploadWidget extends WidgetComponent implements OnInit {
         }
     }
 
-    reset() {
+    public reset(): void {
         this.hasFile = false;
         this.fileName = null;
         this.displayText = null;
@@ -58,7 +58,7 @@ export class UploadWidget extends WidgetComponent implements OnInit {
         }
     }
 
-    onFileChanged(event: any) {
+    public  onFileChanged(event: any): void {
         let files = event.target.files;
         if (files && files.length > 0) {
             let file = files[0];
@@ -67,7 +67,7 @@ export class UploadWidget extends WidgetComponent implements OnInit {
                     this.logService.info(response);
                     this.field.value = [response];
                     this.field.json.value = [response];
-                }, (error: any) => {
+                }, () => {
                     this.logService.error('Error uploading file. See console output for more details.');
                 });
         }

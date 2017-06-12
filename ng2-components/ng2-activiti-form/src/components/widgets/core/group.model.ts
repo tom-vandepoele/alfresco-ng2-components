@@ -17,11 +17,11 @@
 
 export class GroupModel {
 
-    externalId: string;
-    groups: any;
-    id: string;
-    name: string;
-    status: string;
+    public externalId: string;
+    public groups: any;
+    public id: string;
+    public name: string;
+    public status: string;
 
     constructor(json?: any) {
         if (json) {

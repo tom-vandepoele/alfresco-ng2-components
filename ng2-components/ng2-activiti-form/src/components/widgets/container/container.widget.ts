@@ -15,9 +15,9 @@
  * limitations under the License.
  */
 
-import { Component, AfterViewInit, OnInit } from '@angular/core';
-import { ContainerWidgetModel } from './container.widget.model';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { WidgetComponent } from './../widget.component';
+import { ContainerWidgetModel } from './container.widget.model';
 
 declare var componentHandler: any;
 
@@ -30,23 +30,23 @@ export class ContainerWidget extends WidgetComponent implements OnInit, AfterVie
 
     content: ContainerWidgetModel;
 
-    onExpanderClicked() {
+    public onExpanderClicked(): void {
         if (this.content && this.content.isCollapsible()) {
             this.content.isExpanded = !this.content.isExpanded;
         }
     }
 
-    ngOnInit() {
+    public ngOnInit(): void {
         if (this.field) {
             this.content = new ContainerWidgetModel(this.field);
         }
     }
 
-    ngAfterViewInit() {
+    public ngAfterViewInit(): void {
         this.setupMaterialComponents();
     }
 
-    setupMaterialComponents(): boolean {
+    public setupMaterialComponents(): boolean {
         // workaround for MDL issues with dynamic components
         if (componentHandler) {
             componentHandler.upgradeAllRegistered();

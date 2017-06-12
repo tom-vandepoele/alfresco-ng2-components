@@ -17,11 +17,11 @@
 
 export class GroupUserModel {
 
-    company: string;
-    email: string;
-    firstName: string;
-    id: string;
-    lastName: string;
+    public company: string;
+    public email: string;
+    public firstName: string;
+    public id: string;
+    public lastName: string;
 
     constructor(json?: any) {
         if (json) {

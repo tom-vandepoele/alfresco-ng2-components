@@ -16,8 +16,8 @@
  */
 
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Rx';
 import { AlfrescoApiService, LogService } from 'ng2-alfresco-core';
+import { Observable } from 'rxjs/Rx';
 import { FormModel } from '../components/widgets/core/form.model';
 
 @Injectable()
@@ -32,61 +32,61 @@ export class EcmModelService {
     }
 
     public createEcmTypeForActivitiForm(formName: string, form: FormModel): Observable<any> {
-        return Observable.create(observer => {
+        return Observable.create((observer) => {
             this.searchActivitiEcmModel().subscribe(
-                model => {
+                (model) => {
                     if (!model) {
-                        this.createActivitiEcmModel(formName, form).subscribe(typeForm => {
+                        this.createActivitiEcmModel(formName, form).subscribe((typeForm) => {
                             observer.next(typeForm);
                             observer.complete();
                         });
                     } else {
-                        this.saveFomType(formName, form).subscribe(typeForm => {
+                        this.saveFomType(formName, form).subscribe((typeForm) => {
                             observer.next(typeForm);
                             observer.complete();
                         });
                     }
                 },
-                err => this.handleError(err)
+                (err) => this.handleError(err)
             );
         });
 
     }
 
-    searchActivitiEcmModel() {
+    public searchActivitiEcmModel(): any {
         return this.getEcmModels().map(function (ecmModels: any) {
-            return ecmModels.list.entries.find(model => model.entry.name === EcmModelService.MODEL_NAME);
+            return ecmModels.list.entries.find((model) => model.entry.name === EcmModelService.MODEL_NAME);
         });
     }
 
-    createActivitiEcmModel(formName: string, form: FormModel): Observable<any> {
-        return Observable.create(observer => {
+    public reateActivitiEcmModel(formName: string, form: FormModel): Observable<any> {
+        return Observable.create((observer) => {
             this.createEcmModel(EcmModelService.MODEL_NAME, EcmModelService.MODEL_NAMESPACE).subscribe(
-                model => {
+                (model) => {
                     this.logService.info('model created', model);
                     this.activeEcmModel(EcmModelService.MODEL_NAME).subscribe(
-                        modelActive => {
+                        (modelActive) => {
                             this.logService.info('model active', modelActive);
-                            this.createEcmTypeWithProperties(formName, form).subscribe(typeCreated => {
+                            this.createEcmTypeWithProperties(formName, form).subscribe((typeCreated) => {
                                 observer.next(typeCreated);
                                 observer.complete();
                             });
                         },
-                        err => this.handleError(err)
+                        (err) => this.handleError(err)
                     );
                 },
-                err => this.handleError(err)
+                (err) => this.handleError(err)
             );
         });
     }
 
-    saveFomType(formName: string, form: FormModel): Observable<any> {
-        return Observable.create(observer => {
+    public saveFomType(formName: string, form: FormModel): Observable<any> {
+        return Observable.create((observer) => {
             this.searchEcmType(formName, EcmModelService.MODEL_NAME).subscribe(
-                ecmType => {
+                (ecmType) => {
                     this.logService.info('custom types', ecmType);
                     if (!ecmType) {
-                        this.createEcmTypeWithProperties(formName, form).subscribe(typeCreated => {
+                        this.createEcmTypeWithProperties(formName, form).subscribe((typeCreated) => {
                             observer.next(typeCreated);
                             observer.complete();
                         });
@@ -95,56 +95,56 @@ export class EcmModelService {
                         observer.complete();
                     }
                 },
-                err => this.handleError(err)
+                (err) => this.handleError(err)
             );
         });
     }
 
     public createEcmTypeWithProperties(formName: string, form: FormModel): Observable<any> {
-        return Observable.create(observer => {
+        return Observable.create((observer) => {
             this.createEcmType(formName, EcmModelService.MODEL_NAME, EcmModelService.TYPE_MODEL).subscribe(
-                typeCreated => {
+                (typeCreated) => {
                     this.logService.info('type Created', typeCreated);
                     this.addPropertyToAType(EcmModelService.MODEL_NAME, formName, form).subscribe(
-                        properyAdded => {
+                        (properyAdded) => {
                             this.logService.info('property Added', properyAdded);
                             observer.next(typeCreated);
                             observer.complete();
                         },
-                        err => this.handleError(err));
+                        (err) => this.handleError(err));
                 },
-                err => this.handleError(err));
+                (err) => this.handleError(err));
         });
     }
 
     public searchEcmType(typeName: string, modelName: string): Observable<any> {
         return this.getEcmType(modelName).map(function (customTypes: any) {
-            return customTypes.list.entries.find(type => type.entry.prefixedName === typeName || type.entry.title === typeName);
+            return customTypes.list.entries.find((type) => type.entry.prefixedName === typeName || type.entry.title === typeName);
         });
     }
 
     public activeEcmModel(modelName: string): Observable<any> {
         return Observable.fromPromise(this.apiService.getInstance().core.customModelApi.activateCustomModel(modelName))
             .map(this.toJson)
-            .catch(err => this.handleError(err));
+            .catch((err) => this.handleError(err));
     }
 
     public createEcmModel(modelName: string, nameSpace: string): Observable<any> {
         return Observable.fromPromise(this.apiService.getInstance().core.customModelApi.createCustomModel('DRAFT', '', modelName, modelName, nameSpace))
             .map(this.toJson)
-            .catch(err => this.handleError(err));
+            .catch((err) => this.handleError(err));
     }
 
     public getEcmModels(): Observable<any> {
         return Observable.fromPromise(this.apiService.getInstance().core.customModelApi.getAllCustomModel())
             .map(this.toJson)
-            .catch(err => this.handleError(err));
+            .catch((err) => this.handleError(err));
     }
 
     public getEcmType(modelName: string): Observable<any> {
         return Observable.fromPromise(this.apiService.getInstance().core.customModelApi.getAllCustomType(modelName))
             .map(this.toJson)
-            .catch(err => this.handleError(err));
+            .catch((err) => this.handleError(err));
     }
 
     public createEcmType(typeName: string, modelName: string, parentType: string): Observable<any> {
@@ -152,7 +152,7 @@ export class EcmModelService {
 
         return Observable.fromPromise(this.apiService.getInstance().core.customModelApi.createCustomType(modelName, name, parentType, typeName, ''))
             .map(this.toJson)
-            .catch(err => this.handleError(err));
+            .catch((err) => this.handleError(err));
     }
 
     public addPropertyToAType(modelName: string, typeName: string, formFields: any) {
@@ -177,11 +177,11 @@ export class EcmModelService {
 
         return Observable.fromPromise(this.apiService.getInstance().core.customModelApi.addPropertyToType(modelName, name, properties))
             .map(this.toJson)
-            .catch(err => this.handleError(err));
+            .catch((err) => this.handleError(err));
 
     }
 
-    cleanNameType(name: string): string {
+    public cleanNameType(name: string): string {
         let cleanName = name;
         if (name.indexOf(':') !== -1) {
             cleanName = name.split(':')[1];
@@ -189,14 +189,14 @@ export class EcmModelService {
         return cleanName.replace(/[^a-zA-Z ]/g, '');
     }
 
-    toJson(res: any) {
+    public toJson(res: any) {
         if (res) {
             return res || {};
         }
         return {};
     }
 
-    handleError(err: any): any {
+    public handleError(err: any): any {
         this.logService.error(err);
     }
 }

@@ -28,7 +28,7 @@ export class TextWidget extends WidgetComponent implements OnInit {
     private mask;
     private isMaskReversed;
 
-    ngOnInit() {
+    public ngOnInit(): void {
         if (this.field.params && this.field.params['inputMask']) {
             this.mask = this.field.params['inputMask'];
             this.isMaskReversed = this.field.params['inputMaskReversed'] ? this.field.params['inputMaskReversed'] : false;

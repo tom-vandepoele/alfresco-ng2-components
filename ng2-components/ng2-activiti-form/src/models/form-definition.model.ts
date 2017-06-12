@@ -16,10 +16,10 @@
  */
 
 export class FormDefinitionModel {
-    reusable: boolean = false;
-    newVersion: boolean = false;
-    formRepresentation: any;
-    formImageBase64: string = '';
+    public reusable: boolean = false;
+    public newVersion: boolean = false;
+    public formRepresentation: any;
+    public formImageBase64: string = '';
 
     constructor(id: string, name: any, lastUpdatedByFullName: string, lastUpdated: string, metadata: any) {
 

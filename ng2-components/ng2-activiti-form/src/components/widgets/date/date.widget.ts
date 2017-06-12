@@ -15,9 +15,9 @@
  * limitations under the License.
  */
 
-import { Component, ElementRef, OnInit, AfterViewChecked } from '@angular/core';
-import { WidgetComponent } from './../widget.component';
+import { AfterViewChecked, Component, ElementRef, OnInit } from '@angular/core';
 import * as moment from 'moment';
+import { WidgetComponent } from './../widget.component';
 
 declare let mdDateTimePicker: any;
 declare var componentHandler: any;
@@ -35,7 +35,7 @@ export class DateWidget extends WidgetComponent implements OnInit, AfterViewChec
         super();
     }
 
-    ngOnInit() {
+    public ngOnInit(): void {
 
         let settings: any = {
             type: 'date',
@@ -61,14 +61,14 @@ export class DateWidget extends WidgetComponent implements OnInit, AfterViewChec
         this.datePicker = new mdDateTimePicker.default(settings);
     }
 
-    ngAfterViewChecked() {
+    public ngAfterViewChecked(): void {
         if (this.elementRef) {
             let dataLocator = '#' + this.field.id;
             this.datePicker.trigger = this.elementRef.nativeElement.querySelector(dataLocator);
         }
     }
 
-    onDateChanged() {
+    public onDateChanged(): void {
         if (this.field.value) {
             let value = moment(this.field.value, this.field.dateDisplayFormat);
             if (!value.isValid()) {
@@ -79,7 +79,7 @@ export class DateWidget extends WidgetComponent implements OnInit, AfterViewChec
         this.checkVisibility(this.field);
     }
 
-    onDateSelected() {
+    public onDateSelected(): void {
         let newValue = this.datePicker.time.format(this.field.dateDisplayFormat);
         this.field.value = newValue;
         this.checkVisibility(this.field);

@@ -15,12 +15,12 @@
  * limitations under the License.
  */
 
-import { Component, ElementRef, OnInit, Input, ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, Input, OnInit } from '@angular/core';
 import { LogService } from 'ng2-alfresco-core';
-import { WidgetComponent } from './../widget.component';
-import { DynamicTableModel, DynamicTableRow, DynamicTableColumn } from './dynamic-table.widget.model';
 import { WidgetVisibilityService } from '../../../services/widget-visibility.service';
 import { FormFieldModel } from '../core/form-field.model';
+import { WidgetComponent } from './../widget.component';
+import { DynamicTableColumn, DynamicTableModel, DynamicTableRow } from './dynamic-table.widget.model';
 
 @Component({
     selector: 'dynamic-table-widget',
@@ -29,18 +29,18 @@ import { FormFieldModel } from '../core/form-field.model';
 })
 export class DynamicTableWidget extends WidgetComponent implements OnInit {
 
-    ERROR_MODEL_NOT_FOUND = 'Table model not found';
+    public ERROR_MODEL_NOT_FOUND = 'Table model not found';
 
     @Input()
-    field: FormFieldModel;
+    public field: FormFieldModel;
 
     @Input()
-    readOnly: boolean = false;
+    public readOnly: boolean = false;
 
-    content: DynamicTableModel;
+    public content: DynamicTableModel;
 
-    editMode: boolean = false;
-    editRow: DynamicTableRow = null;
+    public editMode: boolean = false;
+    public editRow: DynamicTableRow = null;
 
     private selectArrayCode = [32, 0, 13];
 
@@ -51,14 +51,14 @@ export class DynamicTableWidget extends WidgetComponent implements OnInit {
         super();
     }
 
-    ngOnInit() {
+    public ngOnInit(): void {
         if (this.field) {
             this.content = new DynamicTableModel(this.field);
             this.visibilityService.refreshVisibility(this.field.form);
         }
     }
 
-    forceFocusOnAddButton() {
+    public forceFocusOnAddButton(): void {
         if (this.content) {
             this.cd.detectChanges();
             let buttonAddRow = <HTMLButtonElement>this.elementRef.nativeElement.querySelector('#' + this.content.id + '-add-row');
@@ -68,11 +68,11 @@ export class DynamicTableWidget extends WidgetComponent implements OnInit {
         }
     }
 
-    private isDynamicTableReady(buttonAddRow) {
+    private isDynamicTableReady(buttonAddRow): boolean {
         return this.field && !this.editMode && buttonAddRow;
     }
 
-    isValid() {
+    public isValid(): boolean {
         let result = true;
 
         if (this.content && this.content.field) {
@@ -82,27 +82,27 @@ export class DynamicTableWidget extends WidgetComponent implements OnInit {
         return result;
     }
 
-    onRowClicked(row: DynamicTableRow) {
+    public onRowClicked(row: DynamicTableRow): void {
         if (this.content) {
             this.content.selectedRow = row;
         }
     }
 
-    onKeyPressed($event: KeyboardEvent, row: DynamicTableRow) {
+    public onKeyPressed($event: KeyboardEvent, row: DynamicTableRow): void {
         if (this.content && this.isEnterOrSpacePressed($event.keyCode)) {
             this.content.selectedRow = row;
         }
     }
 
-    private isEnterOrSpacePressed(keycode) {
+    private isEnterOrSpacePressed(keycode): boolean {
         return this.selectArrayCode.indexOf(keycode) !== -1;
     }
 
-    hasSelection(): boolean {
+    public hasSelection(): boolean {
         return !!(this.content && this.content.selectedRow);
     }
 
-    moveSelectionUp(): boolean {
+    public moveSelectionUp(): boolean {
         if (this.content && !this.readOnly) {
             this.content.moveRow(this.content.selectedRow, -1);
             return true;
@@ -110,7 +110,7 @@ export class DynamicTableWidget extends WidgetComponent implements OnInit {
         return false;
     }
 
-    moveSelectionDown(): boolean {
+    public moveSelectionDown(): boolean {
         if (this.content && !this.readOnly) {
             this.content.moveRow(this.content.selectedRow, 1);
             return true;
@@ -118,7 +118,7 @@ export class DynamicTableWidget extends WidgetComponent implements OnInit {
         return false;
     }
 
-    deleteSelection(): boolean {
+    public deleteSelection(): boolean {
         if (this.content && !this.readOnly) {
             this.content.deleteRow(this.content.selectedRow);
             return true;
@@ -126,7 +126,7 @@ export class DynamicTableWidget extends WidgetComponent implements OnInit {
         return false;
     }
 
-    addNewRow(): boolean {
+    public addNewRow(): boolean {
         if (this.content && !this.readOnly) {
             this.editRow = <DynamicTableRow> {
                 isNew: true,
@@ -139,7 +139,7 @@ export class DynamicTableWidget extends WidgetComponent implements OnInit {
         return false;
     }
 
-    editSelection(): boolean {
+    public editSelection(): boolean {
         if (this.content && !this.readOnly) {
             this.editRow = this.copyRow(this.content.selectedRow);
             this.editMode = true;
@@ -148,7 +148,7 @@ export class DynamicTableWidget extends WidgetComponent implements OnInit {
         return false;
     }
 
-    getCellValue(row: DynamicTableRow, column: DynamicTableColumn): any {
+    public getCellValue(row: DynamicTableRow, column: DynamicTableColumn): any {
         if (this.content) {
             let result = this.content.getCellValue(row, column);
             if (column.type === 'Amount') {
@@ -159,7 +159,7 @@ export class DynamicTableWidget extends WidgetComponent implements OnInit {
         return null;
     }
 
-    onSaveChanges() {
+    public onSaveChanges(): void {
         if (this.content) {
             if (this.editRow.isNew) {
                 let row = this.copyRow(this.editRow);
@@ -177,13 +177,13 @@ export class DynamicTableWidget extends WidgetComponent implements OnInit {
         this.forceFocusOnAddButton();
     }
 
-    onCancelChanges() {
+    public  onCancelChanges(): void {
         this.editMode = false;
         this.editRow = null;
         this.forceFocusOnAddButton();
     }
 
-    copyRow(row: DynamicTableRow): DynamicTableRow {
+    public opyRow(row: DynamicTableRow): DynamicTableRow {
         return <DynamicTableRow> {
             value: this.copyObject(row.value)
         };
@@ -194,7 +194,7 @@ export class DynamicTableWidget extends WidgetComponent implements OnInit {
 
         if (typeof obj === 'object' && obj !== null && obj !== undefined) {
             result = Object.assign({}, obj);
-            Object.keys(obj).forEach(key => {
+            Object.keys(obj).forEach((key) => {
                 if (typeof obj[key] === 'object') {
                     result[key] = this.copyObject(obj[key]);
                 }

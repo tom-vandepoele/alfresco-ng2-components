@@ -16,8 +16,8 @@
  */
 
 export class NodeMetadata {
-    metadata: any;
-    nodeType: string;
+    public metadata: any;
+    public nodeType: string;
 
     constructor(metadata: any, nodeType: string) {
         this.metadata = metadata;

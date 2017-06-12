@@ -15,19 +15,19 @@
  * limitations under the License.
  */
 
+import { WidgetVisibilityModel } from '../../../models/widget-visibility.model';
 import { FormWidgetModel } from './form-widget.model';
 import { FormModel } from './form.model';
-import { WidgetVisibilityModel } from '../../../models/widget-visibility.model';
 
 export class TabModel extends FormWidgetModel {
 
-    title: string;
-    isVisible: boolean = true;
-    visibilityCondition: WidgetVisibilityModel;
+    public title: string;
+    public isVisible: boolean = true;
+    public visibilityCondition: WidgetVisibilityModel;
 
-    fields: FormWidgetModel[] = [];
+    public fields: FormWidgetModel[] = [];
 
-    hasContent(): boolean {
+    public hasContent(): boolean {
         return this.fields && this.fields.length > 0;
     }
 
