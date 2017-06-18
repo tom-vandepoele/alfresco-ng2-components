@@ -15,58 +15,35 @@
  * limitations under the License.
  */
 
-import { Directive, OnInit, ElementRef, Input, Output, EventEmitter } from '@angular/core';
+import { Directive, ElementRef, OnInit } from '@angular/core';
 import { Point } from './../models/point';
 import { RaphaelBase } from './../raphael-base';
 import { RaphaelService } from './../raphael.service';
 
 @Directive({selector: 'raphael-icon-box-publish'})
 export class RaphaelIconBoxPublishDirective extends RaphaelBase implements OnInit {
-    @Input()
-    paper: any;
-
-    @Input()
-    position: Point;
-
-    @Input()
-    text: string;
-
-    @Output()
-    onError = new EventEmitter();
-
-    @Input()
-    strokeWidth: number;
-
-    @Input()
-    fillColors: any;
-
-    @Input()
-    stroke: any;
-
-    @Input()
-    fillOpacity: any;
 
     constructor(public elementRef: ElementRef,
                 raphaelService: RaphaelService) {
         super(elementRef, raphaelService);
     }
 
-    ngOnInit() {
+    public ngOnInit(): void {
 
         this.draw(this.position);
     }
 
-    public draw(position: Point) {
+    public draw(position: Point): void {
 
         let image = this.paper.image();
 
-        image.attr({'x': position.x});
-        image.attr({'y': position.y});
-        image.attr({'id': 'image3398'});
-        image.attr({'preserveAspectRatio': 'none'});
-        image.attr({'height': '16'});
-        image.attr({'width': '17'});
-        image.attr({'src': `data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACIAAAAjCAYAAADxG9hnAAAABmJLR0QA/wD/AP+gvaeTAAAACXBI WXMAAA7DAAAO
+        image.attr({x: position.x});
+        image.attr({y: position.y});
+        image.attr({id: 'image3398'});
+        image.attr({preserveAspectRatio: 'none'});
+        image.attr({height: '16'});
+        image.attr({width: '17'});
+        image.attr({src: `data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACIAAAAjCAYAAADxG9hnAAAABmJLR0QA/wD/AP+gvaeTAAAACXBI WXMAAA7DAAAO
         wwHHb6hkAAAAB3RJTUUH3wQXDxwCFNe28AAACsdJREFUWMOVmGmMXtV5x3/POfe+ y2yeGc/mwbMZG9tDMGBTKC5GCU4pbYmSRlmowlIFJWnUprSiy4dI/UA/9EsVifZDmy
         ZIxEpo1Cql UKICqbABG+x4X4M9iz2bxzOefXnfee+95zz9cN9Z7NqVeqSje3XPec/5n/Ns//8rAAd6xvj0lmYA VJWTI9fN2d5BikslrDEYY0ABIX0aUBUUUJS1TZB0HZS
         lUsz8fBHF09neKnFU0t964B5trcoqwA8O fsI3HtmW/u7Hx3p5+oHNqCr7DpzLX3dh1+xC4Z7p2dnGKE7UGmOsNTYFIuXtUlQqsgJkGSdrgBRL 8dLCYlRUUTa1NrYXiqWZ

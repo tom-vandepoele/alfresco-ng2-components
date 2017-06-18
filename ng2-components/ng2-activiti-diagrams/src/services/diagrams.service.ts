@@ -16,9 +16,10 @@
  */
 
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Rx';
-import { Response, Http, Headers, RequestOptions } from '@angular/http';
+import { Headers, Http, RequestOptions, Response } from '@angular/http';
 import { AlfrescoAuthenticationService, AlfrescoSettingsService, LogService } from 'ng2-alfresco-core';
+import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
+import { Observable } from 'rxjs/Rx';
 
 @Injectable()
 export class DiagramsService {
@@ -29,7 +30,7 @@ export class DiagramsService {
                 private logService: LogService) {
     }
 
-    getProcessDefinitionModel(processDefinitionId: string): Observable<any> {
+    public getProcessDefinitionModel(processDefinitionId: string): Observable<any> {
         let url = `${this.settingsService.getBPMApiBaseUrl()}/app/rest/process-definitions/${processDefinitionId}/model-json`;
         let options = this.getRequestOptions();
         return this.http
@@ -37,10 +38,10 @@ export class DiagramsService {
             .map((res: any) => {
                 let body = res.json();
                 return body;
-            }).catch(err => this.handleError(err));
+            }).catch((err) => this.handleError(err));
     }
 
-    getRunningProcessDefinitionModel(processInstanceId: string): Observable<any> {
+    public getRunningProcessDefinitionModel(processInstanceId: string): Observable<any> {
         let url = `${this.settingsService.getBPMApiBaseUrl()}/app/rest/process-instances/${processInstanceId}/model-json`;
         let options = this.getRequestOptions();
         return this.http
@@ -48,7 +49,7 @@ export class DiagramsService {
             .map((res: any) => {
                 let body = res.json();
                 return body;
-            }).catch(err => this.handleError(err));
+            }).catch((err) => this.handleError(err));
     }
 
     public getHeaders(): Headers {
@@ -61,11 +62,16 @@ export class DiagramsService {
 
     public getRequestOptions(param?: any): RequestOptions {
         let headers = this.getHeaders();
-        return new RequestOptions({headers: headers, withCredentials: true, search: param});
+        return new RequestOptions({headers, withCredentials: true, search: param});
     }
 
-    private handleError(error: Response) {
+    /**
+     * Throw the error
+     * @param error
+     * @returns {ErrorObservable}
+     */
+    private handleError(error: Response): ErrorObservable<string | Response> {
         this.logService.error(error);
-        return Observable.throw(error.json().error || 'Server error');
+        return Observable.throw(error || 'Server error');
     }
 }

@@ -15,49 +15,31 @@
  * limitations under the License.
  */
 
-import { Directive, OnInit, ElementRef, Input, Output, EventEmitter } from '@angular/core';
+import { Directive, ElementRef, OnInit } from '@angular/core';
 import { Point } from './models/point';
 import { RaphaelBase } from './raphael-base';
 import { RaphaelService } from './raphael.service';
 
 @Directive({selector: 'raphael-cross'})
 export class RaphaelCrossDirective extends RaphaelBase implements OnInit {
-    @Input()
-    center: Point;
-
-    @Input()
-    width: number;
-
-    @Input()
-    height: number;
-
-    @Input()
-    fillColors: any;
-
-    @Input()
-    stroke: any;
-
-    @Input()
-    strokeWidth: any;
-
-    @Input()
-    fillOpacity: any;
-
-    @Output()
-    onError = new EventEmitter();
 
     constructor(public elementRef: ElementRef,
                 raphaelService: RaphaelService) {
         super(elementRef, raphaelService);
     }
 
-    ngOnInit() {
+    public ngOnInit(): void {
 
-        let opts = {'stroke-width': this.strokeWidth, 'fill': this.fillColors, 'stroke': this.stroke, 'fill-opacity': this.fillOpacity};
+        let opts = {
+            'stroke-width': this.strokeWidth,
+            'fill': this.fillColors,
+            'stroke': this.stroke,
+            'fill-opacity': this.fillOpacity
+        };
         this.draw(this.center, this.width, this.height, opts);
     }
 
-    public draw(center: Point, width: number, height: number, opts?: any) {
+    public draw(center: Point, width: number, height: number, opts?: any): any {
         let quarterWidth = width / 4;
         let quarterHeight = height / 4;
 

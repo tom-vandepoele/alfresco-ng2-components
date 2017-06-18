@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import { Component, ElementRef, Input, Output, EventEmitter } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
     selector: 'diagram-pools',
@@ -23,14 +23,14 @@ import { Component, ElementRef, Input, Output, EventEmitter } from '@angular/cor
 })
 export class DiagramPoolsComponent {
     @Input()
-    pools: any [];
+    public pools: any [];
 
     @Output()
-    onError = new EventEmitter();
+    public onError = new EventEmitter();
 
     constructor(public elementRef: ElementRef) {}
 
-    ngOnInit() {
+    public ngOnInit(): void {
 
     }
 }

@@ -16,13 +16,13 @@
  */
 
 export class DiagramModel {
-    diagramBeginX: number;
-    diagramBeginY: number;
-    diagramHeight: number;
-    diagramWidth: number;
-    elements: DiagramElementModel[] = [];
-    flows: DiagramFlowElementModel[] = [];
-    pools: DiagramPoolElementModel[] = [];
+    public diagramBeginX: number;
+    public diagramBeginY: number;
+    public diagramHeight: number;
+    public diagramWidth: number;
+    public elements: DiagramElementModel[] = [];
+    public flows: DiagramFlowElementModel[] = [];
+    public pools: DiagramPoolElementModel[] = [];
 
     constructor(obj?: any) {
         if (obj) {
@@ -50,20 +50,20 @@ export class DiagramModel {
 }
 
 export class DiagramElementModel {
-    completed: boolean;
-    current: boolean;
-    height: string;
-    id: string;
-    name: string;
-    type: string;
-    width: string;
-    value: string;
-    x: string;
-    y: string;
-    properties: DiagramElementPropertyModel[] = [];
-    dataType: string = '';
-    eventDefinition: DiagramEventDefinitionModel;
-    taskType: string = '';
+    public completed: boolean;
+    public current: boolean;
+    public height: string;
+    public id: string;
+    public name: string;
+    public type: string;
+    public width: string;
+    public value: string;
+    public x: string;
+    public y: string;
+    public properties: DiagramElementPropertyModel[] = [];
+    public dataType: string = '';
+    public eventDefinition: DiagramEventDefinitionModel;
+    public taskType: string = '';
 
     constructor(obj?: any) {
         if (obj) {
@@ -92,9 +92,9 @@ export class DiagramElementModel {
 }
 
 export class DiagramElementPropertyModel {
-    name: string;
-    type: string;
-    value: any;
+    public name: string;
+    public type: string;
+    public value: any;
 
     constructor(obj?: any) {
         if (obj) {
@@ -106,14 +106,14 @@ export class DiagramElementPropertyModel {
 }
 
 export class DiagramFlowElementModel {
-    completed: boolean;
-    current: boolean;
-    id: string;
-    properties: any[] = [];
-    sourceRef: string;
-    targetRef: string;
-    type: string;
-    waypoints: DiagramWayPointModel[] = [];
+    public completed: boolean;
+    public current: boolean;
+    public id: string;
+    public properties: any[] = [];
+    public sourceRef: string;
+    public targetRef: string;
+    public type: string;
+    public waypoints: DiagramWayPointModel[] = [];
 
     constructor(obj?: any) {
         if (obj) {
@@ -134,8 +134,8 @@ export class DiagramFlowElementModel {
 }
 
 export class DiagramWayPointModel {
-    x: number;
-    y: number;
+    public x: number;
+    public y: number;
 
     constructor(obj?: any) {
         if (obj) {
@@ -146,8 +146,8 @@ export class DiagramWayPointModel {
 }
 
 export class DiagramEventDefinitionModel {
-    timeCycle: string;
-    type: string;
+    public timeCycle: string;
+    public type: string;
 
     constructor(obj?: any) {
         if (obj) {
@@ -158,14 +158,14 @@ export class DiagramEventDefinitionModel {
 }
 
 export class DiagramPoolElementModel {
-    height: string;
-    id: string;
-    name: string;
-    properties: any;
-    lanes: DiagramLaneElementModel[] = [];
-    width: string;
-    x: number;
-    y: number;
+    public height: string;
+    public id: string;
+    public name: string;
+    public properties: any;
+    public lanes: DiagramLaneElementModel[] = [];
+    public width: string;
+    public x: number;
+    public y: number;
 
     constructor(obj?: any) {
         if (obj) {
@@ -186,12 +186,12 @@ export class DiagramPoolElementModel {
 }
 
 export class DiagramLaneElementModel {
-    height: number;
-    id: string;
-    name: string;
-    width: number;
-    x: number;
-    y: number;
+    public height: number;
+    public id: string;
+    public name: string;
+    public width: number;
+    public x: number;
+    public y: number;
 
     constructor(obj?: any) {
         if (obj) {

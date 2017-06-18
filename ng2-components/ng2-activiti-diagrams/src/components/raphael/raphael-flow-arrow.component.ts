@@ -15,47 +15,45 @@
  * limitations under the License.
  */
 
-import { Directive, OnInit, ElementRef, Input, Output, EventEmitter } from '@angular/core';
+import { Directive, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Polyline } from './polyline';
 import { RaphaelBase } from './raphael-base';
 import { RaphaelService } from './raphael.service';
-import { Polyline } from './polyline';
 
 declare let Raphael: any;
 
 @Directive({selector: 'raphael-flow-arrow'})
 export class RaphaelFlowArrowDirective extends RaphaelBase implements OnInit {
-    @Input()
-    paper: any;
 
     @Input()
-    flow: any;
+    public flow: any;
 
     @Output()
-    onError = new EventEmitter();
+    public onError = new EventEmitter();
 
-    ARROW_WIDTH = 4;
-    SEQUENCEFLOW_STROKE = 1.5;
+    public ARROW_WIDTH = 4;
+    public SEQUENCEFLOW_STROKE = 1.5;
 
     constructor(public elementRef: ElementRef,
                 raphaelService: RaphaelService) {
         super(elementRef, raphaelService);
     }
 
-    ngOnInit() {
+    public ngOnInit(): void {
 
         this.draw(this.flow);
     }
 
-    public draw(flow: any) {
+    public draw(flow: any): void {
         let line = this.drawLine(flow);
         this.drawArrow(line);
     }
 
-    public drawLine(flow: any) {
+    public drawLine(flow: any): any {
         let polyline = new Polyline(flow.id, flow.waypoints, this.SEQUENCEFLOW_STROKE, this.paper);
         polyline.element = this.paper.path(polyline.path);
         polyline.element.attr({'stroke-width': this.SEQUENCEFLOW_STROKE});
-        polyline.element.attr({'stroke': '#585858'});
+        polyline.element.attr({stroke: '#585858'});
 
         polyline.element.node.id = this.flow.id;
 
@@ -64,7 +62,7 @@ export class RaphaelFlowArrowDirective extends RaphaelBase implements OnInit {
         return line;
     }
 
-    public drawArrow(line: any) {
+    public drawArrow(line: any): void {
         let doubleArrowWidth = 2 * this.ARROW_WIDTH;
         let width = this.ARROW_WIDTH / 2 + .5;
         let arrowHead: any = this.paper.path('M0 0L-' + width + '-' + doubleArrowWidth + 'L' + width + ' -' + doubleArrowWidth + 'z');

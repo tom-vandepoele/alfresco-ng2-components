@@ -20,31 +20,31 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class DiagramColorService {
 
-    static CURRENT_COLOR = '#017501';
-    static COMPLETED_COLOR = '#2632aa';
-    static ACTIVITY_STROKE_COLOR = '#bbbbbb';
-    static MAIN_STROKE_COLOR = '#585858';
+    public static CURRENT_COLOR = '#017501';
+    public static COMPLETED_COLOR = '#2632aa';
+    public static ACTIVITY_STROKE_COLOR = '#bbbbbb';
+    public static MAIN_STROKE_COLOR = '#585858';
 
-    static ACTIVITY_FILL_COLOR = '#f9f9f9';
+    public static ACTIVITY_FILL_COLOR = '#f9f9f9';
 
-    static TASK_STROKE = 1;
-    static TASK_HIGHLIGHT_STROKE = 2;
-    static CALL_ACTIVITY_STROKE = 2;
+    public static TASK_STROKE = 1;
+    public static TASK_HIGHLIGHT_STROKE = 2;
+    public static CALL_ACTIVITY_STROKE = 2;
 
-    totalColors: any;
+    private totalColors: any;
 
     constructor() {
     }
 
-    setTotalColors(totalColors) {
+    public setTotalColors(totalColors): void {
         this.totalColors = totalColors;
     }
 
-    getFillOpacity(): string {
+    public getFillOpacity(): string {
         return '0.6';
     }
 
-    getFillColour(key: string) {
+    public getFillColour(key: string): string {
         if (this.totalColors && this.totalColors.hasOwnProperty(key)) {
             let colorPercentage = this.totalColors[key];
             return this.convertColorToHsb(colorPercentage);
@@ -53,7 +53,7 @@ export class DiagramColorService {
         }
     }
 
-    getBpmnColor(data, defaultColor) {
+    public getBpmnColor(data, defaultColor): string {
         if (data.current) {
             return DiagramColorService.CURRENT_COLOR;
         } else if (data.completed) {
@@ -63,7 +63,7 @@ export class DiagramColorService {
         }
     }
 
-    getBpmnStrokeWidth(data) {
+    public getBpmnStrokeWidth(data): number {
         if (data.current || data.completed) {
             return DiagramColorService.TASK_HIGHLIGHT_STROKE;
         } else {
@@ -71,7 +71,7 @@ export class DiagramColorService {
         }
     }
 
-    convertColorToHsb(colorPercentage: number): string {
+    public convertColorToHsb(colorPercentage: number): string {
         let hue = (120.0 - (colorPercentage * 1.2)) / 360.0;
         return 'hsb(' + hue + ', 1, 1)';
     }

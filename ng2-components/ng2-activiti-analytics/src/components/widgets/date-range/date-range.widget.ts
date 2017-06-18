@@ -15,16 +15,16 @@
  * limitations under the License.
  */
 
-import { Component, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
-import { AbstractControl, FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
-import { WidgetComponent } from './../widget.component';
+import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import * as moment from 'moment';
+import { WidgetComponent } from './../widget.component';
 
-function dateCheck(c: AbstractControl) {
-    let startDate = moment(c.get('startDate').value);
-    let endDate = moment(c.get('endDate').value);
+function dateCheck(abstractControl: AbstractControl): any {
+    let startDate = moment(abstractControl.get('startDate').value);
+    let endDate = moment(abstractControl.get('endDate').value);
     let result = startDate.isAfter(endDate);
-    return result ? {'greaterThan': true} : null;
+    return result ? {greaterThan: true} : null;
 }
 
 declare let mdDateTimePicker: any;
@@ -36,43 +36,43 @@ declare let mdDateTimePicker: any;
 })
 export class DateRangeWidget extends WidgetComponent {
 
-    public static FORMAT_DATE_ACTIVITI: string =  'YYYY-MM-DD';
+    public static FORMAT_DATE_ACTIVITI: string = 'YYYY-MM-DD';
 
     @ViewChild('startElement')
-    startElement: any;
+    public startElement: any;
 
     @ViewChild('endElement')
-    endElement: any;
+    public endElement: any;
 
     @Input('group')
     public dateRange: FormGroup;
 
     @Input()
-    field: any;
+    public field: any;
 
     @Output()
-    dateRangeChanged: EventEmitter<any> = new EventEmitter<any>();
+    public dateRangeChanged: EventEmitter<any> = new EventEmitter<any>();
 
-    debug: boolean = false;
+    public debug: boolean = false;
 
-    dialogStart: any;
+    public dialogStart: any;
 
-    dialogEnd: any;
+    public dialogEnd: any;
 
     constructor(public elementRef: ElementRef,
                 private formBuilder: FormBuilder) {
         super();
     }
 
-    ngOnInit() {
+    public  ngOnInit(): void {
         this.initForm();
         this.addAccessibilityLabelToDatePicker();
     }
 
-    initForm() {
-        let startDateForm = this.field.value ? this.field.value.startDate : '' ;
+    public initForm(): void {
+        let startDateForm = this.field.value ? this.field.value.startDate : '';
         let startDate = this.convertToMomentDate(startDateForm);
-        let endDateForm = this.field.value ? this.field.value.endDate : '' ;
+        let endDateForm = this.field.value ? this.field.value.endDate : '';
         let endDate = this.convertToMomentDate(endDateForm);
 
         let startDateControl = new FormControl(startDate);
@@ -84,13 +84,13 @@ export class DateRangeWidget extends WidgetComponent {
         this.dateRange.addControl('endDate', endDateControl);
 
         this.dateRange.setValidators(dateCheck);
-        this.dateRange.valueChanges.subscribe(data => this.onGroupValueChanged(data));
+        this.dateRange.valueChanges.subscribe((data) => this.onGroupValueChanged(data));
 
-        this.initSartDateDialog(startDate);
+        this.initStartDateDialog(startDate);
         this.initEndDateDialog(endDate);
     }
 
-    initSartDateDialog(date: string) {
+    private initStartDateDialog(date: string): void {
         let settings: any = {
             type: 'date',
             past: moment().subtract(100, 'years'),
@@ -108,7 +108,7 @@ export class DateRangeWidget extends WidgetComponent {
         });
     }
 
-    private addAccessibilityLabelToDatePicker() {
+    private addAccessibilityLabelToDatePicker(): void {
         let left: any = document.querySelector('#mddtp-date__left');
         if (left) {
             left.appendChild(this.createCustomElement('date left'));
@@ -138,7 +138,7 @@ export class DateRangeWidget extends WidgetComponent {
         return span;
     }
 
-    initEndDateDialog(date: string) {
+    public initEndDateDialog(date: string): void {
         let settings: any = {
             type: 'date',
             past: moment().subtract(100, 'years'),
@@ -156,7 +156,7 @@ export class DateRangeWidget extends WidgetComponent {
         });
     }
 
-    onOkStart(inputEl: HTMLInputElement) {
+    public onOkStart(inputEl: HTMLInputElement): void {
         let date = this.dialogStart.time.format(DateRangeWidget.FORMAT_DATE_ACTIVITI);
         this.dateRange.patchValue({
             startDate: date
@@ -167,7 +167,7 @@ export class DateRangeWidget extends WidgetComponent {
         }
     }
 
-    onOkEnd(inputEl: HTMLInputElement) {
+    public onOkEnd(inputEl: HTMLInputElement): void {
         let date = this.dialogEnd.time.format(DateRangeWidget.FORMAT_DATE_ACTIVITI);
         this.dateRange.patchValue({
             endDate: date
@@ -179,27 +179,23 @@ export class DateRangeWidget extends WidgetComponent {
         }
     }
 
-    onGroupValueChanged(data: any) {
+    public onGroupValueChanged(data: any): void {
         if (this.dateRange.valid) {
-            let dateStart = this.convertToMomentDateWithTime(this.dateRange.controls['startDate'].value);
-            let endStart = this.convertToMomentDateWithTime(this.dateRange.controls['endDate'].value);
+            let dateStart = this.convertToMomentDateWithTime(this.dateRange.controls.startDate.value);
+            let endStart = this.convertToMomentDateWithTime(this.dateRange.controls.endDate.value);
             this.dateRangeChanged.emit({startDate: dateStart, endDate: endStart});
         }
     }
 
-    public convertToMomentDateWithTime(date: string) {
+    public convertToMomentDateWithTime(date: string): any {
         return moment(date, DateRangeWidget.FORMAT_DATE_ACTIVITI, true).format(DateRangeWidget.FORMAT_DATE_ACTIVITI) + 'T00:00:00.000Z';
     }
 
-    private convertToMomentDate(date: string) {
+    private convertToMomentDate(date: string): any {
         if (date) {
             return moment(date).format(DateRangeWidget.FORMAT_DATE_ACTIVITI);
         } else {
             return moment().format(DateRangeWidget.FORMAT_DATE_ACTIVITI);
         }
-    }
-
-    ngOnDestroy() {
-
     }
 }

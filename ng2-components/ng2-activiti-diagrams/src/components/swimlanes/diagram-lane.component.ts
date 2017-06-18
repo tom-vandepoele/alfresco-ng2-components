@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import { Component, ElementRef, Input, Output, EventEmitter } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output } from '@angular/core';
 import { DiagramColorService } from '../../services/diagram-color.service';
 
 @Component({
@@ -24,24 +24,24 @@ import { DiagramColorService } from '../../services/diagram-color.service';
 })
 export class DiagramLaneComponent {
     @Input()
-    lane: any;
+    public lane: any;
 
     @Output()
-    onError = new EventEmitter();
+    public onError = new EventEmitter();
 
-    rectLeftCorner: any;
-    width: any;
-    height: any;
+    public rectLeftCorner: any;
+    public width: any;
+    public height: any;
 
-    textPosition: any;
-    text: string;
-    textTransform: string;
-    options: any = {stroke: '#000000', fillColors: 'none', fillOpacity: '', strokeWidth: '1', radius: 0};
+    public textPosition: any;
+    public text: string;
+    public textTransform: string;
+    public options: any = {stroke: '#000000', fillColors: 'none', fillOpacity: '', strokeWidth: '1', radius: 0};
 
     constructor(public elementRef: ElementRef,
                 private diagramColorService: DiagramColorService) {}
 
-    ngOnInit() {
+    public ngOnInit(): void {
         this.rectLeftCorner = {x: this.lane.x, y: this.lane.y};
         this.width = this.lane.width;
         this.height = this.lane.height;

@@ -15,52 +15,38 @@
  * limitations under the License.
  */
 
-import { Directive, OnInit, ElementRef, Input, Output, EventEmitter } from '@angular/core';
+import { Directive, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Point } from './models/point';
 import { RaphaelBase } from './raphael-base';
 import { RaphaelService } from './raphael.service';
 
 @Directive({ selector: 'raphael-rect' })
 export class RaphaelRectDirective extends RaphaelBase implements OnInit {
-    @Input()
-    paper: any;
 
     @Input()
-    leftCorner: Point;
+    public leftCorner: Point;
 
     @Input()
-    width: number;
+    public width: number;
 
     @Input()
-    height: number;
+    public height: number;
 
     @Input()
-    radius: number = 0;
+    public radius: number = 0;
 
     @Input()
-    fillColors: any;
-
-    @Input()
-    stroke: any;
-
-    @Input()
-    strokeWidth: any;
-
-    @Input()
-    fillOpacity: any;
-
-    @Input()
-    elementId: string;
+    public elementId: string;
 
     @Output()
-    onError = new EventEmitter();
+    public onError = new EventEmitter();
 
     constructor(public elementRef: ElementRef,
                 raphaelService: RaphaelService) {
         super(elementRef, raphaelService);
     }
 
-    ngOnInit() {
+    public ngOnInit(): void {
 
         let opts = {
             'stroke-width': this.strokeWidth,
@@ -72,7 +58,7 @@ export class RaphaelRectDirective extends RaphaelBase implements OnInit {
         elementDraw.node.id = this.elementId;
     }
 
-    public draw(leftCorner: Point, width: number, height: number, radius: number, opts: any) {
+    public draw(leftCorner: Point, width: number, height: number, radius: number, opts: any): any {
         return this.paper.rect(leftCorner.x, leftCorner.y, width, height, radius).attr(opts);
     }
 }

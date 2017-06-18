@@ -15,30 +15,22 @@
  * limitations under the License.
  */
 
-import { Component, ElementRef, Input, Output, EventEmitter } from '@angular/core';
-import { DiagramColorService } from '../../services/diagram-color.service';
+import { Component } from '@angular/core';
+import { BaseComponent } from './base-icon.component';
 
 @Component({
     selector: 'diagram-icon-alfresco-publish-task',
     templateUrl: './diagram-icon-alfresco-publish-task.component.html'
 })
-export class DiagramIconAlfrescoPublishTaskComponent {
-    @Input()
-    data: any;
-
-    @Output()
-    onError = new EventEmitter();
-
-    position: any;
-
-    options: any = {stroke: '', fillColors: '', fillOpacity: '', strokeWidth: ''};
-
+export class DiagramIconAlfrescoPublishTaskComponent extends BaseComponent {
     constructor(public elementRef: ElementRef,
-                private diagramColorService: DiagramColorService) {}
+                private diagramColorService: DiagramColorService) {
+        super(elementRef, diagramColorService);
+    }
 
-    ngOnInit() {
+    public ngOnInit(): void {
         this.position = {x: this.data.x + 4, y: this.data.y + 4};
-        this.options.stroke = 'none' ;
-        this.options.fillColors = '#87C040' ;
+        this.options.stroke = 'none';
+        this.options.fillColors = '#87C040';
     }
 }

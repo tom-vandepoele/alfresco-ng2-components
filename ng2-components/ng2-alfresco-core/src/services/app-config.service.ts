@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import { Injectable, APP_INITIALIZER, NgModule, ModuleWithProviders } from '@angular/core';
+import { APP_INITIALIZER, Injectable, ModuleWithProviders, NgModule } from '@angular/core';
 import { Http } from '@angular/http';
 import { ObjectUtils } from '../utils/object-utils';
 
@@ -23,26 +23,26 @@ import { ObjectUtils } from '../utils/object-utils';
 export class AppConfigService {
 
     private config: any = {
-        'ecmHost': 'http://localhost:3000/ecm',
-        'bpmHost': 'http://localhost:3000/bpm',
-        'application': {
-            'name': 'Alfresco'
+        ecmHost: 'http://localhost:3000/ecm',
+        bpmHost: 'http://localhost:3000/bpm',
+        application: {
+            name: 'Alfresco'
         }
     };
 
-    configFile: string = null;
+    public configFile: string = null;
 
     constructor(private http: Http) {}
 
-    get<T>(key: string): T {
+    public get<T>(key: string): T {
         return <T> ObjectUtils.getValue(this.config, key);
     };
 
-    load(resource: string = 'app.config.json'): Promise<any> {
+    public load(resource: string = 'app.config.json'): Promise<any> {
         this.configFile = resource;
         return new Promise((resolve, reject) => {
             this.http.get(resource).subscribe(
-                data => {
+                (data) => {
                     this.config = Object.assign({}, this.config, data.json() || {});
                     resolve(this.config);
                 },
@@ -75,7 +75,7 @@ export function InitAppConfigServiceProvider(resource: string): any {
     ]
 })
 export class AppConfigModule {
-    static forRoot(resource: string): ModuleWithProviders {
+    public static forRoot(resource: string): ModuleWithProviders {
         return {
             ngModule: AppConfigModule,
             providers: [

@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import { Directive, OnInit, ElementRef, Input, Output, EventEmitter } from '@angular/core';
+import { Directive, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Point } from './models/point';
 import { RaphaelBase } from './raphael-base';
 import { RaphaelService } from './raphael.service';
@@ -23,45 +23,33 @@ import { RaphaelService } from './raphael.service';
 @Directive({selector: 'raphael-rhombus'})
 export class RaphaelRhombusDirective extends RaphaelBase implements OnInit {
     @Input()
-    center: Point;
+    public center: Point;
 
     @Input()
-    width: number;
+    public width: number;
 
     @Input()
-    height: number;
+    public height: number;
 
     @Input()
-    fillColors: any;
-
-    @Input()
-    stroke: any;
-
-    @Input()
-    strokeWidth: any;
-
-    @Input()
-    fillOpacity: any;
-
-    @Input()
-    elementId: string;
+    public elementId: string;
 
     @Output()
-    onError = new EventEmitter();
+    public onError = new EventEmitter();
 
     constructor(public elementRef: ElementRef,
                 raphaelService: RaphaelService) {
         super(elementRef, raphaelService);
     }
 
-    ngOnInit() {
+    public ngOnInit(): void {
 
         let opts = {'stroke-width': this.strokeWidth, 'fill': this.fillColors, 'stroke': this.stroke, 'fill-opacity': this.fillOpacity};
         let elementDraw = this.draw(this.center, this.width, this.height, opts);
         elementDraw.node.id = this.elementId;
     }
 
-    public draw(center: Point, width: number, height: number, opts?: any) {
+    public draw(center: Point, width: number, height: number, opts?: any): any {
         return this.paper.path('M' + center.x + ' ' + (center.y + (height / 2)) +
             'L' + (center.x + (width / 2)) + ' ' + (center.y + height) +
             'L' + (center.x + width) + ' ' + (center.y + (height / 2)) +

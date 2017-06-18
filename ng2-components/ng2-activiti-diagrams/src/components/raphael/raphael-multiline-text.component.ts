@@ -15,33 +15,22 @@
  * limitations under the License.
  */
 
-import { Directive, OnInit, ElementRef, Input, Output, EventEmitter } from '@angular/core';
+import { Directive, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { LogService } from 'ng2-alfresco-core';
 import { Point } from './models/point';
 import { RaphaelBase } from './raphael-base';
 import { RaphaelService } from './raphael.service';
 
-@Directive({ selector: 'raphael-multiline-text' })
+@Directive({selector: 'raphael-multiline-text'})
 export class RaphaelMultilineTextDirective extends RaphaelBase implements OnInit {
-    @Input()
-    paper: any;
 
     @Input()
-    position: Point;
-
-    @Input()
-    transform: string;
-
-    @Input()
-    text: string;
-
-    @Input()
-    elementWidth: number;
+    public elementWidth: number;
 
     @Output()
-    onError = new EventEmitter();
+    public onError = new EventEmitter();
 
-    TEXT_PADDING = 3;
+    public TEXT_PADDING = 3;
 
     constructor(public elementRef: ElementRef,
                 raphaelService: RaphaelService,
@@ -49,7 +38,7 @@ export class RaphaelMultilineTextDirective extends RaphaelBase implements OnInit
         super(elementRef, raphaelService);
     }
 
-    ngOnInit() {
+    public ngOnInit(): void {
         this.logService.log(this.elementRef);
         if (this.text === null || this.text === undefined) {
             this.text = '';
@@ -57,7 +46,7 @@ export class RaphaelMultilineTextDirective extends RaphaelBase implements OnInit
         this.draw(this.position, this.text);
     }
 
-    draw(position: Point, text: string) {
+    public draw(position: Point, text: string): any {
         let textPaper = this.paper.text(position.x + this.TEXT_PADDING, position.y + this.TEXT_PADDING, text).attr({
             'text-anchor': 'middle',
             'font-family': 'Arial',
@@ -67,23 +56,25 @@ export class RaphaelMultilineTextDirective extends RaphaelBase implements OnInit
 
         let formattedText = this.formatText(textPaper, text, this.elementWidth);
         textPaper.attr({
-            'text': formattedText
+            text: formattedText
         });
         textPaper.transform(this.transform);
         return textPaper;
     }
 
-    private formatText(textPaper, text, elementWidth) {
+    private formatText(textPaper, text, elementWidth): string {
         let pText = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         textPaper.attr({
-            'text': pText
+            text: pText
         });
         let letterWidth = textPaper.getBBox().width / text.length;
         let removedLineBreaks = text.split('\n');
-        let actualRowLength = 0, formattedText = [];
-        removedLineBreaks.forEach(senteces => {
+        let actualRowLength = 0;
+        let formattedText = [];
+
+        removedLineBreaks.forEach((senteces) => {
             let words = senteces.split(' ');
-            words.forEach(word => {
+            words.forEach((word) => {
                 let length = word.length;
                 if (actualRowLength + (length * letterWidth) > elementWidth) {
                     formattedText.push('\n');

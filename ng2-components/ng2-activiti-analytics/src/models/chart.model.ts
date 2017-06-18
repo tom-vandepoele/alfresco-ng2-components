@@ -17,10 +17,30 @@
 
 import * as moment from 'moment';
 
+enum ChartsType {
+    PIE = 'pie',
+    TABLE = 'table',
+    LINE = 'line',
+    BAR_CHART = 'barChart',
+    MULTI_BAR_CHART = 'multiBarChart',
+    PROCESS_DEFINITION_HEATMAP = 'processDefinitionHeatMap',
+    MASTER_DETAIL_TABLE = 'masterDetailTable'
+}
+
+enum ChartsIcon {
+    PIE_CHART = 'pie_chart',
+    WEB = 'web',
+    SHOW_CHART = 'show_chart',
+    EQUALIZER = 'equalizer',
+    POLL = 'poll',
+    SHARE = 'share',
+    SUBTITLES = 'subtitles'
+}
+
 export class Chart {
-    id: string;
-    type: string;
-    icon: string;
+    public id: string;
+    public type: string;
+    public icon: string;
 
     constructor(obj?: any) {
         this.id = obj && obj.id || null;
@@ -30,63 +50,63 @@ export class Chart {
         }
     }
 
-    private convertType(type: string) {
+    private convertType(type: string): ChartsType {
         let chartType = '';
         switch (type) {
             case 'pieChart':
-                chartType = 'pie';
+                chartType = ChartsType.PIE;
                 break;
             case 'table':
-                chartType = 'table';
+                chartType = ChartsType.TABLE;
                 break;
             case 'line':
-                chartType = 'line';
+                chartType = ChartsType.LINE;
                 break;
             case 'barChart':
-                chartType = 'bar';
+                chartType = ChartsType.BAR_CHART;
                 break;
             case 'multiBarChart':
-                chartType = 'multiBar';
+                chartType = ChartsType.MULTI_BAR_CHART;
                 break;
             case 'processDefinitionHeatMap':
-                chartType = 'HeatMap';
+                chartType = ChartsType.PROCESS_DEFINITION_HEATMAP;
                 break;
-           case 'masterDetailTable':
-                chartType = 'masterDetailTable';
+            case 'masterDetailTable':
+                chartType = ChartsType.MASTER_DETAIL_TABLE;
                 break;
             default:
-                chartType = 'table';
+                chartType = Charts.TABLEW;
                 break;
         }
         return chartType;
     }
 
-    private getIconType(type: string): string {
+    private getIconType(type: string): ChartsIcon {
         let typeIcon: string = '';
         switch (type) {
             case 'pie':
-                typeIcon = 'pie_chart';
+                typeIcon = ChartsIcon.PIE_CHART;
                 break;
             case 'table':
-                typeIcon = 'web';
+                typeIcon = ChartsIcon.WEB;
                 break;
             case 'line':
-                typeIcon = 'show_chart';
+                typeIcon = ChartsIcon.SHOW_CHART;
                 break;
             case 'bar':
-                typeIcon = 'equalizer';
+                typeIcon = ChartsIcon.EQUALIZER;
                 break;
             case 'multiBar':
-                typeIcon = 'poll';
+                typeIcon = ChartsIcon.POLL;
                 break;
             case 'HeatMap':
-                typeIcon = 'share';
+                typeIcon = ChartsIcon.SHARE;
                 break;
             case 'masterDetailTable':
-                typeIcon = 'subtitles';
+                typeIcon = ChartsIcon.SUBTITLES;
                 break;
             default:
-                typeIcon = 'web';
+                typeIcon = ChartsIcon.WEB;
                 break;
         }
         return typeIcon;
@@ -94,10 +114,10 @@ export class Chart {
 }
 
 export class LineChart extends Chart {
-    title: string;
-    titleKey: string;
-    labels: string[] = [];
-    datasets: any[] = [];
+    public title: string;
+    public titleKey: string;
+    public labels: string[] = [];
+    public datasets: any[] = [];
 
     constructor(obj?: any) {
         super(obj);
@@ -112,14 +132,14 @@ export class LineChart extends Chart {
 }
 
 export class BarChart extends Chart {
-    title: string;
-    titleKey: string;
-    labels: any = [];
-    datasets: any[] = [];
-    data: any[] = [];
-    xAxisType: string;
-    yAxisType: string;
-    options: any = {
+    public title: string;
+    public titleKey: string;
+    public labels: any = [];
+    public datasets: any[] = [];
+    public data: any[] = [];
+    public xAxisType: string;
+    public yAxisType: string;
+    public options: any = {
         responsive: true,
         scales: {
             yAxes: [{
@@ -129,8 +149,7 @@ export class BarChart extends Chart {
                 }
             }],
             xAxes: [{
-                ticks: {
-                },
+                ticks: {},
                 stacked: false
             }]
         }
@@ -165,8 +184,8 @@ export class BarChart extends Chart {
         }
     }
 
-    xAxisTickFormatFunction = function (xAxisType) {
-        return function (value) {
+    public xAxisTickFormatFunction(xAxisType): Function {
+        return (value) => {
             if (xAxisType !== null && xAxisType !== undefined) {
                 if ('date_day' === xAxisType) {
                     return moment(new Date(value)).format('DD');
@@ -180,8 +199,8 @@ export class BarChart extends Chart {
         };
     };
 
-    yAxisTickFormatFunction = function (yAxisType) {
-        return function (value) {
+    public yAxisTickFormatFunction(yAxisType): Function {
+        return (value) => {
             if (yAxisType !== null && yAxisType !== undefined) {
                 if ('count' === yAxisType) {
                     let label = '' + value;
@@ -194,7 +213,7 @@ export class BarChart extends Chart {
         };
     };
 
-    hasDatasets() {
+    public hasDatasets(): boolean {
         return this.datasets && this.datasets.length > 0 ? true : false;
     }
 }
@@ -207,10 +226,10 @@ export class MultiBarChart extends BarChart {
 }
 
 export class TableChart extends Chart {
-    title: string;
-    titleKey: string;
-    labels: string[] = [];
-    datasets: any[] = [];
+    public title: string;
+    public titleKey: string;
+    public labels: string[] = [];
+    public datasets: any[] = [];
 
     constructor(obj?: any) {
         super(obj);
@@ -222,14 +241,14 @@ export class TableChart extends Chart {
         }
     }
 
-    hasDatasets() {
+    public hasDatasets(): boolean {
         return this.datasets && this.datasets.length > 0 ? true : false;
     }
 }
 
 export class DetailsTableChart extends TableChart {
-    detailsTable: any;
-    showDetails: boolean = false;
+    public detailsTable: any;
+    public showDetails: boolean = false;
 
     constructor(obj?: any) {
         super(obj);
@@ -238,20 +257,20 @@ export class DetailsTableChart extends TableChart {
         }
     }
 
-    hasDetailsTable() {
+    public hasDetailsTable(): boolean {
         return this.detailsTable ? true : false;
     }
 }
 
 export class HeatMapChart extends Chart {
-    avgTimePercentages: string;
-    avgTimeValues: string;
-    processDefinitionId: string;
-    titleKey: string;
-    totalCountValues: string;
-    totalCountsPercentages: string;
-    totalTimePercentages: string;
-    totalTimeValues: string;
+    public avgTimePercentages: string;
+    public avgTimeValues: string;
+    public processDefinitionId: string;
+    public titleKey: string;
+    public totalCountValues: string;
+    public totalCountsPercentages: string;
+    public totalTimePercentages: string;
+    public totalTimeValues: string;
 
     constructor(obj?: any) {
         super(obj);
@@ -267,10 +286,10 @@ export class HeatMapChart extends Chart {
 }
 
 export class PieChart extends Chart {
-    title: string;
-    titleKey: string;
-    labels: string[] = [];
-    data: string[] = [];
+    public title: string;
+    public titleKey: string;
+    public labels: string[] = [];
+    public data: string[] = [];
 
     constructor(obj?: any) {
         super(obj);
@@ -283,16 +302,16 @@ export class PieChart extends Chart {
         }
     }
 
-    add(label: string, data: string) {
+    public add(label: string, data: string): void {
         this.labels.push(label);
         this.data.push(data);
     }
 
-    hasData(): boolean {
+    public hasData(): boolean {
         return this.data && this.data.length > 0 ? true : false;
     }
 
-    hasZeroValues(): boolean {
+    public hasZeroValues(): boolean {
         let isZeroValues: boolean = false;
         if (this.hasData()) {
             isZeroValues = true;

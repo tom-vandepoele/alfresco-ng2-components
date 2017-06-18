@@ -25,7 +25,7 @@ export class CookieService {
      *
      * @returns {string | null}
      */
-    getItem(key: string): string | null {
+    public getItem(key: string): string | null {
         const regexp = new RegExp('(?:' + key + '|;\s*' + key + ')=(.*?)(?:;|$)', 'g');
         const result = regexp.exec(document.cookie);
         return (result === null) ? null : result[1];
@@ -40,7 +40,7 @@ export class CookieService {
      *
      * @returns {boolean}
      */
-    setItem(key: string, data: string, expiration: Date | null, path: string | null): void {
+    public setItem(key: string, data: string, expiration: Date | null, path: string | null): void {
         document.cookie = `${key}=${data}` +
             (expiration ? ';expires=' + expiration.toUTCString() : '') +
             (path ? `;path=${path}` : ';path=/');

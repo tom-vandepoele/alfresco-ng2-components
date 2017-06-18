@@ -15,38 +15,31 @@
  * limitations under the License.
  */
 
-import {
-    Component,
-    Input,
-    OnInit
-} from '@angular/core';
-import { CardViewModel } from '../../models/card-view.model';
+import { Component, Input } from '@angular/core';
 import * as moment from 'moment';
+import { CardViewModel } from '../../models/card-view.model';
 
 @Component({
     selector: 'adf-card-view',
     templateUrl: './adf-card-view.component.html',
     styleUrls: ['./adf-card-view.component.css']
 })
-export class CardView implements OnInit {
+export class CardView {
 
     @Input()
-    properties: CardViewModel [];
+    public properties: CardViewModel [];
 
     constructor() {
 
     }
 
-    ngOnInit() {
-
-    }
-
-    getPropertyValue(property: CardViewModel): string {
+    public getPropertyValue(property: CardViewModel): string {
         if (!property.value) {
             return property.default;
         } else if (property.format) {
             return moment(property.value).format(property.format);
         }
+
         return property.value;
     }
 

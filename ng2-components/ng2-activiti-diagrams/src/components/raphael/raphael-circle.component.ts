@@ -15,53 +15,38 @@
  * limitations under the License.
  */
 
-import { Directive, OnInit, ElementRef, Input, Output, EventEmitter } from '@angular/core';
+import { Directive, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Point } from './models/point';
 import { RaphaelBase } from './raphael-base';
 import { RaphaelService } from './raphael.service';
 
 @Directive({selector: 'raphael-circle'})
 export class RaphaelCircleDirective extends RaphaelBase implements OnInit {
-    @Input()
-    paper: any;
 
     @Input()
-    center: Point;
+    public center: Point;
 
     @Input()
-    radius: number;
+    public radius: number;
 
     @Input()
-    strokeWidth: number;
-
-    @Input()
-    fillColors: any;
-
-    @Input()
-    stroke: any;
-
-    @Input()
-    fillOpacity: any;
-
-    @Input()
-    elementId: string;
+    public elementId: string;
 
     @Output()
-    onError = new EventEmitter();
+    public onError = new EventEmitter();
 
     constructor(public elementRef: ElementRef,
                 raphaelService: RaphaelService) {
         super(elementRef, raphaelService);
     }
 
-    ngOnInit() {
-
+    public ngOnInit(): void {
         let opts = {'stroke-width': this.strokeWidth, 'fill': this.fillColors, 'stroke': this.stroke, 'fill-opacity': this.fillOpacity};
         let drawElement = this.draw(this.center, this.radius, opts);
         drawElement.node.id = this.elementId;
     }
 
-    public draw(center: Point, radius: number, opts: any) {
+    public draw(center: Point, radius: number, opts: any): any {
         let circle = this.paper.circle(center.x, center.y, radius).attr(opts);
         return circle;
     }

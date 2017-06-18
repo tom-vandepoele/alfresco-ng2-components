@@ -15,10 +15,10 @@
  * limitations under the License.
  */
 
-import { Component, EventEmitter, OnChanges, Input, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { AlfrescoTranslationService, LogService } from 'ng2-alfresco-core';
-import { AnalyticsService } from '../services/analytics.service';
 import { ReportQuery } from '../models/report.model';
+import { AnalyticsService } from '../services/analytics.service';
 import { AnalyticsGeneratorComponent } from './analytics-generator.component';
 
 @Component({
@@ -29,30 +29,30 @@ import { AnalyticsGeneratorComponent } from './analytics-generator.component';
 export class AnalyticsComponent implements OnChanges {
 
     @Input()
-    appId: number;
+    public appId: number;
 
     @Input()
-    reportId: number;
+    public reportId: number;
 
     @Input()
-    hideParameters: boolean = false;
+    public hideParameters: boolean = false;
 
     @Input()
-    debug: boolean = false;
+    public  debug: boolean = false;
 
     @Output()
-    editReport = new EventEmitter();
+    public editReport = new EventEmitter();
 
     @Output()
-    reportSaved = new EventEmitter();
+    public reportSaved = new EventEmitter();
 
     @Output()
-    reportDeleted = new EventEmitter();
+    public reportDeleted = new EventEmitter();
 
     @ViewChild('analyticsgenerator')
-    analyticsgenerator: AnalyticsGeneratorComponent;
+    public analyticsgenerator: AnalyticsGeneratorComponent;
 
-    reportParamQuery: ReportQuery;
+    public reportParamQuery: ReportQuery;
 
     constructor(private translateService: AlfrescoTranslationService,
                 private analyticsService: AnalyticsService,
@@ -63,27 +63,27 @@ export class AnalyticsComponent implements OnChanges {
         }
     }
 
-    ngOnChanges(changes: SimpleChanges) {
+    public ngOnChanges(changes: SimpleChanges): void {
         this.analyticsgenerator.reset();
     }
 
-    public showReport($event) {
+    public showReport($event): void {
         this.analyticsgenerator.generateReport(this.reportId, $event);
     }
 
-    public reset() {
+    public reset(): void {
         this.analyticsgenerator.reset();
     }
 
-    public onEditReport(name: string) {
+    public onEditReport(name: string): void {
         this.editReport.emit(name);
     }
 
-    public onSaveReportSuccess(reportId) {
+    public onSaveReportSuccess(reportId): void {
         this.reportSaved.emit(reportId);
     }
 
-    public onDeleteReportSuccess() {
+    public onDeleteReportSuccess(): void {
         this.reportDeleted.emit();
     }
 

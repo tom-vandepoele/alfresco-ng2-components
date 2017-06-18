@@ -15,34 +15,26 @@
  * limitations under the License.
  */
 
-import { Directive, OnInit, ElementRef, Input, Output, EventEmitter } from '@angular/core';
+import { Directive, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Point } from './models/point';
 import { RaphaelBase } from './raphael-base';
 import { RaphaelService } from './raphael.service';
 
 @Directive({selector: 'raphael-text'})
 export class RaphaelTextDirective extends RaphaelBase implements OnInit {
-    @Input()
-    paper: any;
 
     @Input()
-    position: Point;
-
-    @Input()
-    transform: string;
-
-    @Input()
-    text: string;
+    public transform: string;
 
     @Output()
-    onError = new EventEmitter();
+    public onError = new EventEmitter();
 
     constructor(public elementRef: ElementRef,
                 raphaelService: RaphaelService) {
         super(elementRef, raphaelService);
     }
 
-    ngOnInit() {
+    public ngOnInit(): void {
 
         if (this.text === null || this.text === undefined) {
             this.text = '';
@@ -50,7 +42,7 @@ export class RaphaelTextDirective extends RaphaelBase implements OnInit {
         this.draw(this.position, this.text);
     }
 
-    public draw(position: Point, text: string) {
+    public draw(position: Point, text: string): any {
         let textPaper = this.paper.text(position.x, position.y, text).attr({
             'text-anchor' : 'middle',
             'font-family' : 'Arial',

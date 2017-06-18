@@ -16,8 +16,8 @@
  */
 
 import { Component, ElementRef, Input } from '@angular/core';
-import { WidgetComponent } from './../widget.component';
 import { FormGroup } from '@angular/forms';
+import { WidgetComponent } from './../widget.component';
 
 @Component({
     selector: 'checkbox-widget',
@@ -26,7 +26,7 @@ import { FormGroup } from '@angular/forms';
 export class CheckboxWidget extends WidgetComponent {
 
     @Input()
-    field: any;
+    public field: any;
 
     @Input('group')
     public formGroup: FormGroup;

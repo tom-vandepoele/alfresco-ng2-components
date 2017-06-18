@@ -15,28 +15,21 @@
  * limitations under the License.
  */
 
-import { Component, ElementRef, Input, Output, EventEmitter } from '@angular/core';
-import { DiagramColorService } from '../../services/diagram-color.service';
+import { Component } from '@angular/core';
+import { BaseComponent } from './base-icon.component';
 
 @Component({
     selector: 'diagram-icon-mule-task',
     templateUrl: './diagram-icon-mule-task.component.html'
 })
-export class DiagramIconMuleTaskComponent {
-    @Input()
-    data: any;
-
-    @Output()
-    onError = new EventEmitter();
-
-    position: any;
-
-    options: any = {stroke: '', fillColors: '', fillOpacity: '', strokeWidth: ''};
+export class DiagramIconMuleTaskComponent extends BaseComponent {
 
     constructor(public elementRef: ElementRef,
-                private diagramColorService: DiagramColorService) {}
+                private diagramColorService: DiagramColorService) {
+        super(elementRef, diagramColorService);
+    }
 
-    ngOnInit() {
+    public ngOnInit(): void {
         this.position = {x: this.data.x + 2, y: this.data.y + 2};
         this.options.stroke = 'none' ;
         this.options.fillColors = '#bd4848' ;

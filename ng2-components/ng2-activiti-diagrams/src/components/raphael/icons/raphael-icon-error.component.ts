@@ -15,53 +15,30 @@
  * limitations under the License.
  */
 
-import { Directive, OnInit, ElementRef, Input, Output, EventEmitter } from '@angular/core';
+import { Directive, ElementRef, OnInit } from '@angular/core';
 import { Point } from './../models/point';
 import { RaphaelBase } from './../raphael-base';
 import { RaphaelService } from './../raphael.service';
 
 @Directive({selector: 'raphael-icon-error'})
 export class RaphaelIconErrorDirective extends RaphaelBase implements OnInit {
-    @Input()
-    paper: any;
-
-    @Input()
-    position: Point;
-
-    @Input()
-    text: string;
-
-    @Output()
-    onError = new EventEmitter();
-
-    @Input()
-    strokeWidth: number;
-
-    @Input()
-    fillColors: any;
-
-    @Input()
-    stroke: any;
-
-    @Input()
-    fillOpacity: any;
 
     constructor(public elementRef: ElementRef,
                 raphaelService: RaphaelService) {
         super(elementRef, raphaelService);
     }
 
-    ngOnInit() {
+    public ngOnInit(): void {
 
         this.draw(this.position);
     }
 
-    public draw(position: Point) {
+    public draw(position: Point): void {
         let path1 = this.paper.path(`M 22.820839,11.171502 L 19.36734,24.58992 L 13.54138,14.281819 L 9.3386512,20.071607
         L 13.048949,6.8323057 L 18.996148,16.132659 L 22.820839,11.171502 z`).attr({
-            'opacity': 1,
-            'stroke': this.stroke,
-            'fill': this.fillColors
+            opacity: 1,
+            stroke: this.stroke,
+            fill: this.fillColors
         });
         return path1.transform('T' + position.x + ',' + position.y);
     }

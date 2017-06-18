@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import { Component, ElementRef, Input, Output, EventEmitter } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output } from '@angular/core';
 import { DiagramColorService } from '../../services/diagram-color.service';
 
 @Component({
@@ -24,15 +24,15 @@ import { DiagramColorService } from '../../services/diagram-color.service';
 })
 export class DiagramUserTaskComponent {
     @Input()
-    data: any;
+    public data: any;
 
     @Output()
-    onError = new EventEmitter();
+    public onError = new EventEmitter();
 
     constructor(public elementRef: ElementRef,
                 private diagramColorService: DiagramColorService) {}
 
-    ngOnInit() {
+    public ngOnInit(): void {
 
     }
 }

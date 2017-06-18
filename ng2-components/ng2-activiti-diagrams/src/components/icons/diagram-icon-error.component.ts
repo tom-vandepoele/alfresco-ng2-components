@@ -15,31 +15,21 @@
  * limitations under the License.
  */
 
-import { Component, ElementRef, Input, Output, EventEmitter } from '@angular/core';
-import { DiagramColorService } from '../../services/diagram-color.service';
+import { Component } from '@angular/core';
+import { BaseComponent } from './base-icon.component';
 
 @Component({
     selector: 'diagram-icon-error',
     templateUrl: './diagram-icon-error.component.html'
 })
-export class DiagramIconErrorComponent {
-    @Input()
-    data: any;
-
-    @Input()
-    fillColor: string;
-
-    @Output()
-    onError = new EventEmitter();
-
-    position: any;
-
-    options: any = {stroke: '', fillColors: '', fillOpacity: '', strokeWidth: ''};
+export class DiagramIconErrorComponent extends  BaseComponent {
 
     constructor(public elementRef: ElementRef,
-                private diagramColorService: DiagramColorService) {}
+                private diagramColorService: DiagramColorService) {
+        super(elementRef, diagramColorService);
+    }
 
-    ngOnInit() {
+    public ngOnInit(): void {
         this.position = {x: this.data.x - 1, y: this.data.y - 1};
 
         this.options.stroke = 'black';

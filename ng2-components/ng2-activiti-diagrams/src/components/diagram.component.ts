@@ -15,12 +15,12 @@
  * limitations under the License.
  */
 
-import { Component, ElementRef, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output } from '@angular/core';
 import { AlfrescoTranslationService, LogService } from 'ng2-alfresco-core';
-import { DiagramsService } from '../services/diagrams.service';
+import { DiagramElementModel, DiagramModel } from '../models/diagram.model';
 import { DiagramColorService } from '../services/diagram-color.service';
+import { DiagramsService } from '../services/diagrams.service';
 import { RaphaelService } from './raphael/raphael.service';
-import { DiagramModel, DiagramElementModel } from '../models/diagram.model';
 
 @Component({
     selector: 'activiti-diagram',
@@ -29,34 +29,34 @@ import { DiagramModel, DiagramElementModel } from '../models/diagram.model';
 })
 export class DiagramComponent {
     @Input()
-    processDefinitionId: any;
+    public processDefinitionId: any;
 
     @Input()
-    processInstanceId: any;
+    public processInstanceId: any;
 
     @Input()
-    metricPercentages: any;
+    public metricPercentages: any;
 
     @Input()
-    metricColor: any;
+    public metricColor: any;
 
     @Input()
-    metricType: string = '';
+    public metricType: string = '';
 
     @Input()
-    width: number = 1000;
+    public width: number = 1000;
 
     @Input()
-    height: number = 500;
+    public height: number = 500;
 
     @Output()
-    onSuccess = new EventEmitter();
+    public onSuccess = new EventEmitter();
 
     @Output()
-    onError = new EventEmitter();
+    public onError = new EventEmitter();
 
-    PADDING_WIDTH: number = 60;
-    PADDING_HEIGHT: number = 60;
+    public PADDING_WIDTH: number = 60;
+    public PADDING_HEIGHT: number = 60;
 
     private diagram: DiagramModel;
 
@@ -71,7 +71,7 @@ export class DiagramComponent {
         }
     }
 
-    ngOnChanges(changes: SimpleChanges) {
+    public ngOnChanges(): void {
         this.reset();
         this.diagramColorService.setTotalColors(this.metricColor);
         if (this.processDefinitionId) {
@@ -81,12 +81,12 @@ export class DiagramComponent {
         }
     }
 
-    getRunningProcessDefinitionModel(processInstanceId: string) {
+    public getRunningProcessDefinitionModel(processInstanceId: string): void {
         this.diagramsService.getRunningProcessDefinitionModel(processInstanceId).subscribe(
             (res: any) => {
                 this.diagram = new DiagramModel(res);
                 this.raphaelService.setting(this.diagram.diagramWidth + this.PADDING_WIDTH,
-                                            this.diagram.diagramHeight + this.PADDING_HEIGHT);
+                    this.diagram.diagramHeight + this.PADDING_HEIGHT);
                 this.setMetricValueToDiagramElement(this.diagram, this.metricPercentages, this.metricType);
                 this.onSuccess.emit(res);
             },
@@ -96,12 +96,12 @@ export class DiagramComponent {
         );
     }
 
-    getProcessDefinitionModel(processDefinitionId: string) {
+    public getProcessDefinitionModel(processDefinitionId: string): void {
         this.diagramsService.getProcessDefinitionModel(processDefinitionId).subscribe(
             (res: any) => {
                 this.diagram = new DiagramModel(res);
                 this.raphaelService.setting(this.diagram.diagramWidth + this.PADDING_WIDTH,
-                                            this.diagram.diagramHeight + this.PADDING_HEIGHT);
+                    this.diagram.diagramHeight + this.PADDING_HEIGHT);
                 this.setMetricValueToDiagramElement(this.diagram, this.metricPercentages, this.metricType);
                 this.onSuccess.emit(res);
             },
@@ -111,7 +111,7 @@ export class DiagramComponent {
         );
     }
 
-    setMetricValueToDiagramElement(diagram: DiagramModel, metrics: any, metricType: string) {
+    public setMetricValueToDiagramElement(diagram: DiagramModel, metrics: any, metricType: string): void {
         for (let key in metrics) {
             if (metrics.hasOwnProperty(key)) {
                 let foundElement: DiagramElementModel = diagram.elements.find(
@@ -124,7 +124,7 @@ export class DiagramComponent {
         }
     }
 
-    reset() {
+    public reset(): void {
         this.raphaelService.reset();
     }
 }

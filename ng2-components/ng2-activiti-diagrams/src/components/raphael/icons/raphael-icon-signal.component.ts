@@ -15,53 +15,30 @@
  * limitations under the License.
  */
 
-import { Directive, OnInit, ElementRef, Input, Output, EventEmitter } from '@angular/core';
+import { Directive, ElementRef, OnInit } from '@angular/core';
 import { Point } from './../models/point';
 import { RaphaelBase } from './../raphael-base';
 import { RaphaelService } from './../raphael.service';
 
 @Directive({selector: 'raphael-icon-signal'})
 export class RaphaelIconSignalDirective extends RaphaelBase implements OnInit {
-    @Input()
-    paper: any;
-
-    @Input()
-    position: Point;
-
-    @Input()
-    text: string;
-
-    @Output()
-    onError = new EventEmitter();
-
-    @Input()
-    strokeWidth: number;
-
-    @Input()
-    fillColors: any;
-
-    @Input()
-    stroke: any;
-
-    @Input()
-    fillOpacity: any;
 
     constructor(public elementRef: ElementRef,
                 raphaelService: RaphaelService) {
         super(elementRef, raphaelService);
     }
 
-    ngOnInit() {
+    public ngOnInit(): void {
 
         this.draw(this.position);
     }
 
-    public draw(position: Point) {
+    public draw(position: Point): void {
         let path1 = this.paper.path(`M 8.7124971,21.247342 L 23.333334,21.247342 L 16.022915,8.5759512 L 8.7124971,21.247342 z`).attr({
-            'opacity': this.fillOpacity,
-            'stroke': this.stroke,
-            'strokeWidth': this.strokeWidth,
-            'fill': this.fillColors
+            opacity: this.fillOpacity,
+            stroke: this.stroke,
+            strokeWidth: this.strokeWidth,
+            fill: this.fillColors
         });
         return path1.transform('T' + position.x + ',' + position.y);
     }

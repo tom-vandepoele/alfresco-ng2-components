@@ -187,14 +187,14 @@ export class UploadDirective implements OnInit, OnDestroy {
             if (dataTransfer) {
                 const items = dataTransfer.items;
                 if (items) {
-                    for (let i = 0; i < items.length; i++) {
-                        if (typeof items[i].webkitGetAsEntry !== 'undefined') {
-                            let item = items[i].webkitGetAsEntry();
+                    for (let currentItem in items) {
+                        if (typeof currentItem.webkitGetAsEntry !== 'undefined') {
+                            let item = currentItem.webkitGetAsEntry();
                             if (item) {
                                 if (item.isFile) {
                                     iterations.push(Promise.resolve(<FileInfo> {
                                         entry: item,
-                                        file: items[i].getAsFile(),
+                                        file: currentItem.getAsFile(),
                                         relativeFolder: '/'
                                     }));
                                 } else if (item.isDirectory) {
@@ -206,7 +206,7 @@ export class UploadDirective implements OnInit, OnDestroy {
                         } else {
                             iterations.push(Promise.resolve(<FileInfo>{
                                 entry: null,
-                                file: items[i].getAsFile(),
+                                file: currentItem.getAsFile(),
                                 relativeFolder: '/'
                             }));
                         }

@@ -16,15 +16,15 @@
  */
 
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Rx';
 import { TranslateService } from '@ngx-translate/core';
+import { Observable } from 'rxjs/Rx';
 import { AlfrescoTranslateLoader } from './alfresco-translate-loader.service';
 
 @Injectable()
 export class AlfrescoTranslationService {
-    defaultLang: string = 'en';
-    userLang: string = 'en';
-    customLoader: AlfrescoTranslateLoader;
+    private defaultLang: string = 'en';
+    public userLang: string = 'en';
+    public customLoader: AlfrescoTranslateLoader;
 
     constructor(public translate: TranslateService) {
         this.userLang = translate.getBrowserLang() || this.defaultLang;
@@ -33,7 +33,7 @@ export class AlfrescoTranslationService {
         this.use(this.userLang);
     }
 
-    addTranslationFolder(name: string = '', path: string = '') {
+    public addTranslationFolder(name: string = '', path: string = ''): void {
         if (!this.customLoader.existComponent(name)) {
             this.customLoader.addComponentList(name, path);
             if (this.userLang !== this.defaultLang) {
@@ -54,12 +54,12 @@ export class AlfrescoTranslationService {
         }
     }
 
-    use(lang: string): Observable<any> {
+    public use(lang: string): Observable<any> {
         this.customLoader.init(lang);
         return this.translate.use(lang);
     }
 
-    get(key: string|Array<string>, interpolateParams?: Object): Observable<string|any> {
+    public get(key: string|string[], interpolateParams?: Object): Observable<string|any> {
         return this.translate.get(key, interpolateParams);
     }
 }

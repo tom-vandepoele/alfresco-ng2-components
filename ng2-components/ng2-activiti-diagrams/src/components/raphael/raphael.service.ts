@@ -22,9 +22,9 @@ declare let Raphael: any;
 @Injectable()
 export class RaphaelService {
 
-    paper: any;
-    width: number = 300;
-    height: number = 400;
+    public paper: any;
+    public width: number = 300;
+    public height: number = 400;
     private ctx: any;
 
     constructor() {

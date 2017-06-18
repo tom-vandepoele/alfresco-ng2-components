@@ -24,13 +24,13 @@ export class Anchor {
         last: 'last'
     };
 
-    uuid: any = null;
-    x: any = 0;
-    y: any = 0;
-    isFirst: any = false;
-    isLast: any = false;
-    typeIndex: any = 0;
-    type: any = Anchor.ANCHOR_TYPE.main;
+    public  uuid: any = null;
+    public x: any = 0;
+    public y: any = 0;
+    public isFirst: any = false;
+    public isLast: any = false;
+    public typeIndex: any = 0;
+    public type: any = Anchor.ANCHOR_TYPE.main;
 
     constructor(uuid: any, type: any, x: any, y: any) {
         this.uuid = uuid;

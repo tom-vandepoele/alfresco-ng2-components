@@ -15,8 +15,8 @@
  * limitations under the License.
  */
 
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { FormGroup, Validators, FormControl } from '@angular/forms';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { WidgetComponent } from './../widget.component';
 
 @Component({
@@ -27,7 +27,7 @@ import { WidgetComponent } from './../widget.component';
 export class DropdownWidget extends WidgetComponent {
 
     @Input()
-    field: any;
+    public field: any;
 
     @Input('group')
     public formGroup: FormGroup;
@@ -36,32 +36,32 @@ export class DropdownWidget extends WidgetComponent {
     public controllerName: string;
 
     @Output()
-    fieldChanged: EventEmitter<any> = new EventEmitter<any>();
+    public fieldChanged: EventEmitter<any> = new EventEmitter<any>();
 
     @Input()
-    showDefaultOption: boolean = true;
+    public showDefaultOption: boolean = true;
 
     @Input()
-    required: boolean = false;
+    public required: boolean = false;
 
     @Input()
-    defaultOptionText: string = 'Choose One';
+    public defaultOptionText: string = 'Choose One';
 
     constructor() {
         super();
     }
 
-    ngOnInit() {
+    public ngOnInit(): void {
         if (this.required) {
             this.formGroup.get(this.controllerName).setValidators(Validators.compose(this.buildValidatorList()));
         }
     }
 
-    validateDropDown(controller: FormControl) {
-        return controller.value !== 'null' ? null : { controllerName: false };
+    public validateDropDown(controller: FormControl): any {
+        return controller.value !== 'null' ? null : {controllerName: false};
     }
 
-    buildValidatorList() {
+    public buildValidatorList(): any[] {
         let validatorList = [];
         validatorList.push(Validators.required);
         if (this.showDefaultOption) {

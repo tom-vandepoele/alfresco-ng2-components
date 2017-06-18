@@ -16,8 +16,8 @@
  */
 
 import { Component, ElementRef, Input } from '@angular/core';
-import { WidgetComponent } from './../widget.component';
 import { FormGroup, Validators } from '@angular/forms';
+import { WidgetComponent } from './../widget.component';
 
 @Component({
     selector: 'number-widget',
@@ -27,7 +27,7 @@ import { FormGroup, Validators } from '@angular/forms';
 export class NumberWidget extends WidgetComponent {
 
     @Input()
-    field: any;
+    public field: any;
 
     @Input('group')
     public formGroup: FormGroup;
@@ -36,19 +36,19 @@ export class NumberWidget extends WidgetComponent {
     public controllerName: string;
 
     @Input()
-    required: boolean = false;
+    public required: boolean = false;
 
     constructor(public elementRef: ElementRef) {
         super();
     }
 
-    ngOnInit() {
+    public ngOnInit(): void {
         if (this.required) {
             this.formGroup.get(this.controllerName).setValidators(Validators.required);
         }
     }
 
-    setupMaterialComponents(handler: any): boolean {
+    public setupMaterialComponents(handler: any): boolean {
         // workaround for MDL issues with dynamic components
         if (handler) {
             handler.upgradeAllRegistered();

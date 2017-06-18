@@ -15,23 +15,29 @@
  * limitations under the License.
  */
 
-import { Component } from '@angular/core';
-import { BaseComponent } from './base-icon.component';
+import { ElementRef, EventEmitter, Input, Output } from '@angular/core';
+import { DiagramColorService } from '../../services/diagram-color.service';
 
-@Component({
-    selector: 'diagram-icon-camel-task',
-    templateUrl: './diagram-icon-camel-task.component.html'
-})
-export class DiagramIconCamelTaskComponent extends BaseComponent {
+export class BaseComponent {
+    @Input()
+    public data: any;
+
+    @Input()
+    public type: string;
+
+    @Input()
+    public fillColor: string;
+
+    @Output()
+    public onError = new EventEmitter();
+
+    public position: any;
+
+    public options: any = {stroke: '', fillColors: '', fillOpacity: '', strokeWidth: ''};
 
     constructor(public elementRef: ElementRef,
-                private diagramColorService: DiagramColorService) {
-        super(elementRef, diagramColorService);
-    }
+                private diagramColorService: DiagramColorService) {}
 
     public ngOnInit(): void {
-        this.position = {x: this.data.x + 8, y: this.data.y + 6};
-        this.options.stroke = 'none';
-        this.options.fillColors = '#bd4848';
     }
 }

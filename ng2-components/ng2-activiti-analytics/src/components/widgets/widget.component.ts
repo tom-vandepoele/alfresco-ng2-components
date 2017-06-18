@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import { Input, AfterViewInit, Output, EventEmitter, SimpleChanges, OnChanges } from '@angular/core';
+import { AfterViewInit, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 
 let componentHandler: any;
 
@@ -25,38 +25,38 @@ let componentHandler: any;
 export class WidgetComponent implements AfterViewInit, OnChanges {
 
     @Input()
-    field: any;
+    public field: any;
 
     @Output()
-    fieldChanged: EventEmitter<any> = new EventEmitter<any>();
+    public fieldChanged: EventEmitter<any> = new EventEmitter<any>();
 
-    ngOnChanges(changes: SimpleChanges) {
-        let field = changes['field'];
+    public ngOnChanges(changes: SimpleChanges): void {
+        let field = changes.field;
+
         if (field && field.currentValue) {
             this.fieldChanged.emit(field.currentValue.value);
-            return;
         }
     }
 
-    hasField() {
+    public hasField(): boolean {
         return this.field ? true : false;
     }
 
-    hasValue(): boolean {
+    public hasValue(): boolean {
         return this.field &&
             this.field.value !== null &&
             this.field.value !== undefined;
     }
 
-    changeValue(field: any) {
+    public changeValue(field: any): void {
         this.fieldChanged.emit(field);
     }
 
-    ngAfterViewInit() {
+    public ngAfterViewInit(): void {
         this.setupMaterialComponents(componentHandler);
     }
 
-    setupMaterialComponents(handler?: any): boolean {
+    public setupMaterialComponents(handler?: any): boolean {
         // workaround for MDL issues with dynamic components
         if (handler) {
             handler.upgradeAllRegistered();

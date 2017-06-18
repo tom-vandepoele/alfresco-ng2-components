@@ -25,14 +25,14 @@ import { Component, Input } from '@angular/core';
 export class DiagramTooltip {
 
     @Input()
-    data: any;
+    public data: any;
 
-    getTooltipHeader(data: any) {
+    public getTooltipHeader(data: any): string {
         let headerValue = data.name || data.id;
         return data.type + ' ' + headerValue;
     }
 
-    getTooltipMessage(data: any) {
+    public getTooltipMessage(data: any): string {
         return (data.value !== undefined && data.value !== null ) ? data.value + ' ' + data.dataType : '';
     }
 }

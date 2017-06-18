@@ -15,52 +15,29 @@
  * limitations under the License.
  */
 
-import { Directive, OnInit, ElementRef, Input, Output, EventEmitter } from '@angular/core';
+import { Directive, ElementRef, OnInit } from '@angular/core';
 import { Point } from './../models/point';
 import { RaphaelBase } from './../raphael-base';
 import { RaphaelService } from './../raphael.service';
 
 @Directive({selector: 'raphael-icon-send'})
 export class RaphaelIconSendDirective extends RaphaelBase implements OnInit {
-    @Input()
-    paper: any;
-
-    @Input()
-    position: Point;
-
-    @Input()
-    text: string;
-
-    @Output()
-    onError = new EventEmitter();
-
-    @Input()
-    strokeWidth: number;
-
-    @Input()
-    fillColors: any;
-
-    @Input()
-    stroke: any;
-
-    @Input()
-    fillOpacity: any;
 
     constructor(public elementRef: ElementRef,
                 raphaelService: RaphaelService) {
         super(elementRef, raphaelService);
     }
 
-    ngOnInit() {
+    public ngOnInit(): void {
 
         this.draw(this.position);
     }
 
-    public draw(position: Point) {
+    public draw(position: Point): any {
         let path1 = this.paper.path(`M 1 3 L 9 11 L 17 3 L 1 3 z M 1 5 L 1 13 L 5 9 L 1 5 z M 17 5 L 13 9 L 17 13 L 17 5 z M 6 10 L 1 15
             L 17 15 L 12 10 L 9 13 L 6 10 z`).attr({
-            'stroke': this.stroke,
-            'fill': this.fillColors
+            stroke: this.stroke,
+            fill: this.fillColors
         });
         return path1.transform('T' + position.x + ',' + position.y);
     }

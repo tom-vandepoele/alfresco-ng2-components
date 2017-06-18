@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import { Component, ElementRef, Input, Output, EventEmitter } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output } from '@angular/core';
 import { DiagramColorService } from '../../services/diagram-color.service';
 
 @Component({
@@ -24,21 +24,21 @@ import { DiagramColorService } from '../../services/diagram-color.service';
 })
 export class DiagramIntermediateCatchingEventComponent {
     @Input()
-    data: any;
+    public data: any;
 
     @Output()
-    onError = new EventEmitter();
+    public onError = new EventEmitter();
 
-    center: any = {};
-    options: any = {stroke: '', fillColors: '', fillOpacity: '', strokeWidth: 1};
+    public center: any = {};
+    public options: any = {stroke: '', fillColors: '', fillOpacity: '', strokeWidth: 1};
 
-    circleRadiusInner: number;
-    circleRadiusOuter: number;
+    public circleRadiusInner: number;
+    public circleRadiusOuter: number;
 
     constructor(public elementRef: ElementRef,
                 private diagramColorService: DiagramColorService) {}
 
-    ngOnInit() {
+    public ngOnInit(): void {
         this.center.x = this.data.x + (this.data.width / 2);
         this.center.y = this.data.y + (this.data.height / 2);
 

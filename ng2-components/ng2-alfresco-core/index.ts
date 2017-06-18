@@ -15,44 +15,44 @@
  * limitations under the License.
  */
 
-import { NgModule, ModuleWithProviders } from '@angular/core';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpModule, Http } from '@angular/http';
 import { CommonModule } from '@angular/common';
+import { ModuleWithProviders, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { Http, HttpModule } from '@angular/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { AdfToolbarComponent } from './src/components/toolbar/toolbar.component';
 import { MaterialModule } from './src/material.module';
 import { AppConfigModule } from './src/services/app-config.service';
-import { AdfToolbarComponent } from './src/components/toolbar/toolbar.component';
 
 import {
+    AlfrescoApiService,
     AlfrescoAuthenticationService,
     AlfrescoContentService,
     AlfrescoSettingsService,
-    StorageService,
-    CookieService,
-    AlfrescoApiService,
     AlfrescoTranslateLoader,
     AlfrescoTranslationService,
-    RenditionsService,
+    AppConfigService,
     AuthGuard,
-    AuthGuardEcm,
     AuthGuardBpm,
+    AuthGuardEcm,
+    ContentService,
+    CookieService,
+    InitAppConfigServiceProvider,
     LogService,
     LogServiceMock,
     NotificationService,
-    ContentService,
-    AppConfigService, InitAppConfigServiceProvider
+    RenditionsService, StorageService
 } from './src/services/index';
 
-import { FileSizePipe } from './src/pipes/file-size.pipe';
-import { UploadDirective } from './src/directives/upload.directive';
-import { DataColumnComponent } from './src/components/data-column/data-column.component';
-import { DataColumnListComponent } from './src/components/data-column/data-column-list.component';
-import { MATERIAL_DESIGN_DIRECTIVES } from './src/components/material/index';
-import { CONTEXT_MENU_PROVIDERS, CONTEXT_MENU_DIRECTIVES } from './src/components/context-menu/index';
 import { COLLAPSABLE_DIRECTIVES } from './src/components/collapsable/index';
+import { CONTEXT_MENU_DIRECTIVES, CONTEXT_MENU_PROVIDERS } from './src/components/context-menu/index';
+import { DataColumnListComponent } from './src/components/data-column/data-column-list.component';
+import { DataColumnComponent } from './src/components/data-column/data-column.component';
+import { MATERIAL_DESIGN_DIRECTIVES } from './src/components/material/index';
 import { VIEW_DIRECTIVES } from './src/components/view/index';
+import { UploadDirective } from './src/directives/upload.directive';
+import { FileSizePipe } from './src/pipes/file-size.pipe';
 
 export * from './src/services/index';
 export * from './src/components/index';
@@ -88,7 +88,7 @@ export const ALFRESCO_CORE_PROVIDERS: any[] = [
     ...CONTEXT_MENU_PROVIDERS
 ];
 
-export function createTranslateLoader(http: Http, logService: LogService) {
+export function createTranslateLoader(http: Http, logService: LogService): AlfrescoTranslateLoader {
     return new AlfrescoTranslateLoader(http, logService);
 }
 
@@ -143,7 +143,7 @@ export function createTranslateLoader(http: Http, logService: LogService) {
     ]
 })
 export class CoreModule {
-    static forRoot(opts: any = {}): ModuleWithProviders {
+    public static forRoot(opts: any = {}): ModuleWithProviders {
 
         const appConfigFile = opts.appConfigFile || 'app.config.json';
 

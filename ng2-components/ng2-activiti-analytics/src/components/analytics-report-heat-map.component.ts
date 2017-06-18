@@ -15,10 +15,10 @@
  * limitations under the License.
  */
 
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { AlfrescoTranslationService } from 'ng2-alfresco-core';
 import { AnalyticsService } from '../services/analytics.service';
-import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 
 @Component({
     selector: 'analytics-report-heat-map',
@@ -27,20 +27,20 @@ import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 export class AnalyticsReportHeatMapComponent implements  OnInit {
 
     @Input()
-    report: any;
+    public report: any;
 
     @Output()
-    onSuccess = new EventEmitter();
+    public onSuccess = new EventEmitter();
 
     @Output()
-    onError = new EventEmitter();
+    public onError = new EventEmitter();
 
-    field: any = {};
+    public field: any = {};
 
-    metricForm: FormGroup;
-    currentMetric: string;
-    currentMetricColors: string;
-    metricType: string;
+    public metricForm: FormGroup;
+    public currentMetric: string;
+    public currentMetricColors: string;
+    public metricType: string;
 
     constructor(private translateService: AlfrescoTranslationService,
                 private analyticsService: AnalyticsService,
@@ -50,7 +50,7 @@ export class AnalyticsReportHeatMapComponent implements  OnInit {
         }
     }
 
-    ngOnInit() {
+    public ngOnInit(): void {
         this.initForm();
         this.field.id = 'metrics';
         this.field.value = 'totalCount';
@@ -63,7 +63,7 @@ export class AnalyticsReportHeatMapComponent implements  OnInit {
         );
     }
 
-    onMetricChanges(field: any) {
+    public onMetricChanges(field: any): void {
         if (field.value === 'totalCount') {
             this.currentMetric = this.report.totalCountValues;
             this.currentMetricColors = this.report.totalCountsPercentages;
@@ -79,7 +79,7 @@ export class AnalyticsReportHeatMapComponent implements  OnInit {
         }
     }
 
-    initForm() {
+    public initForm(): void {
         this.metricForm = this.formBuilder.group({
             metricGroup: new FormGroup({
                 metric: new FormControl()
@@ -87,7 +87,7 @@ export class AnalyticsReportHeatMapComponent implements  OnInit {
         });
     }
 
-    hasMetric() {
+    public hasMetric(): void {
         return (this.report.totalCountsPercentages ||
         this.report.totalTimePercentages ||
         this.report.avgTimePercentages) ? true : false;

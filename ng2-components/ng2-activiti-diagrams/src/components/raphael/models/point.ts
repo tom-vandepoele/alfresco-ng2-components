@@ -16,8 +16,8 @@
  */
 
 export class Point {
-    x: number;
-    y: number;
+    public x: number;
+    public y: number;
 
     constructor(obj?: any) {
         this.x = obj && obj.x || 0;

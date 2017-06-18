@@ -15,40 +15,26 @@
  * limitations under the License.
  */
 
-import { Directive, OnInit, ElementRef, Input, Output, EventEmitter } from '@angular/core';
+import { Directive, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Point } from './models/point';
 import { RaphaelBase } from './raphael-base';
 import { RaphaelService } from './raphael.service';
 
 @Directive({selector: 'raphael-pentagon'})
 export class RaphaelPentagonDirective extends RaphaelBase implements OnInit {
-    @Input()
-    center: Point;
 
     @Input()
-    fillColors: any;
-
-    @Input()
-    stroke: any;
-
-    @Input()
-    strokeWidth: any;
-
-    @Input()
-    fillOpacity: any;
-
-    @Input()
-    strokeLinejoin: any;
+    public strokeLinejoin: any;
 
     @Output()
-    onError = new EventEmitter();
+    public onError = new EventEmitter();
 
     constructor(public elementRef: ElementRef,
                 raphaelService: RaphaelService) {
         super(elementRef, raphaelService);
     }
 
-    ngOnInit() {
+    public ngOnInit(): void {
 
         let opts = {
             'stroke-width': this.strokeWidth,
@@ -60,7 +46,7 @@ export class RaphaelPentagonDirective extends RaphaelBase implements OnInit {
         this.draw(this.center, opts);
     }
 
-    public draw(center: Point, opts?: any) {
+    public draw(center: Point, opts?: any): void {
         let penta = this.paper.path('M 20.327514,22.344972 L 11.259248,22.344216 L 8.4577203,13.719549' +
             ' L 15.794545,8.389969 L 23.130481,13.720774 L 20.327514,22.344972 z').attr(opts);
         penta.transform('T' + (center.x + 4) + ',' + (center.y + 4));

@@ -16,28 +16,28 @@
  */
 
 import {
+    AfterContentChecked,
+    AfterViewChecked,
     Component,
     EventEmitter,
-    OnInit,
-    OnChanges,
     Input,
+    OnChanges,
+    OnDestroy,
+    OnInit,
     Output,
     SimpleChanges,
-    OnDestroy,
-    AfterViewChecked,
-    AfterContentChecked,
     ViewChild
 } from '@angular/core';
-import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import * as moment from 'moment';
-import { AlfrescoTranslationService, LogService, ContentService } from 'ng2-alfresco-core';
-import { AnalyticsService } from '../services/analytics.service';
+import { AlfrescoTranslationService, ContentService, LogService } from 'ng2-alfresco-core';
 import {
-    ReportParametersModel,
-    ReportQuery,
     ParameterValueModel,
-    ReportParameterDetailsModel
+    ReportParameterDetailsModel,
+    ReportParametersModel,
+    ReportQuery
 } from '../models/report.model';
+import { AnalyticsService } from '../services/analytics.service';
 
 declare var componentHandler;
 declare let dialogPolyfill: any;
@@ -52,47 +52,47 @@ export class AnalyticsReportParametersComponent implements OnInit, OnChanges, On
     public static FORMAT_DATE_ACTIVITI: string = 'YYYY-MM-DD';
 
     @Input()
-    appId: string;
+    public appId: string;
 
     @Input()
-    reportId: string;
+    public reportId: string;
 
     @Input()
-    hideComponent: boolean = false;
+    public hideComponent: boolean = false;
 
     @Input()
-    debug: boolean = false;
+    public debug: boolean = false;
 
     @Output()
-    onSuccess = new EventEmitter();
+    public onSuccess = new EventEmitter();
 
     @Output()
-    onError = new EventEmitter();
+    public onError = new EventEmitter();
 
     @Output()
-    onEdit = new EventEmitter();
+    public onEdit = new EventEmitter();
 
     @Output()
-    onFormValueChanged = new EventEmitter();
+    public onFormValueChanged = new EventEmitter();
 
     @Output()
-    saveReportSuccess = new EventEmitter();
+    public saveReportSuccess = new EventEmitter();
 
     @Output()
-    deleteReportSuccess = new EventEmitter();
+    public deleteReportSuccess = new EventEmitter();
 
     @ViewChild('reportNameDialog')
-    reportNameDialog: any;
+    public reportNameDialog: any;
 
-    onDropdownChanged = new EventEmitter();
+    public onDropdownChanged = new EventEmitter();
 
-    onSuccessReportParams = new EventEmitter();
+    public onSuccessReportParams = new EventEmitter();
 
-    onSuccessParamOpt = new EventEmitter();
+    public onSuccessParamOpt = new EventEmitter();
 
-    reportParameters: ReportParametersModel;
+    public reportParameters: ReportParametersModel;
 
-    reportForm: FormGroup;
+    public reportForm: FormGroup;
 
     private dropDownSub;
     private reportParamsSub;
@@ -114,9 +114,9 @@ export class AnalyticsReportParametersComponent implements OnInit, OnChanges, On
         }
     }
 
-    ngOnInit() {
+    public ngOnInit(): void {
         this.dropDownSub = this.onDropdownChanged.subscribe((field) => {
-            let paramDependOn: ReportParameterDetailsModel = this.reportParameters.definition.parameters.find(p => p.dependsOn === field.id);
+            let paramDependOn: ReportParameterDetailsModel = this.reportParameters.definition.parameters.find((p) => p.dependsOn === field.id);
             if (paramDependOn) {
                 this.retrieveParameterOptions(this.reportParameters.definition.parameters, this.appId, this.reportId, field.value);
             }
@@ -130,23 +130,23 @@ export class AnalyticsReportParametersComponent implements OnInit, OnChanges, On
         });
     }
 
-    ngOnChanges(changes: SimpleChanges) {
+    public ngOnChanges(changes: SimpleChanges): void {
         this.isEditable = false;
         if (this.reportForm) {
             this.reportForm.reset();
         }
-        let reportId = changes['reportId'];
+        let reportId = changes.reportId;
         if (reportId && reportId.currentValue) {
             this.getReportParams(reportId.currentValue);
         }
 
-        let appId = changes['appId'];
+        let appId = changes.appId;
         if (appId && (appId.currentValue || appId.currentValue === null)) {
             this.getReportParams(this.reportId);
         }
     }
 
-    private generateFormGroupFromParameter(parameters: ReportParameterDetailsModel[]) {
+    private generateFormGroupFromParameter(parameters: ReportParameterDetailsModel[]): any {
         let formBuilderGroup: any = {};
         parameters.forEach((param: ReportParameterDetailsModel) => {
             switch (param.type) {
@@ -193,11 +193,11 @@ export class AnalyticsReportParametersComponent implements OnInit, OnChanges, On
             }
         });
         this.reportForm = this.formBuilder.group(formBuilderGroup);
-        this.reportForm.valueChanges.subscribe(data => this.onValueChanged(data));
-        this.reportForm.statusChanges.subscribe(data => this.onStatusChanged(data));
+        this.reportForm.valueChanges.subscribe((data) => this.onValueChanged(data));
+        this.reportForm.statusChanges.subscribe((data) => this.onStatusChanged(data));
     }
 
-    public getReportParams(reportId: string) {
+    public getReportParams(reportId: string): void {
         this.reportParamsSub = this.analyticsService.getReportParams(reportId).subscribe(
             (res: ReportParametersModel) => {
                 this.reportParameters = res;
@@ -214,7 +214,7 @@ export class AnalyticsReportParametersComponent implements OnInit, OnChanges, On
         );
     }
 
-    private retrieveParameterOptions(parameters: ReportParameterDetailsModel[], appId: string, reportId?: string, processDefinitionId?: string) {
+    private retrieveParameterOptions(parameters: ReportParameterDetailsModel[], appId: string, reportId?: string, processDefinitionId?: string): void {
         parameters.forEach((param) => {
             this.analyticsService.getParamValuesByType(param.type, appId, reportId, processDefinitionId).subscribe(
                 (opts: ParameterValueModel[]) => {
@@ -228,36 +228,36 @@ export class AnalyticsReportParametersComponent implements OnInit, OnChanges, On
         });
     }
 
-    onProcessDefinitionChanges(field: any) {
+    public onProcessDefinitionChanges(field: any): void {
         if (field.value) {
             this.onDropdownChanged.emit(field);
         }
     }
 
-    public submit(values: any) {
+    public submit(values: any): void {
         this.reportParamQuery = this.convertFormValuesToReportParamQuery(values);
         this.onSuccess.emit(this.reportParamQuery);
     }
 
-    onValueChanged(values: any) {
+    public  onValueChanged(values: any): void {
         this.onFormValueChanged.emit(values);
         if (this.reportForm && this.reportForm.valid) {
             this.submit(values);
         }
     }
 
-    onStatusChanged(status: any) {
+    public onStatusChanged(status: any): void {
         if (this.reportForm && !this.reportForm.pending && this.reportForm.dirty) {
             this.formValidState = this.reportForm.valid;
         }
     }
 
-    public convertMomentDate(date: string) {
+    public convertMomentDate(date: string): any {
         return moment(date, AnalyticsReportParametersComponent.FORMAT_DATE_ACTIVITI, true)
                 .format(AnalyticsReportParametersComponent.FORMAT_DATE_ACTIVITI) + 'T00:00:00.000Z';
     }
 
-    public getTodayDate() {
+    public getTodayDate(): any {
         return moment().format(AnalyticsReportParametersComponent.FORMAT_DATE_ACTIVITI);
     }
 
@@ -265,7 +265,7 @@ export class AnalyticsReportParametersComponent implements OnInit, OnChanges, On
         return value != null ? parseInt(value, 10) : 0;
     }
 
-    convertFormValuesToReportParamQuery(values: any): ReportQuery {
+    public convertFormValuesToReportParamQuery(values: any): ReportQuery {
         let reportParamQuery: ReportQuery = new ReportQuery();
         if (values.dateRange) {
             reportParamQuery.dateRange.startDate = this.convertMomentDate(values.dateRange.startDate);
@@ -295,7 +295,7 @@ export class AnalyticsReportParametersComponent implements OnInit, OnChanges, On
         return reportParamQuery;
     }
 
-    ngOnDestroy() {
+    public ngOnDestroy(): void {
         this.dropDownSub.unsubscribe();
         this.paramOpts.unsubscribe();
         if (this.reportParamsSub) {
@@ -303,15 +303,15 @@ export class AnalyticsReportParametersComponent implements OnInit, OnChanges, On
         }
     }
 
-    public editEnable() {
+    public editEnable(): void {
         this.isEditable = true;
     }
 
-    public editDisable() {
+    public editDisable(): void {
         this.isEditable = false;
     }
 
-    public editTitle() {
+    public editTitle(): void {
         this.reportParamsSub = this.analyticsService.updateReport(this.reportParameters.id, this.reportParameters.name).subscribe(
             (res: ReportParametersModel) => {
                 this.editDisable();
@@ -323,7 +323,7 @@ export class AnalyticsReportParametersComponent implements OnInit, OnChanges, On
         );
     }
 
-    public showDialog(event: string) {
+    public showDialog(event: string): void {
         if (!this.reportNameDialog.nativeElement.showModal) {
             dialogPolyfill.registerDialog(this.reportNameDialog.nativeElement);
         }
@@ -332,13 +332,13 @@ export class AnalyticsReportParametersComponent implements OnInit, OnChanges, On
         this.reportName = this.reportParameters.name + ' ( ' + this.getTodayDate() + ' )';
     }
 
-    closeDialog() {
+    public closeDialog(): void {
         if (this.reportNameDialog) {
             this.reportNameDialog.nativeElement.close();
         }
     }
 
-    performAction(action: string, reportParamQuery: ReportQuery) {
+    public performAction(action: string, reportParamQuery: ReportQuery): void {
         reportParamQuery.reportName = this.reportName;
         this.closeDialog();
         if (action === 'Save') {
@@ -349,20 +349,20 @@ export class AnalyticsReportParametersComponent implements OnInit, OnChanges, On
         this.resetActions();
     }
 
-    resetActions() {
+    public resetActions(): void {
         this.action = '';
         this.reportName = '';
     }
 
-    isSaveAction() {
+    public isSaveAction(): boolean {
         return this.action === 'Save';
     }
 
-    isFormValid() {
+    public isFormValid(): boolean {
         return this.reportForm && this.reportForm.dirty && this.reportForm.valid;
     }
 
-    doExport(paramQuery: ReportQuery) {
+    public doExport(paramQuery: ReportQuery): void {
         this.analyticsService.exportReportToCsv(this.reportId, paramQuery).subscribe(
             (data: any) => {
                 let blob: Blob = new Blob([data], {type: 'text/csv'});
@@ -370,35 +370,35 @@ export class AnalyticsReportParametersComponent implements OnInit, OnChanges, On
             });
     }
 
-    doSave(paramQuery: ReportQuery) {
+    public doSave(paramQuery: ReportQuery): void {
         this.analyticsService.saveReport(this.reportId, paramQuery).subscribe(() => {
             this.saveReportSuccess.emit(this.reportId);
         });
     }
 
-    deleteReport(reportId: string) {
+    public deleteReport(reportId: string): void {
         this.analyticsService.deleteReport(reportId).subscribe(() => {
             this.deleteReportSuccess.emit(reportId);
-        }, error => this.logService.error(error));
+        }, (error) => this.logService.error(error));
     }
 
-    ngAfterViewChecked() {
+    public ngAfterViewChecked(): void {
         if (componentHandler) {
             componentHandler.upgradeAllRegistered();
         }
     }
 
-    ngAfterContentChecked() {
+    public ngAfterContentChecked(): void {
         if (this.reportForm && this.reportForm.valid) {
             this.reportForm.markAsDirty();
         }
     }
 
-    toggleParameters() {
+    public toggleParameters(): void {
         this.hideParameters = !this.hideParameters;
     }
 
-    isParametersHide() {
+    public isParametersHide(): boolean {
         return this.hideParameters;
     }
 }

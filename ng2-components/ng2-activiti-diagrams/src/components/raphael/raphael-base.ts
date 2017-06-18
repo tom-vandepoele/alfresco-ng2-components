@@ -15,12 +15,34 @@
  * limitations under the License.
  */
 
-import { ElementRef } from '@angular/core';
+import { ElementRef, Input } from '@angular/core';
 import { RaphaelService } from './raphael.service';
 
 export class RaphaelBase {
 
-    paper: any;
+    @Input()
+    public paper: any;
+
+    @Input()
+    public position: Point;
+
+    @Input()
+    public text: string;
+
+    @Output()
+    public onError = new EventEmitter();
+
+    @Input()
+    public strokeWidth: number;
+
+    @Input()
+    public fillColors: any;
+
+    @Input()
+    public stroke: any;
+
+    @Input()
+    public fillOpacity: any;
 
     private element: ElementRef;
 

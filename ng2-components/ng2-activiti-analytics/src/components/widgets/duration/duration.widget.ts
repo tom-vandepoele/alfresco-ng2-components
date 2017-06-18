@@ -15,10 +15,10 @@
  * limitations under the License.
  */
 
-import { Component, ElementRef, OnInit, Input } from '@angular/core';
-import { NumberWidget } from './../number/number.widget';
-import { ReportParameterDetailsModel, ParameterValueModel } from './../../../models/report.model';
+import { Component, ElementRef, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ParameterValueModel, ReportParameterDetailsModel } from './../../../models/report.model';
+import { NumberWidget } from './../number/number.widget';
 
 @Component({
     selector: 'duration-widget',
@@ -28,7 +28,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 export class DurationWidget extends NumberWidget implements OnInit {
 
     @Input()
-    field: any;
+    public field: any;
 
     @Input('group')
     public formGroup: FormGroup;
@@ -37,10 +37,10 @@ export class DurationWidget extends NumberWidget implements OnInit {
     public controllerName: string;
 
     @Input()
-    required: boolean = false;
+    public required: boolean = false;
 
-    duration: ReportParameterDetailsModel;
-    currentValue: number;
+    public duration: ReportParameterDetailsModel;
+    public currentValue: number;
 
     public selectionGroup: FormGroup;
 
@@ -48,7 +48,7 @@ export class DurationWidget extends NumberWidget implements OnInit {
         super(elementRef);
     }
 
-    ngOnInit() {
+    public ngOnInit(): void {
         let timeType = new FormControl();
         this.formGroup.addControl('timeType', timeType);
 
@@ -69,7 +69,7 @@ export class DurationWidget extends NumberWidget implements OnInit {
         this.duration.value = paramOptions[0].id;
     }
 
-    public calculateDuration() {
+    public calculateDuration(): void {
         if (this.field && this.duration.value ) {
             this.currentValue = parseInt(this.field.value, 10) * parseInt(this.duration.value, 10);
             this.formGroup.get(this.controllerName).setValue(this.currentValue);

@@ -15,28 +15,21 @@
  * limitations under the License.
  */
 
-import { Component, ElementRef, Input, Output, EventEmitter } from '@angular/core';
-import { DiagramColorService } from '../../services/diagram-color.service';
+import { Component } from '@angular/core';
+import { BaseComponent } from './base-icon.component';
 
 @Component({
     selector: 'diagram-icon-google-drive-publish-task',
     templateUrl: './diagram-icon-google-drive-publish-task.component.html'
 })
-export class DiagramIconGoogleDrivePublishTaskComponent {
-    @Input()
-    data: any;
-
-    @Output()
-    onError = new EventEmitter();
-
-    position: any;
-
-    options: any = {stroke: '', fillColors: '', fillOpacity: '', strokeWidth: ''};
+export class DiagramIconGoogleDrivePublishTaskComponent extends BaseComponent {
 
     constructor(public elementRef: ElementRef,
-                private diagramColorService: DiagramColorService) {}
+                private diagramColorService: DiagramColorService) {
+        super(elementRef, diagramColorService);
+    }
 
-    ngOnInit() {
+    public ngOnInit(): void {
         this.position = {x: this.data.x + 6, y: this.data.y + 6};
     }
 }

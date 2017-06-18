@@ -16,9 +16,9 @@
  */
 
 import { Injectable } from '@angular/core';
-import { Response, Http } from '@angular/http';
-import { Observable } from 'rxjs/Rx';
+import { Http, Response } from '@angular/http';
 import { TranslateLoader } from '@ngx-translate/core';
+import { Observable } from 'rxjs/Rx';
 import { ComponentTranslationModel } from '../models/component.model';
 import { LogService } from './log.service';
 
@@ -30,19 +30,18 @@ export class AlfrescoTranslateLoader implements TranslateLoader {
     private _componentList: ComponentTranslationModel[] = [];
     private queue: string [][] = [];
 
-    constructor(private http: Http,
-                private logService: LogService) {
+    constructor(private http: Http, private logService: LogService) {
     }
 
-    addComponentList(nameInput: string, pathInput: string) {
+    public addComponentList(nameInput: string, pathInput: string): void {
         this._componentList.push(new ComponentTranslationModel({name: nameInput, path: pathInput}));
     }
 
-    existComponent(name: string): boolean {
-        return this._componentList.find(x => x.name === name) ? true : false;
+    public existComponent(name: string): boolean {
+        return this._componentList.find((x) => x.name === name) ? true : false;
     }
 
-    getComponentToFetch(lang: string) {
+    public getComponentToFetch(lang: string): Array<Observable<Response>> {
         let observableBatch = [];
         if (!this.queue[lang]) {
             this.queue[lang] = [];
@@ -63,17 +62,17 @@ export class AlfrescoTranslateLoader implements TranslateLoader {
         return observableBatch;
     }
 
-    init(lang: string) {
+    public init(lang: string): void {
         if (this.queue[lang] === undefined) {
             this.queue[lang] = [];
         }
     }
 
-    isComponentInQueue(lang: string, name: string) {
-        return (this.queue[lang] || []).find(x => x === name) ? true : false;
+    public isComponentInQueue(lang: string, name: string): boolean {
+        return (this.queue[lang] || []).find((x) => x === name) ? true : false;
     }
 
-    getFullTranslationJSON(lang: string) {
+    public getFullTranslationJSON(lang: string): any {
         let fullTranslation: string = '';
         let cloneList = this._componentList.slice(0);
         cloneList.reverse().forEach((component) => {
@@ -86,10 +85,10 @@ export class AlfrescoTranslateLoader implements TranslateLoader {
         }
     }
 
-    getTranslation(lang: string): Observable<any> {
+    public getTranslation(lang: string): Observable<any> {
         let observableBatch = this.getComponentToFetch(lang);
 
-        return Observable.create(observer => {
+        return Observable.create((observer) => {
             if (observableBatch.length > 0) {
                 Observable.forkJoin(observableBatch).subscribe(
                     () => {

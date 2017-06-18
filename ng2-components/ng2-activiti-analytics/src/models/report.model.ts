@@ -23,10 +23,10 @@
  * @returns {ReportParametersModel} .
  */
 export class ReportParametersModel {
-    id: number;
-    name: string;
-    definition: ReportDefinitionModel;
-    created: string;
+    public id: number;
+    public name: string;
+    public definition: ReportDefinitionModel;
+    public created: string;
 
     constructor(obj?: any) {
         this.id = obj && obj.id;
@@ -37,13 +37,13 @@ export class ReportParametersModel {
         this.created = obj && obj.created || null;
     }
 
-    hasParameters() {
+    public  hasParameters(): boolean {
         return (this.definition && this.definition.parameters && this.definition.parameters.length > 0) ? true : false;
     }
 }
 
 export class ReportDefinitionModel {
-    parameters: ReportParameterDetailsModel[] = [];
+    public parameters: ReportParameterDetailsModel[] = [];
 
     constructor(obj?: any) {
         obj.parameters.forEach((params: any) => {
@@ -52,7 +52,7 @@ export class ReportDefinitionModel {
         });
     }
 
-    findParam(name: string): ReportParameterDetailsModel {
+    public findParam(name: string): ReportParameterDetailsModel {
         this.parameters.forEach((param) => {
             return param.type === name ? param : null;
         });
@@ -68,13 +68,13 @@ export class ReportDefinitionModel {
  * @returns {ReportParameterDetailsModel} .
  */
 export class ReportParameterDetailsModel {
-    id: string;
-    name: string;
-    nameKey: string;
-    type: string;
-    value: any;
-    options: ParameterValueModel[];
-    dependsOn: string;
+    public id: string;
+    public name: string;
+    public nameKey: string;
+    public type: string;
+    public value: any;
+    public options: ParameterValueModel[];
+    public dependsOn: string;
 
     constructor(obj?: any) {
         this.id = obj && obj.id;
@@ -88,10 +88,10 @@ export class ReportParameterDetailsModel {
 }
 
 export class ParameterValueModel {
-    id: string;
-    name: string;
-    version: string;
-    value: string;
+    public id: string;
+    public name: string;
+    public version: string;
+    public value: string;
 
     constructor(obj?: any) {
         this.id = obj && obj.id;
@@ -100,21 +100,21 @@ export class ParameterValueModel {
         this.version = obj && obj.version || null;
     }
 
-    get label () {
+    public get label(): string {
         return this.version ? `${this.name} (v ${this.version}) ` : this.name;
     }
 }
 
 export class ReportQuery {
-    reportName: string;
-    processDefinitionId: string;
-    status: string;
-    taskName: string;
-    typeFiltering: boolean;
-    dateRange: ReportDateRange;
-    dateRangeInterval: string;
-    slowProcessInstanceInteger: number;
-    duration: number;
+    public reportName: string;
+    public processDefinitionId: string;
+    public status: string;
+    public taskName: string;
+    public typeFiltering: boolean;
+    public dateRange: ReportDateRange;
+    public dateRangeInterval: string;
+    public slowProcessInstanceInteger: number;
+    public duration: number;
 
     constructor(obj?: any) {
         this.reportName = obj && obj.reportName || null;
@@ -131,9 +131,9 @@ export class ReportQuery {
 }
 
 export class ReportDateRange {
-    startDate: string;
-    endDate: string;
-    rangeId: string;
+    public startDate: string;
+    public endDate: string;
+    public rangeId: string;
 
     constructor(obj?: any) {
         this.startDate = obj && obj.startDate || null;

@@ -15,32 +15,27 @@
  * limitations under the License.
  */
 
-import { Component, ElementRef, Input, Output, EventEmitter } from '@angular/core';
-import { DiagramColorService } from '../../services/diagram-color.service';
+import { Component } from '@angular/core';
+import { BaseComponent } from './base-icon.component';
 
 @Component({
     selector: 'diagram-icon-timer',
     templateUrl: './diagram-icon-timer.component.html'
 })
-export class DiagramIconTimerComponent {
-    @Input()
-    data: any;
+export class DiagramIconTimerComponent extends BaseComponent {
 
-    @Output()
-    onError = new EventEmitter();
-
-    center: any = {};
-    position: any;
-
-    circleRadius: number;
-
-    circleOptions: any = {stroke: '', fillColors: '', fillOpacity: '', strokeWidth: ''};
-    timerOptions: any = {stroke: '', fillColors: '', fillOpacity: '', strokeWidth: ''};
+    public center: any = {};
+    public position: any;
+    public circleRadius: number;
+    public circleOptions: any = {stroke: '', fillColors: '', fillOpacity: '', strokeWidth: ''};
+    public timerOptions: any = {stroke: '', fillColors: '', fillOpacity: '', strokeWidth: ''};
 
     constructor(public elementRef: ElementRef,
-                private diagramColorService: DiagramColorService) {}
+                private diagramColorService: DiagramColorService) {
+        super(elementRef, diagramColorService);
+    }
 
-    ngOnInit() {
+    public ngOnInit(): void {
         this.center.x = this.data.x + (this.data.width / 2);
         this.center.y = this.data.y + (this.data.height / 2);
         this.circleRadius = 10;

@@ -15,11 +15,11 @@
  * limitations under the License.
  */
 
-import { Component, EventEmitter, OnChanges, Input, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { AlfrescoTranslationService, LogService } from 'ng2-alfresco-core';
-import { AnalyticsService } from '../services/analytics.service';
-import { ReportQuery } from '../models/report.model';
 import { Chart } from '../models/chart.model';
+import { ReportQuery } from '../models/report.model';
+import { AnalyticsService } from '../services/analytics.service';
 
 @Component({
     selector: 'activiti-analytics-generator',
@@ -29,21 +29,21 @@ import { Chart } from '../models/chart.model';
 export class AnalyticsGeneratorComponent implements OnChanges {
 
     @Input()
-    reportId: number;
+    public reportId: number;
 
     @Input()
-    reportParamQuery: ReportQuery = undefined;
+    public reportParamQuery: ReportQuery = undefined;
 
     @Output()
-    onSuccess = new EventEmitter();
+    public onSuccess = new EventEmitter();
 
     @Output()
-    onError = new EventEmitter();
+    public onError = new EventEmitter();
 
-    reports: Chart[];
+    public reports: Chart[];
 
-    showDetails: boolean = false;
-    currentChartPosition: number;
+    public showDetails: boolean = false;
+    public currentChartPosition: number;
 
     public barChartOptions: any = {
         responsive: true,
@@ -55,8 +55,7 @@ export class AnalyticsGeneratorComponent implements OnChanges {
                 }
             }],
             xAxes: [{
-                ticks: {
-                },
+                ticks: {},
                 stacked: true
             }]
         }
@@ -71,7 +70,7 @@ export class AnalyticsGeneratorComponent implements OnChanges {
         }
     }
 
-    ngOnChanges(changes: SimpleChanges) {
+    public ngOnChanges(changes: SimpleChanges): void {
         if (this.reportId && this.reportParamQuery) {
             this.generateReport(this.reportId, this.reportParamQuery);
         } else {
@@ -79,10 +78,11 @@ export class AnalyticsGeneratorComponent implements OnChanges {
         }
     }
 
-    public generateReport(reportId, reportParamQuery) {
+    public generateReport(reportId, reportParamQuery): void {
         if (reportParamQuery === undefined || reportParamQuery === null) {
             reportParamQuery = {};
         }
+
         this.analyticsService.getReportsByParams(reportId, reportParamQuery).subscribe(
             (res: Chart[]) => {
                 this.reports = res;
@@ -97,7 +97,7 @@ export class AnalyticsGeneratorComponent implements OnChanges {
         );
     }
 
-    public reset() {
+    public reset(): void {
         if (this.reports) {
             this.reports = undefined;
         }
@@ -114,23 +114,23 @@ export class AnalyticsGeneratorComponent implements OnChanges {
         report.datasets = clone.datasets;
     }
 
-    toggleDetailsTable() {
+    public toggleDetailsTable(): void {
         this.showDetails = !this.showDetails;
     }
 
-    isShowDetails(): boolean {
+    public isShowDetails(): boolean {
         return this.showDetails;
     }
 
-    isCurrent(position: number) {
+    public isCurrent(position: number): boolean {
         return position === this.currentChartPosition ? true : false;
     }
 
-    selectCurrent(position: number) {
+    public selectCurrent(position: number): void {
         this.currentChartPosition = position;
     }
 
-    selectFirstReport() {
+    public selectFirstReport(): void {
         this.selectCurrent(0);
     }
 }

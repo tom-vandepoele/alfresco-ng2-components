@@ -23,51 +23,56 @@ export interface FileInfo {
 
 export class FileUtils {
 
-    static flattern(folder: any): Promise<FileInfo[]> {
-        let reader = folder.createReader();
-        let files: FileInfo[] = [];
-        return new Promise((resolve) => {
-            let iterations = [];
-            (function traverse() {
-                reader.readEntries((entries) => {
-                    if (!entries.length) {
-                        Promise.all(iterations).then((result) => resolve(files));
-                    } else {
-                        iterations.push(Promise.all(entries.map((entry) => {
-                            if (entry.isFile) {
-                                return new Promise((resolveFile) => {
-                                    entry.file(function (f: File) {
-                                        files.push({
-                                            entry,
-                                            file: f,
-                                            relativeFolder: entry.fullPath.replace(/\/[^\/]*$/, '')
-                                        });
-                                        resolveFile();
-                                    });
-                                });
-                            } else {
-                                return FileUtils.flattern(entry).then((result) => {
-                                    files.push(...result);
-                                });
-                            }
-                        })));
-                        // Try calling traverse() again for the same dir, according to spec
-                        traverse();
-                    }
-                });
-            })();
-        });
-    }
-
-    static toFileArray(fileList: FileList): File[] {
+    public static toFileArray(fileList: FileList): File[] {
         let result = [];
 
         if (fileList && fileList.length > 0) {
-            for (let i = 0; i < fileList.length; i++) {
-                result.push(fileList[i]);
+            for (let currentFile  in  fileList) {
+                if (currentFile) {
+                    result.push(currentFile);
+                }
             }
         }
 
         return result;
     }
+
+    public static flattern(folder: any): Promise<FileInfo[]> {
+        let reader = folder.createReader();
+        let files: FileInfo[] = [];
+        return new Promise((resolve) => {
+            let iterations = [];
+            this.traverse(iterations, resolve, files, reader);
+        });
+    }
+
+    public traverse(iterations: any, resolve: any, files: any, reader: any): Promise<any> {
+        reader.readEntries((entries) => {
+            if (!entries.length) {
+                Promise.all(iterations).then((result) => resolve(files));
+            } else {
+                iterations.push(Promise.all(entries.map((entry) => {
+                    if (entry.isFile) {
+                        return new Promise((resolveFile) => {
+                            entry.file((file: File) => {
+                                files.push({
+                                    entry,
+                                    file,
+                                    relativeFolder: entry.fullPath.replace(/\/[^\/]*$/, '')
+                                });
+                                resolveFile();
+                            });
+                        });
+                    } else {
+                        return FileUtils.flattern(entry).then((result) => {
+                            files.push(...result);
+                        });
+                    }
+                })));
+                // Try calling traverse() again for the same dir, according to spec
+                this.traverse();
+            }
+        });
+    }
+
 }

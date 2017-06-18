@@ -15,29 +15,16 @@
  * limitations under the License.
  */
 
-import { Component, ElementRef, Input, Output, EventEmitter } from '@angular/core';
-import { DiagramColorService } from '../../services/diagram-color.service';
+import { Component } from '@angular/core';
+import { BaseComponent } from './base-icon.component';
 
 @Component({
     selector: 'diagram-container-icon-event',
     templateUrl: './diagram-container-icon-event.component.html'
 })
-export class DiagramContainerIconEventTaskComponent {
-    @Input()
-    data: any;
-
-    @Input()
-    type: string;
-
-    @Input()
-    fillColor: string;
-
-    @Output()
-    onError = new EventEmitter();
-
+export class DiagramContainerIconEventTaskComponent extends BaseComponent {
     constructor(public elementRef: ElementRef,
-                private diagramColorService: DiagramColorService) {}
-
-    ngOnInit() {
+                private diagramColorService: DiagramColorService) {
+        super(elementRef, diagramColorService);
     }
 }

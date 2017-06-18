@@ -15,11 +15,11 @@
  * limitations under the License.
  */
 
-import { Component, EventEmitter, OnInit, Output, Input } from '@angular/core';
-import { Observer, Observable } from 'rxjs/Rx';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { LogService } from 'ng2-alfresco-core';
-import { AnalyticsService } from '../services/analytics.service';
+import { Observable, Observer } from 'rxjs/Rx';
 import { ReportParametersModel } from '../models/report.model';
+import { AnalyticsService } from '../services/analytics.service';
 
 @Component({
     selector: 'analytics-report-list',
@@ -32,42 +32,42 @@ export class AnalyticsReportListComponent implements OnInit {
     public static LAYOUT_GRID: string = 'GRID';
 
     @Input()
-    layoutType: string = AnalyticsReportListComponent.LAYOUT_LIST;
+    public layoutType: string = AnalyticsReportListComponent.LAYOUT_LIST;
 
     @Input()
-    appId: string;
+    public appId: string;
 
     @Input()
-    selectFirst: boolean = false;
+    public selectFirst: boolean = false;
 
     @Output()
-    reportClick: EventEmitter<ReportParametersModel> = new EventEmitter<ReportParametersModel>();
+    public reportClick: EventEmitter<ReportParametersModel> = new EventEmitter<ReportParametersModel>();
 
     @Output()
-    onSuccess = new EventEmitter();
+    public onSuccess = new EventEmitter();
 
     @Output()
-    onError = new EventEmitter();
+    public onError = new EventEmitter();
 
     private reportObserver: Observer<any>;
-    report$: Observable<any>;
+    private report$: Observable<any>;
 
-    currentReport: any;
+    private currentReport: any;
 
-    reports: ReportParametersModel[] = [];
+    private reports: ReportParametersModel[] = [];
 
     constructor(private analyticsService: AnalyticsService,
                 private logService: LogService) {
-        this.report$ = new Observable<ReportParametersModel>(observer => this.reportObserver = observer).share();
+        this.report$ = new Observable<ReportParametersModel>((observer) => this.reportObserver = observer).share();
     }
 
-    ngOnInit() {
+    public ngOnInit(): void {
         this.initObserver();
 
         this.getReportList(this.appId);
     }
 
-    initObserver() {
+    private initObserver(): void {
         this.report$.subscribe((report: ReportParametersModel) => {
             this.reports.push(report);
         });
@@ -76,7 +76,7 @@ export class AnalyticsReportListComponent implements OnInit {
     /**
      * Reload the component
      */
-    reload(reportId?) {
+    public reload(reportId?): void {
         this.reset();
         this.getReportList(this.appId, reportId);
     }
@@ -84,7 +84,7 @@ export class AnalyticsReportListComponent implements OnInit {
     /**
      * Get the report list
      */
-    getReportList(appId: string, reportId?: string) {
+    private getReportList(appId: string, reportId?: string): void {
         this.analyticsService.getReportList(appId).subscribe(
             (res: ReportParametersModel[]) => {
                 if (res && res.length === 0) {
@@ -112,7 +112,7 @@ export class AnalyticsReportListComponent implements OnInit {
     /**
      * Create the default reports and return the report list
      */
-    createDefaultReports() {
+    private createDefaultReports(): void {
         this.analyticsService.createDefaultReports().subscribe(
             () => {
                 this.analyticsService.getReportList(this.appId).subscribe(
@@ -131,14 +131,14 @@ export class AnalyticsReportListComponent implements OnInit {
      * Check if the report list is empty
      * @returns {boolean|ReportParametersModel[]}
      */
-    isReportsEmpty(): boolean {
+    public isReportsEmpty(): boolean {
         return this.reports === undefined || (this.reports && this.reports.length === 0);
     }
 
     /**
      * Reset the list
      */
-    private reset() {
+    private reset(): void {
         if (!this.isReportsEmpty()) {
             this.reports = [];
         }
@@ -148,33 +148,33 @@ export class AnalyticsReportListComponent implements OnInit {
      * Select the current report
      * @param report
      */
-    public selectReport(report: any) {
+    public selectReport(report: any): void {
         this.currentReport = report;
         this.reportClick.emit(report);
     }
 
-    public selectReportByReportId(reportId) {
-        let reportFound = this.reports.find(report => report.id === reportId);
+    public selectReportByReportId(reportId): void {
+        let reportFound = this.reports.find((report) => report.id === reportId);
         if (reportFound) {
             this.currentReport = reportFound;
             this.reportClick.emit(reportFound);
         }
     }
 
-    selectFirstReport() {
+    public selectFirstReport(): void {
         this.selectReport(this.reports[0]);
         this.selectFirst = false;
     }
 
-    isSelected(report: any) {
+    public isSelected(report: any): boolean {
         return this.currentReport === report ? true : false;
     }
 
-    isList() {
+    public isList(): boolean {
         return this.layoutType === AnalyticsReportListComponent.LAYOUT_LIST;
     }
 
-    isGrid() {
+    public isGrid(): boolean {
         return this.layoutType === AnalyticsReportListComponent.LAYOUT_GRID;
     }
 }

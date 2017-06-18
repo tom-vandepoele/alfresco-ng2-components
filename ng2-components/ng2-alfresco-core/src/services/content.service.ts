@@ -24,33 +24,35 @@ export class ContentService {
     private saveData: Function;
 
     constructor(private sanitizer: DomSanitizer) {
-        this.saveData = (function () {
-            let a = document.createElement('a');
-            document.body.appendChild(a);
-            a.style.display = 'none';
+        this.saveData();
+    }
 
-            return (data, format, fileName) => {
-                let blob = null;
+    public saveData(): Function {
+        let aHref = document.createElement('a');
+        document.body.appendChild(aHref);
+        aHref.style.display = 'none';
 
-                if (format === 'blob' || format === 'data') {
-                    blob = new Blob([data], {type: 'octet/stream'});
-                }
+        return (data, format, fileName) => {
+            let blob = null;
 
-                if (format === 'object' || format === 'json') {
-                    let json = JSON.stringify(data);
-                    blob = new Blob([json], {type: 'octet/stream'});
-                }
+            if (format === 'blob' || format === 'data') {
+                blob = new Blob([data], {type: 'octet/stream'});
+            }
 
-                if (blob) {
-                    let url = window.URL.createObjectURL(blob);
-                    a.href = url;
-                    a.download = fileName;
-                    a.click();
+            if (format === 'object' || format === 'json') {
+                let json = JSON.stringify(data);
+                blob = new Blob([json], {type: 'octet/stream'});
+            }
 
-                    window.URL.revokeObjectURL(url);
-                }
-            };
-        }());
+            if (blob) {
+                let url = window.URL.createObjectURL(blob);
+                aHref.href = url;
+                aHref.download = fileName;
+                aHref.click();
+
+                window.URL.revokeObjectURL(url);
+            }
+        };
     }
 
     /**
