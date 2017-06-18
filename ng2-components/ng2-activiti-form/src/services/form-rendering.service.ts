@@ -64,7 +64,7 @@ export class FormRenderingService {
     };
 
     constructor() {
-        this.types['upload'] = (field: FormFieldModel): Type<{}> => {
+        this.types.upload = (field: FormFieldModel): Type<{}> => {
             if (field) {
                 let params = field.params;
                 if (params && params.link) {
@@ -76,14 +76,14 @@ export class FormRenderingService {
         };
     }
 
-    getComponentTypeResolver(fieldType: string, defaultValue: Type<{}> = UnknownWidget): ComponentTypeResolver {
+    public getComponentTypeResolver(fieldType: string, defaultValue: Type<{}> = UnknownWidget): ComponentTypeResolver {
         if (fieldType) {
             return this.types[fieldType] || DefaultTypeResolver.fromType(defaultValue);
         }
         return DefaultTypeResolver.fromType(defaultValue);
     }
 
-    setComponentTypeResolver(fieldType: string, resolver: ComponentTypeResolver, override: boolean = false) {
+    public setComponentTypeResolver(fieldType: string, resolver: ComponentTypeResolver, override: boolean = false): void {
         if (!fieldType) {
             throw new Error(`fieldType is null or not defined`);
         }
@@ -100,7 +100,7 @@ export class FormRenderingService {
         this.types[fieldType] = resolver;
     }
 
-    resolveComponentType(field: FormFieldModel, defaultValue: Type<{}> = UnknownWidget): Type<{}> {
+    public resolveComponentType(field: FormFieldModel, defaultValue: Type<{}> = UnknownWidget): Type<{}> {
         if (field) {
             let resolver = this.getComponentTypeResolver(field.type, defaultValue);
             return resolver(field);
@@ -115,7 +115,7 @@ export interface ComponentTypeResolver {
 }
 
 export class DefaultTypeResolver {
-    static fromType(type: Type<{}>): ComponentTypeResolver {
+    public static fromType(type: Type<{}>): ComponentTypeResolver {
         return (field: FormFieldModel) => {
             return type;
         };

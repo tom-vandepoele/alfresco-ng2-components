@@ -61,7 +61,7 @@ export class TabsWidget implements AfterContentChecked, AfterViewInit {
         return false;
     }
 
-    tabChanged(field: FormFieldModel) {
+    public tabChanged(field: FormFieldModel): void {
         this.formTabChanged.emit(field);
     }
 

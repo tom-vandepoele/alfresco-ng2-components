@@ -33,7 +33,7 @@ export class WidgetVisibilityService {
                 private logService: LogService) {
     }
 
-    public refreshVisibility(form: FormModel) {
+    public refreshVisibility(form: FormModel): void {
         if (form && form.tabs && form.tabs.length > 0) {
             form.tabs.map((tabModel) => this.refreshEntityVisibility(tabModel));
         }
@@ -43,7 +43,7 @@ export class WidgetVisibilityService {
         }
     }
 
-    public refreshEntityVisibility(element: FormFieldModel | TabModel) {
+    public refreshEntityVisibility(element: FormFieldModel | TabModel): void {
         let visible = this.evaluateVisibility(element.form, element.visibilityCondition);
         element.isVisible = visible;
     }
@@ -72,7 +72,7 @@ export class WidgetVisibilityService {
         }
     }
 
-    public getLeftValue(form: FormModel, visibilityObj: WidgetVisibilityModel) {
+    public getLeftValue(form: FormModel, visibilityObj: WidgetVisibilityModel): string {
         let leftValue = '';
         if (visibilityObj.leftRestResponseId && visibilityObj.leftRestResponseId !== 'null') {
             leftValue = this.getVariableValue(form, visibilityObj.leftRestResponseId, this.processVarList);
@@ -83,7 +83,7 @@ export class WidgetVisibilityService {
         return leftValue;
     }
 
-    public getRightValue(form: FormModel, visibilityObj: WidgetVisibilityModel) {
+    public getRightValue(form: FormModel, visibilityObj: WidgetVisibilityModel): string {
         let valueFound = '';
         if (visibilityObj.rightRestResponseId) {
             valueFound = this.getVariableValue(form, visibilityObj.rightRestResponseId, this.processVarList);
@@ -99,13 +99,15 @@ export class WidgetVisibilityService {
         return valueFound;
     }
 
-    public getFormValue(form: FormModel, field: string) {
+    public getFormValue(form: FormModel, field: string): string {
         let value = this.getFieldValue(form.values, field);
         return value ? value : this.searchForm(form, field);
     }
 
-    public getFieldValue(valueList: any, fieldName: string) {
-        let dropDownFilterByName, valueFound = '';
+    public getFieldValue(valueList: any, fieldName: string): string {
+        let dropDownFilterByName;
+        let valueFound = '';
+
         if (fieldName && fieldName.indexOf('_LABEL') > 0) {
             dropDownFilterByName = fieldName.substring(0, fieldName.length - 6);
             if (valueList[dropDownFilterByName]) {
@@ -119,8 +121,9 @@ export class WidgetVisibilityService {
         return valueFound;
     }
 
-    public searchForm(form: FormModel, name: string) {
+    public searchForm(form: FormModel, name: string): string {
         let fieldValue = '';
+
         form.fields.forEach((containerModel: ContainerModel) => {
             containerModel.field.columns.forEach((containerColumnModel: ContainerColumnModel) => {
                 let fieldFound = containerColumnModel.fields.find((field) => this.isSearchedField(field, name));
@@ -136,11 +139,13 @@ export class WidgetVisibilityService {
                 }
             });
         });
+
         return fieldValue;
     }
 
-    private getObjectValue(field: FormFieldModel) {
+    private getObjectValue(field: FormFieldModel): string {
         let value = '';
+
         if (field.value && field.value.name) {
             value = field.value.name;
         } else if (field.options) {
@@ -151,15 +156,16 @@ export class WidgetVisibilityService {
                 value = field.value;
             }
         }
+
         return value;
     }
 
-    private isSearchedField(field: FormFieldModel, fieldToFind: string) {
+    private isSearchedField(field: FormFieldModel, fieldToFind: string): boolean {
         let forrmattedFieldName = this.removeLabel(field, fieldToFind);
         return field.name ? field.name.toUpperCase() === forrmattedFieldName.toUpperCase() : false;
     }
 
-    private removeLabel(field: FormFieldModel, fieldToFind) {
+    private removeLabel(field: FormFieldModel, fieldToFind): string {
         let formattedFieldName = fieldToFind || '';
         if (field.fieldType === 'RestFieldRepresentation' && fieldToFind.indexOf('_LABEL') > 0) {
             formattedFieldName = fieldToFind.substring(0, fieldToFind.length - 6);
@@ -167,7 +173,7 @@ export class WidgetVisibilityService {
         return formattedFieldName;
     }
 
-    public getVariableValue(form: FormModel, name: string, processVarList: TaskProcessVariableModel[]) {
+    public getVariableValue(form: FormModel, name: string, processVarList: TaskProcessVariableModel[]): string {
         return this.getFormVariableValue(form, name) ||
             this.getProcessVariableValue(name, processVarList);
     }

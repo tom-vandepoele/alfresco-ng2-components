@@ -42,7 +42,7 @@ export class FormFieldTypes {
         FormFieldTypes.READONLY_TEXT
     ];
 
-    public static isReadOnlyType(type: string) {
+    public static isReadOnlyType(type: string): boolean {
         return FormFieldTypes.READONLY_TYPES.indexOf(type) > -1;
     }
 }

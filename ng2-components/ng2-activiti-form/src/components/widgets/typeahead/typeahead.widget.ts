@@ -106,7 +106,7 @@ export class TypeaheadWidget extends WidgetComponent implements OnInit {
         });
     }
 
-    onKeyUp() {
+    public onKeyUp(): void {
         if (this.value && this.value.length >= this.minTermLength) {
             this.options = this.getOptions();
             this.popupVisible = this.options.length > 0;

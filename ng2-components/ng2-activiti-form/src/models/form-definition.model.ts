@@ -24,13 +24,13 @@ export class FormDefinitionModel {
     constructor(id: string, name: any, lastUpdatedByFullName: string, lastUpdated: string, metadata: any) {
 
         this.formRepresentation = {
-            id: id,
-            name: name,
+            id,
+            name,
             description: '',
             version: 1,
             lastUpdatedBy: 1,
-            lastUpdatedByFullName: lastUpdatedByFullName,
-            lastUpdated: lastUpdated,
+            lastUpdatedByFullName,
+            lastUpdated,
             stencilSetId: 0,
             referenceId: null,
             formDefinition: {
@@ -45,7 +45,7 @@ export class FormDefinitionModel {
                     sizeY: 1,
                     row: -1,
                     col: -1,
-                    fields: {'1': this.metadataToFields(metadata)}
+                    fields: {1: this.metadataToFields(metadata)}
                 }],
                 gridsterForm: false,
                 javascriptEvents: [],
@@ -62,7 +62,7 @@ export class FormDefinitionModel {
     private metadataToFields(metadata: any): any[] {
         let fields = [];
         if (metadata) {
-            metadata.forEach(function(property) {
+            metadata.forEach((property) => {
                 if (property) {
                     let field = {
                         type: 'text',

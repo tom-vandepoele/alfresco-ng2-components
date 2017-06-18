@@ -19,10 +19,10 @@ import { FormFieldModel } from './form-field.model';
 
 export class ContainerColumnModel {
 
-    size: number = 12;
-    fields: FormFieldModel[] = [];
+    public size: number = 12;
+    public fields: FormFieldModel[] = [];
 
-    hasFields(): boolean {
+    public hasFields(): boolean {
         return this.fields && this.fields.length > 0;
     }
 }

@@ -29,7 +29,7 @@ declare var componentHandler: any;
 })
 export class DateWidget extends WidgetComponent implements OnInit, AfterViewChecked {
 
-    datePicker: any;
+    public datePicker: any;
 
     constructor(private elementRef: ElementRef) {
         super();

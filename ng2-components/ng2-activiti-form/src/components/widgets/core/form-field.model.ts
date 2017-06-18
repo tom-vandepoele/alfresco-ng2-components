@@ -45,7 +45,7 @@ export class FormFieldModel extends FormWidgetModel {
     private _isValid: boolean = true;
 
     public readonly;
-    defaultDateFormat: string = 'D-M-YYYY';
+    private defaultDateFormat: string = 'D-M-YYYY';
 
     // model members
     public fieldType: string;
@@ -120,10 +120,12 @@ export class FormFieldModel extends FormWidgetModel {
 
         // TODO: consider doing that on value setter and caching result
         if (this.validators && this.validators.length > 0) {
-            for (let i = 0; i < this.validators.length; i++) {
-                if (!this.validators[i].validate(this)) {
-                    this._isValid = false;
-                    return this._isValid;
+            for (let currentValidator in validators) {
+                if (currentValidator) {
+                    if (!currentValidator.validate(this)) {
+                        this._isValid = false;
+                        return this._isValid;
+                    }
                 }
             }
         }
@@ -270,7 +272,7 @@ export class FormFieldModel extends FormWidgetModel {
         return value;
     }
 
-    public updateForm() {
+    public updateForm(): any {
         if (!this.form) {
             return;
         }

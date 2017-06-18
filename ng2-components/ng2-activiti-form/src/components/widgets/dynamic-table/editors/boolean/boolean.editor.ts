@@ -26,15 +26,15 @@ import { DynamicTableColumn, DynamicTableModel, DynamicTableRow } from './../../
 export class BooleanEditorComponent {
 
     @Input()
-    table: DynamicTableModel;
+    public table: DynamicTableModel;
 
     @Input()
-    row: DynamicTableRow;
+    public row: DynamicTableRow;
 
     @Input()
-    column: DynamicTableColumn;
+    public column: DynamicTableColumn;
 
-    onValueChanged(row: DynamicTableRow, column: DynamicTableColumn, event: any) {
+    public onValueChanged(row: DynamicTableRow, column: DynamicTableColumn, event: any): void {
         let value: boolean = (<HTMLInputElement>event.target).checked;
         row.value[column.id] = value;
     }

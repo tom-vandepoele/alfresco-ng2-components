@@ -28,7 +28,7 @@ declare var componentHandler: any;
 })
 export class ContainerWidget extends WidgetComponent implements OnInit, AfterViewInit {
 
-    content: ContainerWidgetModel;
+    public content: ContainerWidgetModel;
 
     public onExpanderClicked(): void {
         if (this.content && this.content.isCollapsible()) {

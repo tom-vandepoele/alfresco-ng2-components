@@ -18,6 +18,7 @@
 import { Injectable } from '@angular/core';
 import { AlfrescoApi } from  'alfresco-js-api';
 import { AlfrescoApiService, LogService } from 'ng2-alfresco-core';
+import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 import { Observable } from 'rxjs/Rx';
 import { ExternalContent } from '../components/widgets/core/external-content';
 import { ExternalContentLink } from '../components/widgets/core/external-content-link';
@@ -80,13 +81,14 @@ export class ActivitiAlfrescoContentService {
         return [];
     }
 
-    handleError(error: any): Observable<any> {
-        let errMsg = ActivitiAlfrescoContentService.UNKNOWN_ERROR_MESSAGE;
+    private handleError(error: Response): ErrorObservable<string | Response> {
+        let errMsg = ActivitiContentService.UNKNOWN_ERROR_MESSAGE;
         if (error) {
             errMsg = (error.message) ? error.message :
-                error.status ? `${error.status} - ${error.statusText}` : ActivitiAlfrescoContentService.GENERIC_ERROR_MESSAGE;
+                error.status ? `${error.status} - ${error.statusText}` : ActivitiContentService.GENERIC_ERROR_MESSAGE;
         }
         this.logService.error(errMsg);
         return Observable.throw(errMsg);
     }
+
 }

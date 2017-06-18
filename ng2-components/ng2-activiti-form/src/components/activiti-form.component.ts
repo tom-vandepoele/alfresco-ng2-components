@@ -450,12 +450,12 @@ export class ActivitiForm implements OnInit, AfterViewChecked, OnChanges {
         );
     }
 
-    private loadFormFromFormId(formId: string) {
+    private loadFormFromFormId(formId: string): void {
         this.formId = formId;
         this.loadForm();
     }
 
-    private storeFormAsMetadata() {
+    private storeFormAsMetadata(): void {
         if (this.saveMetadata) {
             this.ecmModelService.createEcmTypeForActivitiForm(this.formName, this.form).subscribe((type) => {
                     this.nodeService.createNodeMetadata(type.nodeType || type.entry.prefixedName, EcmModelService.MODEL_NAMESPACE, this.form.values, this.path, this.nameNode);
@@ -467,27 +467,27 @@ export class ActivitiForm implements OnInit, AfterViewChecked, OnChanges {
         }
     }
 
-    protected onFormLoaded(form: FormModel) {
+    protected onFormLoaded(form: FormModel): void {
         this.formLoaded.emit(form);
         this.formService.formLoaded.next(new FormEvent(form));
     }
 
-    protected onTaskSaved(form: FormModel) {
+    protected onTaskSaved(form: FormModel): void {
         this.formSaved.emit(form);
         this.formService.taskSaved.next(new FormEvent(form));
     }
 
-    protected onTaskSavedError(form: FormModel, error: any) {
+    protected onTaskSavedError(form: FormModel, error: any): void {
         this.handleError(error);
         this.formService.taskSavedError.next(new FormErrorEvent(form, error));
     }
 
-    protected onTaskCompleted(form: FormModel) {
+    protected onTaskCompleted(form: FormModel): void {
         this.formCompleted.emit(form);
         this.formService.taskCompleted.next(new FormEvent(form));
     }
 
-    protected onTaskCompletedError(form: FormModel, error: any) {
+    protected onTaskCompletedError(form: FormModel, error: any): void {
         this.handleError(error);
         this.formService.taskCompletedError.next(new FormErrorEvent(form, error));
     }

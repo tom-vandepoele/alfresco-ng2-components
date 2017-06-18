@@ -106,7 +106,7 @@ export class ActivitiContentService {
             .catch((err) => this.handleError(err));
     }
 
-    public toJson(res: any) {
+    public toJson(res: any): any {
         if (res) {
             return res || {};
         }

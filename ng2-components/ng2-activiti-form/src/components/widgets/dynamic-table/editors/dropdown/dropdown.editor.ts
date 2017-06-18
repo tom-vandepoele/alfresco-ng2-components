@@ -27,23 +27,23 @@ import { DynamicTableColumn, DynamicTableColumnOption, DynamicTableModel, Dynami
 })
 export class DropdownEditorComponent implements OnInit {
 
-    value: any = null;
-    options: DynamicTableColumnOption[] = [];
+    public value: any = null;
+    public options: DynamicTableColumnOption[] = [];
 
     @Input()
-    table: DynamicTableModel;
+    public table: DynamicTableModel;
 
     @Input()
-    row: DynamicTableRow;
+    public row: DynamicTableRow;
 
     @Input()
-    column: DynamicTableColumn;
+    public column: DynamicTableColumn;
 
     constructor(private formService: FormService,
                 private logService: LogService) {
     }
 
-    ngOnInit() {
+    public ngOnInit(): void {
         let field = this.table.field;
         if (field) {
             if (this.column.optionType === 'rest') {
@@ -59,7 +59,7 @@ export class DropdownEditorComponent implements OnInit {
         }
     }
 
-    getValuesByTaskId(field) {
+    public getValuesByTaskId(field): void {
         this.formService
             .getRestFieldValuesColumn(
                 field.form.taskId,
@@ -76,7 +76,7 @@ export class DropdownEditorComponent implements OnInit {
             );
     }
 
-    getValuesByProcessDefinitionId(field) {
+    public getValuesByProcessDefinitionId(field): void {
         this.formService
             .getRestFieldValuesColumnByProcessId(
                 field.form.processDefinitionId,
@@ -93,13 +93,13 @@ export class DropdownEditorComponent implements OnInit {
             );
     }
 
-    onValueChanged(row: DynamicTableRow, column: DynamicTableColumn, event: any) {
+    public onValueChanged(row: DynamicTableRow, column: DynamicTableColumn, event: any): void {
         let value: any = (<HTMLInputElement>event.target).value;
         value = column.options.find((opt) => opt.name === value);
         row.value[column.id] = value;
     }
 
-    handleError(error: any) {
+    private handleError(error: any): void {
         this.logService.error(error);
     }
 }

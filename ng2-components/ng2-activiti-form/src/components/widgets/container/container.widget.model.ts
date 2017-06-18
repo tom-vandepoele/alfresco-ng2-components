@@ -15,8 +15,8 @@
  * limitations under the License.
  */
 
-import { ContainerModel } from './../core/container.model';
 import { ContainerColumnModel } from './../core/container-column.model';
+import { ContainerModel } from './../core/container.model';
 import { FormFieldTypes } from './../core/form-field-types';
 import { FormFieldModel } from './../core/form-field.model';
 
@@ -32,8 +32,8 @@ export class ContainerWidgetModel extends ContainerModel {
     public isCollapsible(): boolean {
         let allowCollapse = false;
 
-        if (this.isGroup() && this.field.params['allowCollapse']) {
-            allowCollapse = <boolean> this.field.params['allowCollapse'];
+        if (this.isGroup() && this.field.params.allowCollapse) {
+            allowCollapse = <boolean> this.field.params.allowCollapse;
         }
 
         return allowCollapse;
@@ -42,8 +42,8 @@ export class ContainerWidgetModel extends ContainerModel {
     public isCollapsedByDefault(): boolean {
         let collapseByDefault = false;
 
-        if (this.isCollapsible() && this.field.params['collapseByDefault']) {
-            collapseByDefault = <boolean> this.field.params['collapseByDefault'];
+        if (this.isCollapsible() && this.field.params.collapseByDefault) {
+            collapseByDefault = <boolean> this.field.params.collapseByDefault;
         }
 
         return collapseByDefault;

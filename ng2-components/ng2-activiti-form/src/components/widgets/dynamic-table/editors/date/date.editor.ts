@@ -28,24 +28,24 @@ declare let mdDateTimePicker: any;
 })
 export class DateEditorComponent implements OnInit {
 
-    DATE_FORMAT: string = 'DD-MM-YYYY';
+    private DATE_FORMAT: string = 'DD-MM-YYYY';
 
-    datePicker: any;
-    settings: any;
-    value: any;
-
-    @Input()
-    table: DynamicTableModel;
+    public datePicker: any;
+    public settings: any;
+    public value: any;
 
     @Input()
-    row: DynamicTableRow;
+    public table: DynamicTableModel;
 
     @Input()
-    column: DynamicTableColumn;
+    public row: DynamicTableRow;
+
+    @Input()
+    public column: DynamicTableColumn;
 
     constructor(private elementRef: ElementRef) {}
 
-    ngOnInit() {
+    public ngOnInit(): void {
         this.settings = {
             type: 'date',
             past: moment().subtract(100, 'years'),
@@ -63,7 +63,7 @@ export class DateEditorComponent implements OnInit {
         }
     }
 
-    onDateChanged(event: any) {
+    public onDateChanged(event: any): void {
         let newValue = (<HTMLInputElement> event.target).value;
         let dateValue = moment(newValue, this.DATE_FORMAT);
         this.datePicker.time = dateValue;
@@ -71,7 +71,7 @@ export class DateEditorComponent implements OnInit {
         this.table.flushValue();
     };
 
-    onDateSelected(event: CustomEvent) {
+    public onDateSelected(event: CustomEvent): void {
         this.value = this.datePicker.time.format('DD-MM-YYYY');
         let newValue = this.datePicker.time.format('YYYY-MM-DD');
         this.row.value[this.column.id] = `${newValue}T00:00:00.000Z`;
@@ -82,7 +82,7 @@ export class DateEditorComponent implements OnInit {
         }
     }
 
-    updateMaterialTextField(elementRef: ElementRef, value: string): boolean {
+    public updateMaterialTextField(elementRef: ElementRef, value: string): boolean {
         if (elementRef) {
             let el = elementRef.nativeElement;
             if (el) {

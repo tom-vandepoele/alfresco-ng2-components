@@ -22,11 +22,11 @@ export class FormOutcomeEvent {
     private _outcome: FormOutcomeModel;
     private _defaultPrevented: boolean = false;
 
-    get outcome(): FormOutcomeModel {
+    public get outcome(): FormOutcomeModel {
         return this._outcome;
     }
 
-    get defaultPrevented() {
+    public get defaultPrevented(): any {
         return this._defaultPrevented;
     }
 

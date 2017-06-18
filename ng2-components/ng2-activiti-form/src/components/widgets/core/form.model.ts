@@ -98,15 +98,15 @@ export class FormModel {
                 this.loadData(data);
             }
 
-            for (let i = 0; i < this.fields.length; i++) {
-                let field = this.fields[i];
-                if (field.tab) {
+            for (let field in this.fields) {
+                if (field && field.tab) {
                     let tab = tabCache[field.tab];
                     if (tab) {
                         tab.fields.push(field);
                     }
                 }
             }
+
             if (json.fields) {
                 let saveOutcome = new FormOutcomeModel(this, { id: FormModel.SAVE_OUTCOME, name: 'Save', isSystem: true });
                 let completeOutcome = new FormOutcomeModel(this, {id: FormModel.COMPLETE_OUTCOME, name: 'Complete', isSystem: true });
@@ -133,13 +133,13 @@ export class FormModel {
     public getFormFields(): FormFieldModel[] {
         let result: FormFieldModel[] = [];
 
-        for (let i = 0; i < this.fields.length; i++) {
-            let field = this.fields[i];
-
-            if (field instanceof ContainerModel) {
-                let container = <ContainerModel> field;
-                result.push(container.field);
-                result.push(...container.field.fields);
+        for (let field in fields) {
+            if (field) {
+                if (field instanceof ContainerModel) {
+                    let container = <ContainerModel> field;
+                    result.push(container.field);
+                    result.push(...container.field.fields);
+                }
             }
         }
 
@@ -149,15 +149,16 @@ export class FormModel {
     private validateForm(): void {
         this._isValid = true;
         let fields = this.getFormFields();
-        for (let i = 0; i < fields.length; i++) {
-            if (!fields[i].validate()) {
+
+        for (let field in fields) {
+            if (!field.validate()) {
                 this._isValid = false;
                 return;
             }
         }
     }
 
-    private validateField(field: FormFieldModel) {
+    private validateField(field: FormFieldModel): void {
         if (!field) {
             return;
         }
@@ -184,7 +185,7 @@ export class FormModel {
             if (field.type === FormFieldTypes.DISPLAY_VALUE) {
                 // workaround for dynamic table on a completed/readonly form
                 if (field.params) {
-                    let originalField = field.params['field'];
+                    let originalField = field.params.field;
                     if (originalField.type === FormFieldTypes.DYNAMIC_TABLE) {
                         result.push(new ContainerModel(new FormFieldModel(this, field)));
                     }
@@ -199,7 +200,7 @@ export class FormModel {
 
     // Loads external data and overrides field values
     // Typically used when form definition and form data coming from different sources
-    private loadData(data: FormValues) {
+    private loadData(data: FormValues): void {
         for (let field of this.getFormFields()) {
             if (data[field.id]) {
                 field.json.value = data[field.id];

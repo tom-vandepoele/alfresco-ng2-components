@@ -54,7 +54,7 @@ export class EcmModelService {
     }
 
     public searchActivitiEcmModel(): any {
-        return this.getEcmModels().map(function (ecmModels: any) {
+        return this.getEcmModels().map((ecmModels: any) => {
             return ecmModels.list.entries.find((model) => model.entry.name === EcmModelService.MODEL_NAME);
         });
     }
@@ -118,7 +118,7 @@ export class EcmModelService {
     }
 
     public searchEcmType(typeName: string, modelName: string): Observable<any> {
-        return this.getEcmType(modelName).map(function (customTypes: any) {
+        return this.getEcmType(modelName).map((customTypes: any) => {
             return customTypes.list.entries.find((type) => type.entry.prefixedName === typeName || type.entry.title === typeName);
         });
     }
@@ -155,7 +155,7 @@ export class EcmModelService {
             .catch((err) => this.handleError(err));
     }
 
-    public addPropertyToAType(modelName: string, typeName: string, formFields: any) {
+    public addPropertyToAType(modelName: string, typeName: string, formFields: any): void {
         let name = this.cleanNameType(typeName);
 
         let properties = [];
@@ -189,7 +189,7 @@ export class EcmModelService {
         return cleanName.replace(/[^a-zA-Z ]/g, '');
     }
 
-    public toJson(res: any) {
+    public toJson(res: any): any {
         if (res) {
             return res || {};
         }

@@ -59,14 +59,14 @@ export class DisplayValueWidget extends WidgetComponent implements OnInit {
             this.value = this.field.value;
             this.visibilityService.refreshEntityVisibility(this.field);
             if (this.field.params) {
-                if (this.field.params['showDocumentContent'] !== undefined) {
-                    this.showDocumentContent = !!this.field.params['showDocumentContent'];
+                if (this.field.params.showDocumentContent !== undefined) {
+                    this.showDocumentContent = !!this.field.params.showDocumentContent;
                 }
-                if (this.field.params['tableEditable'] !== undefined) {
-                    this.tableEditable = !!this.field.params['tableEditable'];
+                if (this.field.params.tableEditable !== undefined) {
+                    this.tableEditable = !!this.field.params.tableEditable;
                 }
 
-                let originalField = this.field.params['field'];
+                let originalField = this.field.params.field;
                 if (originalField && originalField.type) {
                     this.fieldType = originalField.type;
                     switch (originalField.type) {

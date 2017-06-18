@@ -70,7 +70,7 @@ export class ActivitiStartForm extends ActivitiForm implements AfterViewChecked,
     public showRefreshButton: boolean = true;
 
     @Input()
-    readOnlyForm: boolean = false;
+    public readOnlyForm: boolean = false;
 
     @Output()
     public outcomeClick: EventEmitter<any> = new EventEmitter<any>();

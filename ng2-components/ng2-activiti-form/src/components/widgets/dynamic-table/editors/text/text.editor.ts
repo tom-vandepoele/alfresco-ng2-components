@@ -26,21 +26,21 @@ import { DynamicTableColumn, DynamicTableModel, DynamicTableRow } from './../../
 export class TextEditorComponent implements OnInit {
 
     @Input()
-    table: DynamicTableModel;
+    public table: DynamicTableModel;
 
     @Input()
-    row: DynamicTableRow;
+    public row: DynamicTableRow;
 
     @Input()
-    column: DynamicTableColumn;
+    public column: DynamicTableColumn;
 
-    displayName: string;
+    public displayName: string;
 
-    ngOnInit() {
+    public ngOnInit(): void {
         this.displayName = this.table.getDisplayText(this.column);
     }
 
-    onValueChanged(row: DynamicTableRow, column: DynamicTableColumn, event: any) {
+    public onValueChanged(row: DynamicTableRow, column: DynamicTableColumn, event: any): void {
         let value: any = (<HTMLInputElement>event.target).value;
         row.value[column.id] = value;
     }

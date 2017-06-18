@@ -26,23 +26,23 @@ import { DynamicRowValidationSummary, DynamicTableColumn, DynamicTableModel, Dyn
 export class RowEditorComponent {
 
     @Input()
-    table: DynamicTableModel;
+    public table: DynamicTableModel;
 
     @Input()
-    row: DynamicTableRow;
+    public row: DynamicTableRow;
 
     @Input()
-    column: DynamicTableColumn;
+    public column: DynamicTableColumn;
 
     @Output()
-    save: EventEmitter<any> = new EventEmitter<any>();
+    public save: EventEmitter<any> = new EventEmitter<any>();
 
     @Output()
-    cancel: EventEmitter<any> = new EventEmitter<any>();
+    public cancel: EventEmitter<any> = new EventEmitter<any>();
 
-    validationSummary: DynamicRowValidationSummary = <DynamicRowValidationSummary> { isValid: true, text: null };
+    public validationSummary: DynamicRowValidationSummary = <DynamicRowValidationSummary> {isValid: true, text: null};
 
-    onCancelChanges() {
+    public onCancelChanges(): void {
         this.cancel.emit({
             table: this.table,
             row: this.row,
@@ -50,7 +50,7 @@ export class RowEditorComponent {
         });
     }
 
-    onSaveChanges() {
+    public onSaveChanges(): void {
         this.validate();
         if (this.isValid()) {
             this.save.emit({
@@ -65,7 +65,7 @@ export class RowEditorComponent {
         return this.validationSummary && this.validationSummary.isValid;
     }
 
-    private validate() {
+    private validate(): void {
         this.validationSummary = this.table.validateRow(this.row);
     }
 

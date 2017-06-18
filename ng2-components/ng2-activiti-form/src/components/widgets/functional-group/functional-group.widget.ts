@@ -48,8 +48,8 @@ export class FunctionalGroupWidget extends WidgetComponent implements OnInit {
             }
 
             let params = this.field.params;
-            if (params && params['restrictWithGroup']) {
-                let restrictWithGroup = <GroupModel> params['restrictWithGroup'];
+            if (params && params.restrictWithGroup) {
+                let restrictWithGroup = <GroupModel> params.restrictWithGroup;
                 this.groupId = restrictWithGroup.id;
             }
 
