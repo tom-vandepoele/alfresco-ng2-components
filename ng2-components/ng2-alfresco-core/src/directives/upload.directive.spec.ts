@@ -16,8 +16,8 @@
  */
 
 import { ElementRef } from '@angular/core';
-import { UploadDirective } from './upload.directive';
 import { FileInfo } from './../utils/file-utils';
+import { UploadDirective } from './upload.directive';
 
 describe('UploadDirective', () => {
 
@@ -27,7 +27,8 @@ describe('UploadDirective', () => {
     beforeEach(() => {
         nativeElement = {
             classList: jasmine.createSpyObj('classList', ['add', 'remove']),
-            dispatchEvent: () => {}
+            dispatchEvent: () => {
+            }
         };
         directive = new UploadDirective(new ElementRef(nativeElement), null, null);
     });
@@ -115,7 +116,7 @@ describe('UploadDirective', () => {
             <FileInfo> {},
             <FileInfo> {}
         ]));
-        spyOn(nativeElement, 'dispatchEvent').and.callFake(_ => {
+        spyOn(nativeElement, 'dispatchEvent').and.callFake(() => {
             done();
         });
         directive.onDrop(event);
@@ -130,7 +131,7 @@ describe('UploadDirective', () => {
         spyOn(directive, 'getDataTransfer').and.returnValue({});
         spyOn(directive, 'getFilesDropped').and.returnValue(Promise.resolve(files));
 
-        spyOn(nativeElement, 'dispatchEvent').and.callFake(e => {
+        spyOn(nativeElement, 'dispatchEvent').and.callFake((e) => {
             expect(e.detail.files.length).toBe(1);
             expect(e.detail.files[0]).toBe(files[0]);
             done();

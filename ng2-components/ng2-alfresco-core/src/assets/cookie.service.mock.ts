@@ -17,11 +17,11 @@
 
 export class CookieServiceMock {
 
-    getItem(key: string): string | null {
+    public getItem(key: string): string | null {
         return this[key] && this[key].data || null;
     }
 
-    setItem(key: string, data: string, expiration: Date | null, path: string | null): void {
+    public setItem(key: string, data: string, expiration: Date | null, path: string | null): void {
         this[key] = {data, expiration, path};
     }
 }

@@ -15,17 +15,17 @@
  * limitations under the License.
  */
 
-import { AlfrescoSettingsService } from './alfresco-settings.service';
-import { AlfrescoAuthenticationService } from './alfresco-authentication.service';
-import { AlfrescoApiService } from './alfresco-api.service';
-import { StorageService } from './storage.service';
-import { CookieService } from './cookie.service';
-import { CookieServiceMock } from './../assets/cookie.service.mock';
-import { LogService } from './log.service';
-import { AuthGuardEcm } from './auth-guard-ecm.service';
+import { async, inject, TestBed } from '@angular/core/testing';
 import { Router} from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { TestBed, async, inject } from '@angular/core/testing';
+import { CookieServiceMock } from './../assets/cookie.service.mock';
+import { AlfrescoApiService } from './alfresco-api.service';
+import { AlfrescoAuthenticationService } from './alfresco-authentication.service';
+import { AlfrescoSettingsService } from './alfresco-settings.service';
+import { AuthGuardEcm } from './auth-guard-ecm.service';
+import { CookieService } from './cookie.service';
+import { LogService } from './log.service';
+import { StorageService } from './storage.service';
 
 describe('AuthGuardService ECM', () => {
 

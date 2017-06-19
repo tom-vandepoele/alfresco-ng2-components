@@ -15,12 +15,12 @@
  * limitations under the License.
  */
 
-import { Component, OnChanges, SimpleChange, SimpleChanges, Input, Output, EventEmitter, ElementRef, TemplateRef, AfterContentInit, ContentChild, Optional } from '@angular/core';
-import { DataTableAdapter, DataRow, DataColumn, DataSorting, DataRowEvent, ObjectDataTableAdapter, ObjectDataRow } from '../../data/index';
+import { AfterContentInit, Component, ContentChild, ElementRef, EventEmitter, Input, OnChanges, Optional, Output, SimpleChange, SimpleChanges, TemplateRef } from '@angular/core';
+import { MdCheckboxChange } from '@angular/material';
+import { DataColumnListComponent } from 'ng2-alfresco-core';
+import { DataColumn, DataRow, DataRowEvent, DataSorting, DataTableAdapter, ObjectDataRow, ObjectDataTableAdapter } from '../../data/index';
 import { DataCellEvent } from './data-cell.event';
 import { DataRowActionEvent } from './data-row-action.event';
-import { DataColumnListComponent } from 'ng2-alfresco-core';
-import { MdCheckboxChange } from '@angular/material';
 
 declare var componentHandler;
 
@@ -31,73 +31,74 @@ declare var componentHandler;
 })
 export class DataTableComponent implements AfterContentInit, OnChanges {
 
-    @ContentChild(DataColumnListComponent) columnList: DataColumnListComponent;
+    @ContentChild(DataColumnListComponent)
+    public columnList: DataColumnListComponent;
 
     @Input()
-    data: DataTableAdapter;
+    public data: DataTableAdapter;
 
     @Input()
-    rows: any[] = [];
+    public rows: any[] = [];
 
     @Input()
-    selectionMode: string = 'single'; // none|single|multiple
+    public selectionMode: string = 'single'; // none|single|multiple
 
     @Input()
-    multiselect: boolean = false;
+    public multiselect: boolean = false;
 
     @Input()
-    actions: boolean = false;
+    public actions: boolean = false;
 
     @Input()
-    actionsPosition: string = 'right'; // left|right
+    public actionsPosition: string = 'right'; // left|right
 
     @Input()
-    fallbackThumbnail: string;
+    public fallbackThumbnail: string;
 
     @Input()
-    contextMenu: boolean = false;
+    public contextMenu: boolean = false;
 
     @Input()
-    allowDropFiles: boolean = false;
+    public allowDropFiles: boolean = false;
 
     @Input()
-    rowStyle: string;
+    public rowStyle: string;
 
     @Input()
-    rowStyleClass: string;
+    public rowStyleClass: string;
 
     @Output()
-    rowClick: EventEmitter<DataRowEvent> = new EventEmitter<DataRowEvent>();
+    public rowClick: EventEmitter<DataRowEvent> = new EventEmitter<DataRowEvent>();
 
     @Output()
-    rowDblClick: EventEmitter<DataRowEvent> = new EventEmitter<DataRowEvent>();
+    public rowDblClick: EventEmitter<DataRowEvent> = new EventEmitter<DataRowEvent>();
 
     @Output()
-    showRowContextMenu: EventEmitter<DataCellEvent> = new EventEmitter<DataCellEvent>();
+    public showRowContextMenu: EventEmitter<DataCellEvent> = new EventEmitter<DataCellEvent>();
 
     @Output()
-    showRowActionsMenu: EventEmitter<DataCellEvent> = new EventEmitter<DataCellEvent>();
+    public showRowActionsMenu: EventEmitter<DataCellEvent> = new EventEmitter<DataCellEvent>();
 
     @Output()
-    executeRowAction: EventEmitter<DataRowActionEvent> = new EventEmitter<DataRowActionEvent>();
+    public executeRowAction: EventEmitter<DataRowActionEvent> = new EventEmitter<DataRowActionEvent>();
 
     @Input()
-    loading: boolean = false;
+    public loading: boolean = false;
 
     public noContentTemplate: TemplateRef<any>;
     public loadingTemplate: TemplateRef<any>;
 
-    isSelectAllChecked: boolean = false;
+    public isSelectAllChecked: boolean = false;
 
     constructor(@Optional() private el: ElementRef) {
     }
 
-    ngAfterContentInit() {
+    public ngAfterContentInit(): void {
         this.setTableSchema();
         this.setupMaterialComponents();
     }
 
-    ngAfterViewInit() {
+    public ngAfterViewInit(): void {
         this.setupMaterialComponents();
     }
 
@@ -110,19 +111,19 @@ export class DataTableComponent implements AfterContentInit, OnChanges {
         return false;
     }
 
-    ngOnChanges(changes: SimpleChanges) {
-        if (this.isPropertyChanged(changes['data'])) {
+    public ngOnChanges(changes: SimpleChanges): void {
+        if (this.isPropertyChanged(changes.data)) {
             if (this.isTableEmpty()) {
                 this.initTable();
             }
             return;
         }
 
-        if (this.isPropertyChanged(changes['rows'])) {
+        if (this.isPropertyChanged(changes.rows)) {
             if (this.isTableEmpty()) {
                 this.initTable();
             } else {
-                this.setTableRows(changes['rows'].currentValue);
+                this.setTableRows(changes.rows.currentValue);
             }
             return;
         }
@@ -132,33 +133,33 @@ export class DataTableComponent implements AfterContentInit, OnChanges {
         }
     }
 
-    isPropertyChanged(property: SimpleChange): boolean {
+    public isPropertyChanged(property: SimpleChange): boolean {
         return property && property.currentValue ? true : false;
     }
 
-    convertToRowsData(rows: any []): ObjectDataRow[] {
-        return rows.map(row => new ObjectDataRow(row));
+    public  convertToRowsData(rows: any []): ObjectDataRow[] {
+        return rows.map((row) => new ObjectDataRow(row));
     }
 
-    private initTable() {
+    private initTable(): void {
         this.data = new ObjectDataTableAdapter(this.rows, []);
     }
 
-    isTableEmpty() {
+    public isTableEmpty(): boolean {
         return this.data === undefined || this.data === null;
     }
 
-    private setTableRows(rows) {
+    private setTableRows(rows): void {
         if (this.data) {
             this.data.setRows(this.convertToRowsData(rows));
         }
     }
 
-    private setTableSchema() {
+    private setTableSchema(): void {
         let schema: DataColumn[] = [];
 
         if (this.columnList && this.columnList.columns) {
-            schema = this.columnList.columns.map(c => <DataColumn> c);
+            schema = this.columnList.columns.map((c) => <DataColumn> c);
         }
 
         if (this.data && schema && schema.length > 0) {
@@ -166,9 +167,9 @@ export class DataTableComponent implements AfterContentInit, OnChanges {
         }
     }
 
-    onRowClick(row: DataRow, e: MouseEvent) {
-        if (e) {
-            e.preventDefault();
+    public onRowClick(row: DataRow, mouseEvent: MouseEvent): void {
+        if (mouseEvent) {
+            mouseEvent.preventDefault();
         }
 
         if (row) {
@@ -177,26 +178,26 @@ export class DataTableComponent implements AfterContentInit, OnChanges {
                 const rows = this.data.getRows();
 
                 if (this.isSingleSelectionMode()) {
-                    rows.forEach(r => r.isSelected = false);
+                    rows.forEach((r) => r.isSelected = false);
                     row.isSelected = newValue;
                 }
 
                 if (this.isMultiSelectionMode()) {
-                    const modifier = e.metaKey || e.ctrlKey;
+                    const modifier = mouseEvent.metaKey || mouseEvent.ctrlKey;
                     if (!modifier) {
-                        rows.forEach(r => r.isSelected = false);
+                        rows.forEach((r) => r.isSelected = false);
                     }
                     row.isSelected = newValue;
                 }
             }
 
-            let event = new DataRowEvent(row, e, this);
-            this.rowClick.emit(event);
+            let dataRowEvent = new DataRowEvent(row, mouseEvent, this);
+            this.rowClick.emit(dataRowEvent);
 
-            if (!event.defaultPrevented && this.el.nativeElement) {
+            if (!mouseEvent.defaultPrevented && this.el.nativeElement) {
                 this.el.nativeElement.dispatchEvent(
                     new CustomEvent('row-click', {
-                        detail: event,
+                        detail: dataRowEvent,
                         bubbles: true
                     })
                 );
@@ -204,34 +205,34 @@ export class DataTableComponent implements AfterContentInit, OnChanges {
         }
     }
 
-    resetSelection(): void {
+    public resetSelection(): void {
         if (this.data) {
             const rows = this.data.getRows();
             if (rows && rows.length > 0) {
-                rows.forEach(r => r.isSelected = false);
+                rows.forEach((r) => r.isSelected = false);
             }
         }
     }
 
-    onRowDblClick(row: DataRow, e?: Event) {
-        if (e) {
-            e.preventDefault();
+    public onRowDblClick(row: DataRow, mouseEvent?: MouseEvent): void {
+        if (mouseEvent) {
+            mouseEvent.preventDefault();
         }
 
-        let event = new DataRowEvent(row, e, this);
-        this.rowDblClick.emit(event);
+        let dataRowEvent = new DataRowEvent(row, mouseEvent, this);
+        this.rowDblClick.emit(dataRowEvent);
 
-        if (!event.defaultPrevented && this.el.nativeElement) {
+        if (!mouseEvent.defaultPrevented && this.el.nativeElement) {
             this.el.nativeElement.dispatchEvent(
                 new CustomEvent('row-dblclick', {
-                    detail: event,
+                    detail: dataRowEvent,
                     bubbles: true
                 })
             );
         }
     }
 
-    onColumnHeaderClick(column: DataColumn) {
+    public onColumnHeaderClick(column: DataColumn): void {
         if (column && column.sortable) {
             let current = this.data.getSorting();
             let newDirection = 'asc';
@@ -242,27 +243,29 @@ export class DataTableComponent implements AfterContentInit, OnChanges {
         }
     }
 
-    onSelectAllClick(e: MdCheckboxChange) {
-        this.isSelectAllChecked = e.checked;
+    public onSelectAllClick(mdCheckboxChangeEvent: MdCheckboxChange): void {
+        this.isSelectAllChecked = mdCheckboxChangeEvent.checked;
 
         if (this.multiselect) {
             let rows = this.data.getRows();
             if (rows && rows.length > 0) {
-                for (let i = 0; i < rows.length; i++) {
-                    rows[i].isSelected = e.checked;
+                for (let currentRow of rows) {
+                    if (currentRow) {
+                        currentRow.isSelected = mdCheckboxChangeEvent.checked;
+                    }
                 }
             }
         }
     }
 
-    onImageLoadingError(event: Event) {
+    public onImageLoadingError(event: Event): void {
         if (event && this.fallbackThumbnail) {
             let element = <any> event.target;
             element.src = this.fallbackThumbnail;
         }
     }
 
-    isIconValue(row: DataRow, col: DataColumn): boolean {
+    public isIconValue(row: DataRow, col: DataColumn): boolean {
         if (row && col) {
             let value = row.getValue(col.key);
             return value && value.startsWith('material-icons://');
@@ -270,7 +273,7 @@ export class DataTableComponent implements AfterContentInit, OnChanges {
         return false;
     }
 
-    asIconValue(row: DataRow, col: DataColumn): string {
+    public asIconValue(row: DataRow, col: DataColumn): string {
         if (this.isIconValue(row, col)) {
             let value = row.getValue(col.key) || '';
             return value.replace('material-icons://', '');
@@ -278,11 +281,11 @@ export class DataTableComponent implements AfterContentInit, OnChanges {
         return null;
     }
 
-    iconAltTextKey(value: string): string {
+    public iconAltTextKey(value: string): string {
         return 'ICONS.' + value.substring(value.lastIndexOf('/') + 1).replace(/\.[a-z]+/, '');
     }
 
-    isColumnSorted(col: DataColumn, direction: string): boolean {
+    public isColumnSorted(col: DataColumn, direction: string): boolean {
         if (col && direction) {
             let sorting = this.data.getSorting();
             return sorting && sorting.key === col.key && sorting.direction === direction;
@@ -290,19 +293,19 @@ export class DataTableComponent implements AfterContentInit, OnChanges {
         return false;
     }
 
-    getContextMenuActions(row: DataRow, col: DataColumn): any[] {
+    public getContextMenuActions(row: DataRow, col: DataColumn): any[] {
         let event = new DataCellEvent(row, col, []);
         this.showRowContextMenu.emit(event);
         return event.value.actions;
     }
 
-    getRowActions(row: DataRow, col: DataColumn): any[] {
+    public getRowActions(row: DataRow, col: DataColumn): any[] {
         let event = new DataCellEvent(row, col, []);
         this.showRowActionsMenu.emit(event);
         return event.value.actions;
     }
 
-    onExecuteRowAction(row: DataRow, action: any) {
+    public onExecuteRowAction(row: DataRow, action: any): void {
         if (action.disabled || action.disabled) {
             event.stopPropagation();
         } else {
@@ -310,19 +313,19 @@ export class DataTableComponent implements AfterContentInit, OnChanges {
         }
     }
 
-    rowAllowsDrop(row: DataRow): boolean {
+    public rowAllowsDrop(row: DataRow): boolean {
         return row.isDropTarget === true;
     }
 
-    hasSelectionMode(): boolean {
+    public hasSelectionMode(): boolean {
         return this.isSingleSelectionMode() || this.isMultiSelectionMode();
     }
 
-    isSingleSelectionMode(): boolean {
+    public isSingleSelectionMode(): boolean {
         return this.selectionMode && this.selectionMode.toLowerCase() === 'single';
     }
 
-    isMultiSelectionMode(): boolean {
+    public isMultiSelectionMode(): boolean {
         return this.selectionMode && this.selectionMode.toLowerCase() === 'multiple';
     }
 }

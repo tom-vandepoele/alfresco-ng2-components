@@ -27,9 +27,9 @@ export * from './src/components/datatable/data-row-action.event';
 
 import { DataTableCellComponent } from './src/components/datatable/datatable-cell.component';
 import { DataTableComponent } from './src/components/datatable/datatable.component';
-import { NoContentTemplateComponent } from './src/directives/no-content-template.component';
-import { LoadingContentTemplateComponent } from './src/directives/loading-template.component';
 import { PaginationComponent } from './src/components/pagination/pagination.component';
+import { LoadingContentTemplateComponent } from './src/directives/loading-template.component';
+import { NoContentTemplateComponent } from './src/directives/no-content-template.component';
 
 export const ALFRESCO_DATATABLE_DIRECTIVES: [any] = [
     DataTableComponent,

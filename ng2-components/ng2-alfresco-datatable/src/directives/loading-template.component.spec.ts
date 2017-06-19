@@ -15,10 +15,10 @@
  * limitations under the License.
  */
 
-import { LoadingContentTemplateComponent } from './loading-template.component';
 import { Injector } from '@angular/core';
 import { getTestBed, TestBed } from '@angular/core/testing';
 import { DataTableComponent } from '../components/datatable/datatable.component';
+import { LoadingContentTemplateComponent } from './loading-template.component';
 
 describe('LoadingContentTemplateComponent', () => {
     let injector: Injector;

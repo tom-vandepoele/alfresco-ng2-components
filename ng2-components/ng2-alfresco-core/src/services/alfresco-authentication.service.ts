@@ -21,6 +21,7 @@ import { Observable, Subject } from 'rxjs/Rx';
 import { AlfrescoApiService } from './alfresco-api.service';
 import { AlfrescoSettingsService } from './alfresco-settings.service';
 import { CookieService } from './cookie.service';
+import { LogService } from './log.service';
 import { StorageService } from './storage.service';
 
 const REMEMBER_ME_COOKIE_KEY = 'ALFRESCO_REMEMBER_ME';
@@ -35,6 +36,7 @@ export class AlfrescoAuthenticationService {
     constructor(private settingsService: AlfrescoSettingsService,
                 public alfrescoApi: AlfrescoApiService,
                 private storage: StorageService,
+                private logService: LogService,
                 private cookie: CookieService) {
     }
 

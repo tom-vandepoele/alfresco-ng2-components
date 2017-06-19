@@ -16,7 +16,7 @@
  */
 
 import { DataColumn, DataRow, DataSorting } from './datatable-adapter';
-import { ObjectDataTableAdapter, ObjectDataRow, ObjectDataColumn } from './object-datatable-adapter';
+import { ObjectDataColumn, ObjectDataRow, ObjectDataTableAdapter } from './object-datatable-adapter';
 
 describe('ObjectDataTableAdapter', () => {
 
@@ -132,12 +132,16 @@ describe('ObjectDataTableAdapter', () => {
 
     it('should fail getting value with row not defined', () => {
         let adapter = new ObjectDataTableAdapter([], []);
-        expect(() => { adapter.getValue(null, null); }).toThrowError('Row not found');
+        expect(() => {
+            adapter.getValue(null, null);
+        }).toThrowError('Row not found');
     });
 
     it('should fail getting value with column not defined', () => {
         let adapter = new ObjectDataTableAdapter([], []);
-        expect(() => { adapter.getValue(<DataRow> {}, null); }).toThrowError('Column not found');
+        expect(() => {
+            adapter.getValue(<DataRow> {}, null);
+        }).toThrowError('Column not found');
     });
 
     it('should get value from row with column key', () => {
@@ -147,7 +151,7 @@ describe('ObjectDataTableAdapter', () => {
         row.getValue.and.returnValue(value);
 
         let adapter = new ObjectDataTableAdapter([], []);
-        let result = adapter.getValue(row, <DataColumn> { key: 'col1' });
+        let result = adapter.getValue(row, <DataColumn> {key: 'col1'});
 
         expect(row.getValue).toHaveBeenCalledWith('col1');
         expect(result).toBe(value);
@@ -183,11 +187,11 @@ describe('ObjectDataTableAdapter', () => {
     it('should sort by first column by default', () => {
         let adapter = new ObjectDataTableAdapter(
             [
-                { id: 2, name: 'abs' },
-                { id: 1, name: 'xyz' }
+                {id: 2, name: 'abs'},
+                {id: 1, name: 'xyz'}
             ],
             [
-                new ObjectDataColumn({ key: 'id', sortable: true })
+                new ObjectDataColumn({key: 'id', sortable: true})
             ]
         );
 
@@ -198,8 +202,8 @@ describe('ObjectDataTableAdapter', () => {
 
     it('should take first sortable column by default', () => {
         let adapter = new ObjectDataTableAdapter([], [
-            <DataColumn> { key: 'icon' },
-            new ObjectDataColumn({ key: 'id', sortable: true })
+            <DataColumn> {key: 'icon'},
+            new ObjectDataColumn({key: 'id', sortable: true})
         ]);
 
         expect(adapter.getSorting()).toEqual(
@@ -213,12 +217,12 @@ describe('ObjectDataTableAdapter', () => {
     it('should sort by dates', () => {
         let adapter = new ObjectDataTableAdapter(
             [
-                { id: 1, created: new Date(2016, 7, 6, 15, 7, 2) },
-                { id: 2, created: new Date(2016, 7, 6, 15, 7, 1) }
+                {id: 1, created: new Date(2016, 7, 6, 15, 7, 2)},
+                {id: 2, created: new Date(2016, 7, 6, 15, 7, 1)}
             ],
             [
-                <DataColumn> { key: 'id' },
-                <DataColumn> { key: 'created' }
+                <DataColumn> {key: 'id'},
+                <DataColumn> {key: 'created'}
             ]
         );
 
@@ -232,12 +236,12 @@ describe('ObjectDataTableAdapter', () => {
     it('should be sorting undefined if no sortable found', () => {
         let adapter = new ObjectDataTableAdapter(
             [
-                { id: 2, name: 'abs' },
-                { id: 1, name: 'xyz' }
+                {id: 2, name: 'abs'},
+                {id: 1, name: 'xyz'}
             ],
             [
-                new ObjectDataColumn({ key: 'id' }),
-                new ObjectDataColumn({ key: 'name' })
+                new ObjectDataColumn({key: 'id'}),
+                new ObjectDataColumn({key: name})
             ]
         );
 
@@ -247,11 +251,11 @@ describe('ObjectDataTableAdapter', () => {
     it('should sort asc and desc', () => {
         let adapter = new ObjectDataTableAdapter(
             [
-                { id: 2, name: 'abs' },
-                { id: 1, name: 'xyz' }
+                {id: 2, name: 'abs'},
+                {id: 1, name: 'xyz'}
             ],
             [
-                new ObjectDataColumn({ key: 'id', sortable: true })
+                new ObjectDataColumn({key: 'id', sortable: true})
             ]
         );
 
@@ -297,7 +301,9 @@ describe('ObjectDataTableAdapter', () => {
 describe('ObjectDataRow', () => {
 
     it('should require object source', () => {
-        expect(() => { return new ObjectDataRow(null); }).toThrowError('Object source not found');
+        expect(() => {
+            return new ObjectDataRow(null);
+        }).toThrowError('Object source not found');
     });
 
     it('should get top level property value', () => {
@@ -314,10 +320,10 @@ describe('ObjectDataRow', () => {
 
     it('should get nested property value', () => {
         let row = new ObjectDataRow({
-           name: {
-               firstName: 'John',
-               lastName: 'Doe'
-           }
+            name: {
+                firstName: 'John',
+                lastName: 'Doe'
+            }
         });
 
         expect(row.getValue('name.lastName')).toBe('Doe');
@@ -329,7 +335,7 @@ describe('ObjectDataRow', () => {
     });
 
     it('should check top level value exists', () => {
-        let row = new ObjectDataRow({ id: 1 });
+        let row = new ObjectDataRow({id: 1});
 
         expect(row.hasValue('id')).toBeTruthy();
         expect(row.hasValue('other')).toBeFalsy();
@@ -349,9 +355,9 @@ describe('ObjectDataRow', () => {
     });
 
     it('should generateSchema generate a schema from data', () => {
-        let data =  [
-            { id: 2, name: 'abs' },
-            { id: 1, name: 'xyz' }
+        let data = [
+            {id: 2, name: 'abs'},
+            {id: 1, name: 'xyz'}
         ];
 
         let schema = ObjectDataTableAdapter.generateSchema(data);

@@ -16,13 +16,13 @@
  */
 
 import { ReflectiveInjector } from '@angular/core';
-import { AlfrescoSettingsService } from './alfresco-settings.service';
-import { AlfrescoAuthenticationService } from './alfresco-authentication.service';
-import { AlfrescoApiService } from './alfresco-api.service';
-import { StorageService } from './storage.service';
-import { CookieService } from './cookie.service';
 import { CookieServiceMock } from './../assets/cookie.service.mock';
+import { AlfrescoApiService } from './alfresco-api.service';
+import { AlfrescoAuthenticationService } from './alfresco-authentication.service';
+import { AlfrescoSettingsService } from './alfresco-settings.service';
+import { CookieService } from './cookie.service';
 import { LogService } from './log.service';
+import { StorageService } from './storage.service';
 
 declare let jasmine: any;
 
@@ -39,7 +39,7 @@ describe('AlfrescoAuthenticationService', () => {
             AlfrescoApiService,
             AlfrescoAuthenticationService,
             StorageService,
-            { provide: CookieService, useClass: CookieServiceMock },
+            {provide: CookieService, useClass: CookieServiceMock},
             LogService
         ]);
 
@@ -64,50 +64,51 @@ describe('AlfrescoAuthenticationService', () => {
 
         it('should save the remember me cookie as a session cookie after successful login', (done) => {
             authService.login('fake-username', 'fake-password', false).subscribe(() => {
-                expect(cookie['ALFRESCO_REMEMBER_ME']).not.toBeUndefined();
-                expect(cookie['ALFRESCO_REMEMBER_ME'].expiration).toBeNull();
+                expect(cookie.ALFRESCO_REMEMBER_ME).not.toBeUndefined();
+                expect(cookie.ALFRESCO_REMEMBER_ME.expiration).toBeNull();
                 done();
             });
 
             jasmine.Ajax.requests.mostRecent().respondWith({
-                'status': 201,
+                status: 201,
                 contentType: 'application/json',
-                responseText: JSON.stringify({'entry': {'id': 'fake-post-ticket', 'userId': 'admin'}})
+                responseText: JSON.stringify({entry: {id: 'fake-post-ticket', userId: 'admin'}})
             });
         });
 
         it('should save the remember me cookie as a persistent cookie after successful login', (done) => {
             authService.login('fake-username', 'fake-password', true).subscribe(() => {
-                expect(cookie['ALFRESCO_REMEMBER_ME']).not.toBeUndefined();
-                expect(cookie['ALFRESCO_REMEMBER_ME'].expiration).not.toBeNull();
+                expect(cookie.ALFRESCO_REMEMBER_ME).not.toBeUndefined();
+                expect(cookie.ALFRESCO_REMEMBER_ME.expiration).not.toBeNull();
                 done();
             });
 
             jasmine.Ajax.requests.mostRecent().respondWith({
-                'status': 201,
+                status: 201,
                 contentType: 'application/json',
-                responseText: JSON.stringify({'entry': {'id': 'fake-post-ticket', 'userId': 'admin'}})
+                responseText: JSON.stringify({entry: {id: 'fake-post-ticket', userId: 'admin'}})
             });
         });
 
         it('should not save the remember me cookie after failed login', (done) => {
             authService.login('fake-username', 'fake-password').subscribe(
-                (res) => {},
+                (res) => {
+                },
                 (err: any) => {
-                    expect(cookie['ALFRESCO_REMEMBER_ME']).toBeUndefined();
+                    expect(cookie.ALFRESCO_REMEMBER_ME).toBeUndefined();
                     done();
                 });
 
             jasmine.Ajax.requests.mostRecent().respondWith({
-                'status': 403,
+                status: 403,
                 contentType: 'application/json',
                 responseText: JSON.stringify({
-                    'error': {
-                        'errorKey': 'Login failed',
-                        'statusCode': 403,
-                        'briefSummary': '05150009 Login failed',
-                        'stackTrace': 'For security reasons the stack trace is no longer displayed, but the property is kept for previous versions.',
-                        'descriptionURL': 'https://api-explorer.alfresco.com'
+                    error: {
+                        errorKey: 'Login failed',
+                        statusCode: 403,
+                        briefSummary: '05150009 Login failed',
+                        stackTrace: 'For security reasons the stack trace is no longer displayed, but the property is kept for previous versions.',
+                        descriptionURL: 'https://api-explorer.alfresco.com'
                     }
                 })
             });
@@ -129,9 +130,9 @@ describe('AlfrescoAuthenticationService', () => {
             });
 
             jasmine.Ajax.requests.mostRecent().respondWith({
-                'status': 201,
+                status: 201,
                 contentType: 'application/json',
-                responseText: JSON.stringify({'entry': {'id': 'fake-post-ticket', 'userId': 'admin'}})
+                responseText: JSON.stringify({entry: {id: 'fake-post-ticket', userId: 'admin'}})
             });
         });
 
@@ -144,9 +145,9 @@ describe('AlfrescoAuthenticationService', () => {
             });
 
             jasmine.Ajax.requests.mostRecent().respondWith({
-                'status': 201,
+                status: 201,
                 contentType: 'application/json',
-                responseText: JSON.stringify({'entry': {'id': 'fake-post-ticket', 'userId': 'admin'}})
+                responseText: JSON.stringify({entry: {id: 'fake-post-ticket', userId: 'admin'}})
             });
         });
 
@@ -162,15 +163,15 @@ describe('AlfrescoAuthenticationService', () => {
                 });
 
             jasmine.Ajax.requests.mostRecent().respondWith({
-                'status': 403,
+                status: 403,
                 contentType: 'application/json',
                 responseText: JSON.stringify({
-                    'error': {
-                        'errorKey': 'Login failed',
-                        'statusCode': 403,
-                        'briefSummary': '05150009 Login failed',
-                        'stackTrace': 'For security reasons the stack trace is no longer displayed, but the property is kept for previous versions.',
-                        'descriptionURL': 'https://api-explorer.alfresco.com'
+                    rror: {
+                        erorKey: 'ogin failed',
+                        statsCode: 403
+                        briefSmmary: '0515009 Login failed',
+                        stackTrae: 'For seurity reasons the stack trace is no longer displayed, but the property is kept for previous versions.',
+                        descriptioURL: 'https://pi-explorer.alfresco.com'
                     }
                 })
             });
@@ -182,9 +183,9 @@ describe('AlfrescoAuthenticationService', () => {
             });
 
             jasmine.Ajax.requests.mostRecent().respondWith({
-                'status': 201,
+                status: 201,
                 contentType: 'application/json',
-                responseText: JSON.stringify({'entry': {'id': 'fake-post-ticket', 'userId': 'admin'}})
+                responseText: JSON.stringify({entry: {id: 'fake-post-ticket', userId: 'admin'}})
             });
         });
 
@@ -198,14 +199,14 @@ describe('AlfrescoAuthenticationService', () => {
                 });
 
                 jasmine.Ajax.requests.mostRecent().respondWith({
-                    'status': 204
+                    status: 204
                 });
             });
 
             jasmine.Ajax.requests.mostRecent().respondWith({
-                'status': 201,
+                status: 201,
                 contentType: 'application/json',
-                responseText: JSON.stringify({'entry': {'id': 'fake-post-ticket', 'userId': 'admin'}})
+                responseText: JSON.stringify({entry: {id: 'fake-post-ticket', userId: 'admin'}})
             });
         });
 
@@ -217,7 +218,7 @@ describe('AlfrescoAuthenticationService', () => {
                 expect(authService.getTicketEcm()).toBe('fake-post-ticket');
 
                 jasmine.Ajax.requests.mostRecent().respondWith({
-                    'status': 204
+                    status: 204
                 });
 
                 logoutPromise.subscribe(() => {
@@ -229,9 +230,9 @@ describe('AlfrescoAuthenticationService', () => {
             });
 
             jasmine.Ajax.requests.mostRecent().respondWith({
-                'status': 201,
+                status: 201,
                 contentType: 'application/json',
-                responseText: JSON.stringify({'entry': {'id': 'fake-post-ticket', 'userId': 'admin'}})
+                responseText: JSON.stringify({entry: {id: 'fake-post-ticket', userId: 'admin'}})
             });
         });
 
@@ -256,7 +257,7 @@ describe('AlfrescoAuthenticationService', () => {
             });
 
             jasmine.Ajax.requests.mostRecent().respondWith({
-                'status': 200
+                status: 200
             });
         });
 
@@ -269,9 +270,9 @@ describe('AlfrescoAuthenticationService', () => {
             });
 
             jasmine.Ajax.requests.mostRecent().respondWith({
-                'status': 201,
+                status: 201,
                 contentType: 'application/json',
-                responseText: JSON.stringify({'entry': {'id': 'fake-post-ticket', 'userId': 'admin'}})
+                responseText: JSON.stringify({entry: {id: 'fake-post-ticket', userId: 'admin'}})
             });
         });
 
@@ -287,7 +288,7 @@ describe('AlfrescoAuthenticationService', () => {
                 });
 
             jasmine.Ajax.requests.mostRecent().respondWith({
-                'status': 403
+                status: 403
             });
         });
 
@@ -299,7 +300,7 @@ describe('AlfrescoAuthenticationService', () => {
                 expect(authService.getTicketBpm()).toBe('Basic ZmFrZS11c2VybmFtZTpmYWtlLXBhc3N3b3Jk');
 
                 jasmine.Ajax.requests.mostRecent().respondWith({
-                    'status': 200
+                    status: 200
                 });
 
                 logoutPromise.subscribe(() => {
@@ -311,7 +312,7 @@ describe('AlfrescoAuthenticationService', () => {
             });
 
             jasmine.Ajax.requests.mostRecent().respondWith({
-                'status': 200
+                status: 200
             });
         });
 
@@ -325,12 +326,12 @@ describe('AlfrescoAuthenticationService', () => {
                 });
 
                 jasmine.Ajax.requests.mostRecent().respondWith({
-                    'status': 200
+                    status: 200
                 });
             });
 
             jasmine.Ajax.requests.mostRecent().respondWith({
-                'status': 200
+                status: 200
             });
         });
 
@@ -345,7 +346,7 @@ describe('AlfrescoAuthenticationService', () => {
                 });
 
             jasmine.Ajax.requests.mostRecent().respondWith({
-                'status': 403
+                status: 403
             });
         });
     });
@@ -393,13 +394,13 @@ describe('AlfrescoAuthenticationService', () => {
             });
 
             jasmine.Ajax.requests.at(0).respondWith({
-                'status': 201,
+                status: 201,
                 contentType: 'application/json',
-                responseText: JSON.stringify({'entry': {'id': 'fake-post-ticket', 'userId': 'admin'}})
+                responseText: JSON.stringify({entry: {id: 'fake-post-ticket', userId: 'admin'}})
             });
 
             jasmine.Ajax.requests.at(1).respondWith({
-                'status': 200
+                status: 200
             });
         });
 
@@ -416,11 +417,11 @@ describe('AlfrescoAuthenticationService', () => {
                 });
 
             jasmine.Ajax.requests.at(0).respondWith({
-                'status': 403
+                status: 403
             });
 
             jasmine.Ajax.requests.at(1).respondWith({
-                'status': 200
+                status: 200
             });
         });
 
@@ -437,13 +438,13 @@ describe('AlfrescoAuthenticationService', () => {
                 });
 
             jasmine.Ajax.requests.at(0).respondWith({
-                'status': 201,
+                status: 201,
                 contentType: 'application/json',
-                responseText: JSON.stringify({'entry': {'id': 'fake-post-ticket', 'userId': 'admin'}})
+                responseText: JSON.stringify({entry: {id: 'fake-post-ticket', userId: 'admin'}})
             });
 
             jasmine.Ajax.requests.at(1).respondWith({
-                'status': 403
+                status: 403
             });
         });
 
@@ -461,11 +462,11 @@ describe('AlfrescoAuthenticationService', () => {
                 });
 
             jasmine.Ajax.requests.at(0).respondWith({
-                'status': 403
+                status: 403
             });
 
             jasmine.Ajax.requests.at(1).respondWith({
-                'status': 403
+                status: 403
             });
         });
     });

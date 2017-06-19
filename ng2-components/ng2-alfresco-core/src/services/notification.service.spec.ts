@@ -15,11 +15,11 @@
  * limitations under the License.
  */
 
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Component } from '@angular/core';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { LiveAnnouncer, MdSnackBar, MdSnackBarModule, OVERLAY_PROVIDERS, OverlayModule } from '@angular/material';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NotificationService } from './notification.service';
-import { MdSnackBarModule, MdSnackBar, OverlayModule, OVERLAY_PROVIDERS, LiveAnnouncer } from '@angular/material';
 
 describe('NotificationService', () => {
     let fixture: ComponentFixture<ComponentThatProvidesNotificationService>;
@@ -81,12 +81,12 @@ class ComponentThatProvidesNotificationService {
 
     }
 
-    sendMessage() {
+    public sendMessage(): Promise<any> {
         let promise = this.notificationService.openSnackMessage('Test notification', 5000);
         return promise;
     }
 
-    sendMessageAction() {
+    public sendMessageAction(): Promise<any> {
         let promise = this.notificationService.openSnackMessageAction('Test notification', 'TestWarn', 5000);
         return promise;
     }

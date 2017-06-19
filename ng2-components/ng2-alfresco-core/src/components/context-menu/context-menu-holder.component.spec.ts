@@ -15,8 +15,8 @@
  * limitations under the License.
  */
 
-import { ContextMenuService } from './context-menu.service';
 import { ContextMenuHolderComponent } from './context-menu-holder.component';
+import { ContextMenuService } from './context-menu.service';
 
 describe('ContextMenuHolderComponent', () => {
 
@@ -81,7 +81,7 @@ describe('ContextMenuHolderComponent', () => {
             clientY: 20
         });
 
-        contextMenuService.show.next({ event: event });
+        contextMenuService.show.next({event});
 
         expect(menuHolder.locationCss).toEqual(
             jasmine.objectContaining({
@@ -93,7 +93,7 @@ describe('ContextMenuHolderComponent', () => {
 
     it('should take links from service event', () => {
         let links = [{}, {}];
-        contextMenuService.show.next({ obj: links });
+        contextMenuService.show.next({obj: links});
         expect(menuHolder.links).toBe(links);
     });
 

@@ -16,20 +16,21 @@
  */
 
 import { ReflectiveInjector } from '@angular/core';
-import { AlfrescoSettingsService } from './alfresco-settings.service';
+import { CookieServiceMock } from './../assets/cookie.service.mock';
+import { AlfrescoApiService } from './alfresco-api.service';
 import { AlfrescoAuthenticationService } from './alfresco-authentication.service';
 import { AlfrescoContentService } from './alfresco-content.service';
-import { AlfrescoApiService } from './alfresco-api.service';
-import { StorageService } from './storage.service';
+import { AlfrescoSettingsService } from './alfresco-settings.service';
 import { CookieService } from './cookie.service';
-import { CookieServiceMock } from './../assets/cookie.service.mock';
 import { LogService } from './log.service';
+import { StorageService } from './storage.service';
 
 declare let jasmine: any;
 
 describe('AlfrescoContentService', () => {
 
-    let injector, contentService: AlfrescoContentService;
+    let injector;
+    let contentService: AlfrescoContentService;
     let authService: AlfrescoAuthenticationService;
     let settingsService: AlfrescoSettingsService;
     let storage: StorageService;
@@ -44,7 +45,7 @@ describe('AlfrescoContentService', () => {
             AlfrescoAuthenticationService,
             AlfrescoSettingsService,
             StorageService,
-            { provide: CookieService, useClass: CookieServiceMock },
+            {provide: CookieService, useClass: CookieServiceMock},
             LogService
         ]);
 
@@ -79,9 +80,9 @@ describe('AlfrescoContentService', () => {
         });
 
         jasmine.Ajax.requests.mostRecent().respondWith({
-            'status': 201,
+            status: 201,
             contentType: 'application/json',
-            responseText: JSON.stringify({'entry': {'id': 'fake-post-ticket', 'userId': 'admin'}})
+            responseText: JSON.stringify({entry: {id: 'fake-post-ticket', userId: 'admin'}})
         });
     });
 
@@ -94,9 +95,9 @@ describe('AlfrescoContentService', () => {
         });
 
         jasmine.Ajax.requests.mostRecent().respondWith({
-            'status': 201,
+            status: 201,
             contentType: 'application/json',
-            responseText: JSON.stringify({'entry': {'id': 'fake-post-ticket', 'userId': 'admin'}})
+            responseText: JSON.stringify({entry: {id: 'fake-post-ticket', userId: 'admin'}})
         });
     });
 });

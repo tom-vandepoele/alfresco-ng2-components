@@ -15,8 +15,8 @@
  * limitations under the License.
  */
 
-import { TestBed, inject } from '@angular/core/testing';
-import { HttpModule, XHRBackend, Response, ResponseOptions } from '@angular/http';
+import { inject, TestBed } from '@angular/core/testing';
+import { HttpModule, Response, ResponseOptions, XHRBackend } from '@angular/http';
 import { MockBackend, MockConnection } from '@angular/http/testing';
 import { AppConfigModule, AppConfigService } from './app-config.service';
 
@@ -24,10 +24,10 @@ describe('AppConfigService', () => {
 
     let appConfigService: AppConfigService;
     const mockResponse = {
-        'ecmHost': 'http://localhost:4000/ecm',
-        'bpmHost': 'http://localhost:4000/ecm',
-        'application': {
-            'name': 'Custom Name'
+        ecmHost: 'http://localhost:4000/ecm',
+        bpmHost: 'http://localhost:4000/ecm',
+        application: {
+            name: 'Custom Name'
         }
     };
 
@@ -38,7 +38,7 @@ describe('AppConfigService', () => {
                 AppConfigModule
             ],
             providers: [
-                { provide: XHRBackend, useClass: MockBackend }
+                {provide: XHRBackend, useClass: MockBackend}
             ]
         });
     });
@@ -60,7 +60,7 @@ describe('AppConfigService', () => {
     });
 
     it('should load external settings', () => {
-        appConfigService.load().then(config => {
+        appConfigService.load().then((config) => {
             expect(config).toEqual(mockResponse);
         });
     });

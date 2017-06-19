@@ -49,7 +49,7 @@ describe('ContextMenuDirective', () => {
     it('should forward event to service', () => {
         let event = new MouseEvent('click');
 
-        contextMenuService.show.subscribe(e => {
+        contextMenuService.show.subscribe(() => {
             expect(e.event).toBeDefined();
             expect(e.event).toBe(event);
         });
@@ -61,7 +61,7 @@ describe('ContextMenuDirective', () => {
         let links = [{}, {}];
         directive.links = links;
 
-        contextMenuService.show.subscribe(e => {
+        contextMenuService.show.subscribe((e) => {
             expect(e.obj).toBeDefined();
             expect(e.obj).toBe(links);
         });

@@ -16,18 +16,19 @@
  */
 
 import { ReflectiveInjector } from '@angular/core';
-import { AlfrescoApiService } from './alfresco-api.service';
-import { RenditionsService } from './renditions.service';
-import { AlfrescoSettingsService } from './alfresco-settings.service';
-import { StorageService } from './storage.service';
-import { LogService } from './log.service';
 import { fakeRedition, fakeReditionCreated, fakeReditionsList } from '../assets/renditionsService.mock';
+import { AlfrescoApiService } from './alfresco-api.service';
+import { AlfrescoSettingsService } from './alfresco-settings.service';
+import { LogService } from './log.service';
+import { RenditionsService } from './renditions.service';
+import { StorageService } from './storage.service';
 
 declare let jasmine: any;
 declare let AlfrescoApi: any;
 
 describe('RenditionsService', () => {
-    let service, injector;
+    let service;
+    let injector;
 
     beforeEach(() => {
         injector = ReflectiveInjector.resolveAndCreate([
@@ -55,7 +56,7 @@ describe('RenditionsService', () => {
         });
 
         jasmine.Ajax.requests.mostRecent().respondWith({
-            'status': 200,
+            status: 200,
             contentType: 'application/json',
             responseText: JSON.stringify(fakeReditionsList)
         });
@@ -68,7 +69,7 @@ describe('RenditionsService', () => {
         });
 
         jasmine.Ajax.requests.mostRecent().respondWith({
-            'status': 200,
+            status: 200,
             contentType: 'application/json',
             responseText: ''
         });
@@ -82,7 +83,7 @@ describe('RenditionsService', () => {
         );
 
         jasmine.Ajax.requests.mostRecent().respondWith({
-            'status': 403,
+            status: 403,
             contentType: 'application/json',
             responseText: 'error'
         });
@@ -95,7 +96,7 @@ describe('RenditionsService', () => {
         });
 
         jasmine.Ajax.requests.mostRecent().respondWith({
-            'status': 200,
+            status: 200,
             contentType: 'application/json',
             responseText: JSON.stringify(fakeRedition)
         });
@@ -108,7 +109,7 @@ describe('RenditionsService', () => {
         });
 
         jasmine.Ajax.requests.mostRecent().respondWith({
-            'status': 403,
+            status: 403,
             contentType: 'application/json'
         });
     });
@@ -120,7 +121,7 @@ describe('RenditionsService', () => {
         });
 
         jasmine.Ajax.requests.mostRecent().respondWith({
-            'status': 200,
+            status: 200,
             contentType: 'application/json',
             responseText: JSON.stringify(fakeReditionCreated)
         });
@@ -133,7 +134,7 @@ describe('RenditionsService', () => {
         });
 
         jasmine.Ajax.requests.mostRecent().respondWith({
-            'status': 200,
+            status: 200,
             contentType: 'application/json',
             responseText: JSON.stringify(fakeRedition)
         });
@@ -146,7 +147,7 @@ describe('RenditionsService', () => {
         });
 
         jasmine.Ajax.requests.mostRecent().respondWith({
-            'status': 400,
+            status: 400,
             contentType: 'application/json'
         });
     });
