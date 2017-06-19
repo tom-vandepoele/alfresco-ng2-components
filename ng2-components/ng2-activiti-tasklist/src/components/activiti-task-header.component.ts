@@ -15,8 +15,8 @@
  * limitations under the License.
  */
 
-import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
-import { AlfrescoTranslationService, LogService, CardViewModel } from 'ng2-alfresco-core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { AlfrescoTranslationService, CardViewModel, LogService } from 'ng2-alfresco-core';
 import { TaskDetailsModel } from '../models/index';
 import { ActivitiTaskListService } from './../services/activiti-tasklist.service';
 
@@ -28,15 +28,15 @@ import { ActivitiTaskListService } from './../services/activiti-tasklist.service
 export class ActivitiTaskHeader implements OnChanges {
 
     @Input()
-    formName: string = null;
+    public formName: string = null;
 
     @Input()
-    taskDetails: TaskDetailsModel;
+    public taskDetails: TaskDetailsModel;
 
     @Output()
-    claim: EventEmitter<any> = new EventEmitter<any>();
+    public claim: EventEmitter<any> = new EventEmitter<any>();
 
-    properties: CardViewModel [];
+    public properties: CardViewModel [];
 
     constructor(private translateService: AlfrescoTranslationService,
                 private activitiTaskService: ActivitiTaskListService,
@@ -46,16 +46,27 @@ export class ActivitiTaskHeader implements OnChanges {
         }
     }
 
-    ngOnChanges(changes: SimpleChanges) {
+    public ngOnChanges(changes: SimpleChanges): void {
         this.refreshData();
     }
 
-    refreshData() {
+    public refreshData(): void {
         if (this.taskDetails) {
             this.properties = [
                 new CardViewModel({label: 'Status:', value: this.getTaskStatus(), key: 'status'}),
-                new CardViewModel({label: 'Due Date:', value: this.taskDetails.dueDate, format: 'MMM DD YYYY', key: 'dueDate', default: 'No date'}),
-                new CardViewModel({label: 'Category:', value: this.taskDetails.category, key: 'category', default: 'No category'}),
+                new CardViewModel({
+                    label: 'Due Date:',
+                    value: this.taskDetails.dueDate,
+                    format: 'MMM DD YYYY',
+                    key: 'dueDate',
+                    default: 'No date'
+                }),
+                new CardViewModel({
+                    label: 'Category:',
+                    value: this.taskDetails.category,
+                    key: 'category',
+                    default: 'No category'
+                }),
                 new CardViewModel(
                     {
                         label: 'Created By:',
@@ -63,9 +74,19 @@ export class ActivitiTaskHeader implements OnChanges {
                         key: 'assignee',
                         default: 'No assignee'
                     }),
-                new CardViewModel({label: 'Created:', value: this.taskDetails.created, format: 'MMM DD YYYY', key: 'created'}),
+                new CardViewModel({
+                    label: 'Created:',
+                    value: this.taskDetails.created,
+                    format: 'MMM DD YYYY',
+                    key: 'created'
+                }),
                 new CardViewModel({label: 'Id:', value: this.taskDetails.id, key: 'id'}),
-                new CardViewModel({label: 'Description:', value: this.taskDetails.description, key: 'description', default: 'No description'}),
+                new CardViewModel({
+                    label: 'Description:',
+                    value: this.taskDetails.description,
+                    key: 'description',
+                    default: 'No description'
+                }),
                 new CardViewModel({label: 'Form name:', value: this.formName, key: 'formName', default: 'No form'})
             ];
         }
@@ -75,15 +96,15 @@ export class ActivitiTaskHeader implements OnChanges {
         return (this.taskDetails && this.taskDetails.assignee) ? true : false;
     }
 
-    isAssignedToMe(): boolean {
+    public isAssignedToMe(): boolean {
         return this.taskDetails.assignee ? true : false;
     }
 
-    getTaskStatus(): string {
+    public getTaskStatus(): string {
         return this.taskDetails.endDate ? 'Completed' : 'Running';
     }
 
-    claimTask(taskId: string) {
+    public claimTask(taskId: string): void {
         this.activitiTaskService.claimTask(taskId).subscribe(
             (res: any) => {
                 this.logService.info('Task claimed');

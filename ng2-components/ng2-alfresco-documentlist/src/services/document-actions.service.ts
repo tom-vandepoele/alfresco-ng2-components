@@ -16,16 +16,16 @@
  */
 
 import { Injectable } from '@angular/core';
-import { ContentActionHandler } from '../models/content-action.model';
-import { DocumentListService } from './document-list.service';
 import { AlfrescoContentService } from 'ng2-alfresco-core';
-import { PermissionModel } from '../models/permissions.model';
 import { Subject } from 'rxjs/Rx';
+import { ContentActionHandler } from '../models/content-action.model';
+import { PermissionModel } from '../models/permissions.model';
+import { DocumentListService } from './document-list.service';
 
 @Injectable()
 export class DocumentActionsService {
 
-    permissionEvent: Subject<PermissionModel> = new Subject<PermissionModel>();
+    public permissionEvent: Subject<PermissionModel> = new Subject<PermissionModel>();
 
     private handlers: { [id: string]: ContentActionHandler; } = {};
 
@@ -34,7 +34,7 @@ export class DocumentActionsService {
         this.setupActionHandlers();
     }
 
-    getHandler(key: string): ContentActionHandler {
+    public getHandler(key: string): ContentActionHandler {
         if (key) {
             let lkey = key.toLowerCase();
             return this.handlers[lkey] || null;
@@ -42,7 +42,7 @@ export class DocumentActionsService {
         return null;
     }
 
-    setHandler(key: string, handler: ContentActionHandler): boolean {
+    public setHandler(key: string, handler: ContentActionHandler): boolean {
         if (key) {
             let lkey = key.toLowerCase();
             this.handlers[lkey] = handler;
@@ -51,26 +51,26 @@ export class DocumentActionsService {
         return false;
     }
 
-    canExecuteAction(obj: any): boolean {
+    public canExecuteAction(obj: any): boolean {
         return this.documentListService && obj && obj.entry.isFile === true;
     }
 
-    private setupActionHandlers() {
-        this.handlers['download'] = this.download.bind(this);
-        this.handlers['delete'] = this.deleteNode.bind(this);
+    private setupActionHandlers(): void {
+        this.handlers.download = this.download.bind(this);
+        this.handlers.delete = this.deleteNode.bind(this);
 
         // TODO: for demo purposes only, will be removed during future revisions
-        this.handlers['system1'] = this.handleStandardAction1.bind(this);
-        this.handlers['system2'] = this.handleStandardAction2.bind(this);
+        this.handlers.system1 = this.handleStandardAction1.bind(this);
+        this.handlers.system2 = this.handleStandardAction2.bind(this);
     }
 
     // TODO: for demo purposes only, will be removed during future revisions
-    private handleStandardAction1(obj: any) {
+    private handleStandardAction1(obj: any): void {
         window.alert('standard document action 1');
     }
 
     // TODO: for demo purposes only, will be removed during future revisions
-    private handleStandardAction2(obj: any) {
+    private handleStandardAction2(obj: any): void {
         window.alert('standard document action 2');
     }
 
@@ -87,7 +87,7 @@ export class DocumentActionsService {
         return false;
     }
 
-    private deleteNode(obj: any, target?: any, permission?: string) {
+    private deleteNode(obj: any, target?: any, permission?: string): void {
         if (this.canExecuteAction(obj)) {
             if (this.hasPermission(obj.entry, permission)) {
                 this.documentListService.deleteNode(obj.entry.id).subscribe(() => {
@@ -96,14 +96,14 @@ export class DocumentActionsService {
                     }
                 });
             } else {
-                this.permissionEvent.next(new PermissionModel({type: 'content', action: 'delete', permission: permission}));
+                this.permissionEvent.next(new PermissionModel({type: 'content', action: 'delete', permission}));
             }
         }
     }
 
     private hasPermission(node: any, permission: string): boolean {
         if (this.hasPermissions(node)) {
-            return node.allowableOperations.find(permision => permision === permission) ? true : false;
+            return node.allowableOperations.find((permision) => permision === permission) ? true : false;
         }
         return false;
     }

@@ -27,18 +27,18 @@ import { AlfrescoTranslationService, ContentService } from 'ng2-alfresco-core';
 export class ActivitiProcessAttachmentListComponent implements OnChanges {
 
     @Input()
-    processInstanceId: string;
+    public processInstanceId: string;
 
     @Output()
-    attachmentClick = new EventEmitter();
+    public attachmentClick = new EventEmitter();
 
     @Output()
-    success = new EventEmitter();
+    public success = new EventEmitter();
 
     @Output()
-    error: EventEmitter<any> = new EventEmitter<any>();
+    public error: EventEmitter<any> = new EventEmitter<any>();
 
-    attachments: any[] = [];
+    public attachments: any[] = [];
 
     constructor(private translateService: AlfrescoTranslationService,
                 private activitiContentService: ActivitiContentService,
@@ -49,21 +49,21 @@ export class ActivitiProcessAttachmentListComponent implements OnChanges {
         }
     }
 
-    ngOnChanges(changes: SimpleChanges) {
-        if (changes['processInstanceId'] && changes['processInstanceId'].currentValue) {
-            this.loadAttachmentsByProcessInstanceId(changes['processInstanceId'].currentValue);
+    public ngOnChanges(changes: SimpleChanges): void {
+        if (changes.processInstanceId && changes.processInstanceId.currentValue) {
+            this.loadAttachmentsByProcessInstanceId(changes.processInstanceId.currentValue);
         }
     }
 
-    reset () {
+    public reset (): void {
         this.attachments = [];
     }
 
-    reload(): void {
+    public reload(): void {
         this.loadAttachmentsByProcessInstanceId(this.processInstanceId);
     }
 
-    private loadAttachmentsByProcessInstanceId(processInstanceId: string) {
+    private loadAttachmentsByProcessInstanceId(processInstanceId: string): void {
         if (processInstanceId) {
             this.reset();
             this.activitiContentService.getProcessRelatedContent(processInstanceId).subscribe(
@@ -85,7 +85,7 @@ export class ActivitiProcessAttachmentListComponent implements OnChanges {
         }
     }
 
-    private deleteAttachmentById(contentId: string) {
+    private deleteAttachmentById(contentId: string): void {
         if (contentId) {
             this.activitiContentService.deleteRelatedContent(contentId).subscribe(
                 (res: any) => {
@@ -99,11 +99,11 @@ export class ActivitiProcessAttachmentListComponent implements OnChanges {
         }
     }
 
-    isEmpty(): boolean {
+    public isEmpty(): boolean {
         return this.attachments && this.attachments.length === 0;
     }
 
-    onShowRowActionsMenu(event: any) {
+    public onShowRowActionsMenu(event: any): void {
         let viewAction = {
             title: 'View',
             name: 'view'
@@ -126,7 +126,7 @@ export class ActivitiProcessAttachmentListComponent implements OnChanges {
         ];
     }
 
-    onExecuteRowAction(event: any) {
+    public  onExecuteRowAction(event: any): void {
         let args = event.value;
         let action = args.action;
         if (action.name === 'view') {
@@ -138,12 +138,12 @@ export class ActivitiProcessAttachmentListComponent implements OnChanges {
         }
     }
 
-    openContent(event: any): void {
+    public openContent(event: any): void {
         let content = event.value.obj;
         this.emitDocumentContent(content);
     }
 
-    emitDocumentContent(content: any) {
+    public emitDocumentContent(content: any): void {
         this.activitiContentService.getFileRawContent(content.id).subscribe(
             (blob: Blob) => {
                 content.contentBlob = blob;
@@ -155,7 +155,7 @@ export class ActivitiProcessAttachmentListComponent implements OnChanges {
         );
     }
 
-    downloadContent(content: any): void {
+    public downloadContent(content: any): void {
         this.activitiContentService.getFileRawContent(content.id).subscribe(
             (blob: Blob) => this.contentService.downloadBlob(blob, content.name),
             (err) => {

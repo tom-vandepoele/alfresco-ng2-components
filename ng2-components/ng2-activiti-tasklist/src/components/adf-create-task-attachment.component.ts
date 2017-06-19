@@ -15,9 +15,9 @@
  * limitations under the License.
  */
 
-import { Component, OnChanges, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
-import { AlfrescoTranslationService } from 'ng2-alfresco-core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { ActivitiContentService } from 'ng2-activiti-form';
+import { AlfrescoTranslationService } from 'ng2-alfresco-core';
 
 @Component({
     selector: 'adf-create-task-attachment',
@@ -27,13 +27,13 @@ import { ActivitiContentService } from 'ng2-activiti-form';
 export class ActivitiCreateTaskAttachmentComponent implements OnChanges {
 
     @Input()
-    taskId: string;
+    public taskId: string;
 
     @Output()
-    error: EventEmitter<any> = new EventEmitter<any>();
+    public error: EventEmitter<any> = new EventEmitter<any>();
 
     @Output()
-    success: EventEmitter<any> = new EventEmitter<any>();
+    public success: EventEmitter<any> = new EventEmitter<any>();
 
     constructor(private translateService: AlfrescoTranslationService,
                 private activitiContentService: ActivitiContentService) {
@@ -43,13 +43,13 @@ export class ActivitiCreateTaskAttachmentComponent implements OnChanges {
         }
     }
 
-    ngOnChanges(changes: SimpleChanges) {
-        if (changes['taskId'] && changes['taskId'].currentValue) {
-            this.taskId = changes['taskId'].currentValue;
+    public ngOnChanges(changes: SimpleChanges): void {
+        if (changes.taskId && changes.taskId.currentValue) {
+            this.taskId = changes.taskId.currentValue;
         }
     }
 
-    onFileUpload(event: any) {
+    public onFileUpload(event: any): void {
         let filesList: File[] = event.detail.files;
 
         for (let fileInfoObj of filesList) {

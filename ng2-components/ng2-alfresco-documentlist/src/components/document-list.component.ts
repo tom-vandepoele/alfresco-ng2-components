@@ -16,24 +16,24 @@
  */
 
 import {
-    Component, OnInit, Input, OnChanges, Output, SimpleChanges, EventEmitter, ElementRef,
-    AfterContentInit, TemplateRef, NgZone, ViewChild, HostListener, ContentChild
+    AfterContentInit, Component, ContentChild, ElementRef, EventEmitter, HostListener, Input, NgZone,
+    OnChanges, OnInit, Output, SimpleChanges, TemplateRef, ViewChild
 } from '@angular/core';
-import { Subject } from 'rxjs/Rx';
 import { MinimalNodeEntity, MinimalNodeEntryEntity, NodePaging, Pagination } from 'alfresco-js-api';
 import { AlfrescoTranslationService, DataColumnListComponent } from 'ng2-alfresco-core';
 import {
-    DataRowEvent,
-    DataTableComponent,
-    ObjectDataColumn,
     DataCellEvent,
-    DataRowActionEvent,
     DataColumn,
-    DataSorting
+    DataRowActionEvent,
+    DataRowEvent,
+    DataSorting,
+    DataTableComponent,
+    ObjectDataColumn
 } from 'ng2-alfresco-datatable';
-import { DocumentListService } from './../services/document-list.service';
+import { Subject } from 'rxjs/Rx';
+import { ImageResolver, RowFilter, ShareDataRow, ShareDataTableAdapter } from './../data/share-datatable-adapter';
 import { ContentActionModel } from './../models/content-action.model';
-import { ShareDataTableAdapter, ShareDataRow, RowFilter, ImageResolver } from './../data/share-datatable-adapter';
+import { DocumentListService } from './../services/document-list.service';
 import { NodeEntityEvent, NodeEntryEvent } from './node.event';
 
 declare var require: any;
@@ -45,66 +45,67 @@ declare var require: any;
 })
 export class DocumentListComponent implements OnInit, OnChanges, AfterContentInit {
 
-    static SINGLE_CLICK_NAVIGATION: string = 'click';
-    static DOUBLE_CLICK_NAVIGATION: string = 'dblclick';
-    static DEFAULT_PAGE_SIZE: number = 20;
+    private static SINGLE_CLICK_NAVIGATION: string = 'click';
+    private static DOUBLE_CLICK_NAVIGATION: string = 'dblclick';
+    private static DEFAULT_PAGE_SIZE: number = 20;
 
-    @ContentChild(DataColumnListComponent) columnList: DataColumnListComponent;
-
-    @Input()
-    fallbackThumbnail: string = require('../assets/images/ft_ic_miscellaneous.svg');
+    @ContentChild(DataColumnListComponent)
+    public columnList: DataColumnListComponent;
 
     @Input()
-    navigate: boolean = true;
+    public fallbackThumbnail: string = require('../assets/images/ft_ic_miscellaneous.svg');
 
     @Input()
-    navigationMode: string = DocumentListComponent.DOUBLE_CLICK_NAVIGATION; // click|dblclick
+    public navigate: boolean = true;
 
     @Input()
-    thumbnails: boolean = false;
+    public navigationMode: string = DocumentListComponent.DOUBLE_CLICK_NAVIGATION; // click|dblclick
 
     @Input()
-    selectionMode: string = 'single'; // null|single|multiple
+    public thumbnails: boolean = false;
 
     @Input()
-    multiselect: boolean = false;
+    public selectionMode: string = 'single'; // null|single|multiple
 
     @Input()
-    enablePagination: boolean = true;
+    public multiselect: boolean = false;
 
     @Input()
-    contentActions: boolean = false;
+    public enablePagination: boolean = true;
 
     @Input()
-    contentActionsPosition: string = 'right'; // left|right
+    public contentActions: boolean = false;
 
     @Input()
-    contextMenuActions: boolean = false;
+    public contentActionsPosition: string = 'right'; // left|right
 
     @Input()
-    creationMenuActions: boolean = true;
+    public contextMenuActions: boolean = false;
 
     @Input()
-    pageSize: number = DocumentListComponent.DEFAULT_PAGE_SIZE;
+    public creationMenuActions: boolean = true;
 
     @Input()
-    emptyFolderImageUrl: string = require('../assets/images/empty_doc_lib.svg');
+    public pageSize: number = DocumentListComponent.DEFAULT_PAGE_SIZE;
 
     @Input()
-    allowDropFiles: boolean = false;
+    public emptyFolderImageUrl: string = require('../assets/images/empty_doc_lib.svg');
 
     @Input()
-    sorting: string[];
+    public allowDropFiles: boolean = false;
 
     @Input()
-    rowStyle: string;
+    public sorting: string[];
 
     @Input()
-    rowStyleClass: string;
+    public rowStyle: string;
 
-    skipCount: number = 0;
+    @Input()
+    public rowStyleClass: string;
 
-    pagination: Pagination;
+    public skipCount: number = 0;
+
+    public pagination: Pagination;
 
     @Input()
     set rowFilter(value: RowFilter) {
@@ -123,48 +124,47 @@ export class DocumentListComponent implements OnInit, OnChanges, AfterContentIni
 
     // The identifier of a node. You can also use one of these well-known aliases: -my- | -shared- | -root-
     @Input()
-    currentFolderId: string = null;
+    public currentFolderId: string = null;
 
     @Input()
-    folderNode: MinimalNodeEntryEntity = null;
+    public folderNode: MinimalNodeEntryEntity = null;
 
     @Input()
-    node: NodePaging = null;
+    public node: NodePaging = null;
 
     @Output()
-    nodeClick: EventEmitter<NodeEntityEvent> = new EventEmitter<NodeEntityEvent>();
+    public nodeClick: EventEmitter<NodeEntityEvent> = new EventEmitter<NodeEntityEvent>();
 
     @Output()
-    nodeDblClick: EventEmitter<NodeEntityEvent> = new EventEmitter<NodeEntityEvent>();
+    public nodeDblClick: EventEmitter<NodeEntityEvent> = new EventEmitter<NodeEntityEvent>();
 
     @Output()
-    folderChange: EventEmitter<NodeEntryEvent> = new EventEmitter<NodeEntryEvent>();
+    public folderChange: EventEmitter<NodeEntryEvent> = new EventEmitter<NodeEntryEvent>();
 
     @Output()
-    preview: EventEmitter<NodeEntityEvent> = new EventEmitter<NodeEntityEvent>();
+    public preview: EventEmitter<NodeEntityEvent> = new EventEmitter<NodeEntityEvent>();
 
     @Output()
-    success: EventEmitter<any> = new EventEmitter();
+    public success: EventEmitter<any> = new EventEmitter();
 
     @Output()
-    ready: EventEmitter<any> = new EventEmitter();
+    public ready: EventEmitter<any> = new EventEmitter();
 
     @Output()
-    error: EventEmitter<any> = new EventEmitter();
+    public error: EventEmitter<any> = new EventEmitter();
 
     @Output()
-    permissionError: EventEmitter<any> = new EventEmitter();
+    public permissionError: EventEmitter<any> = new EventEmitter();
 
     @ViewChild(DataTableComponent)
-    dataTable: DataTableComponent;
+    public dataTable: DataTableComponent;
 
-    errorMessage;
-    actions: ContentActionModel[] = [];
-    emptyFolderTemplate: TemplateRef<any>;
-    contextActionHandler: Subject<any> = new Subject();
-    data: ShareDataTableAdapter;
+    public actions: ContentActionModel[] = [];
+    public emptyFolderTemplate: TemplateRef<any>;
+    public contextActionHandler: Subject<any> = new Subject();
+    public data: ShareDataTableAdapter;
 
-    loading: boolean = false;
+    public loading: boolean = false;
     private currentNodeAllowableOperations: string[] = [];
     private CREATE_PERMISSION = 'create';
 
@@ -178,14 +178,14 @@ export class DocumentListComponent implements OnInit, OnChanges, AfterContentIni
         }
     }
 
-    getContextActions(node: MinimalNodeEntity) {
+    public getContextActions(node: MinimalNodeEntity): any {
         if (node && node.entry) {
             let actions = this.getNodeActions(node);
             if (actions && actions.length > 0) {
-                return actions.map(a => {
+                return actions.map((a) => {
                     return {
                         model: a,
-                        node: node,
+                        node,
                         subject: this.contextActionHandler
                     };
                 });
@@ -194,25 +194,25 @@ export class DocumentListComponent implements OnInit, OnChanges, AfterContentIni
         return null;
     }
 
-    contextActionCallback(action) {
+    public contextActionCallback(action): void {
         if (action) {
             this.executeContentAction(action.node, action.model);
         }
     }
 
-    ngOnInit() {
+    public ngOnInit(): any {
         this.data = new ShareDataTableAdapter(this.documentListService, null, this.getDefaultSorting());
         this.data.thumbnails = this.thumbnails;
-        this.contextActionHandler.subscribe(val => this.contextActionCallback(val));
+        this.contextActionHandler.subscribe((val) => this.contextActionCallback(val));
 
         this.enforceSingleClickNavigationForMobile();
     }
 
-    ngAfterContentInit() {
+    public ngAfterContentInit(): void {
         let schema: DataColumn[] = [];
 
         if (this.columnList && this.columnList.columns && this.columnList.columns.length > 0) {
-            schema = this.columnList.columns.map(c => <DataColumn> c);
+            schema = this.columnList.columns.map((c) => <DataColumn> c);
         }
 
         if (!this.data) {
@@ -227,19 +227,19 @@ export class DocumentListComponent implements OnInit, OnChanges, AfterContentIni
         }
     }
 
-    ngOnChanges(changes: SimpleChanges) {
-        if (changes['folderNode'] && changes['folderNode'].currentValue) {
+    public ngOnChanges(changes: SimpleChanges): void {
+        if (changes.folderNode && changes.folderNode.currentValue) {
             this.loadFolder();
-        } else if (changes['currentFolderId'] && changes['currentFolderId'].currentValue) {
-            this.loadFolderByNodeId(changes['currentFolderId'].currentValue);
-        } else if (changes['node'] && changes['node'].currentValue) {
+        } else if (changes.currentFolderId && changes.currentFolderId.currentValue) {
+            this.loadFolderByNodeId(changes.currentFolderId.currentValue);
+        } else if (changes.node && changes.node.currentValue) {
             if (this.data) {
-                this.data.loadPage(changes['node'].currentValue);
+                this.data.loadPage(changes.node.currentValue);
             }
         }
     }
 
-    reload() {
+    public reload(): void {
         this.ngZone.run(() => {
             if (this.folderNode) {
                 this.loadFolder();
@@ -252,7 +252,7 @@ export class DocumentListComponent implements OnInit, OnChanges, AfterContentIni
         });
     }
 
-    isEmptyTemplateDefined(): boolean {
+    public isEmptyTemplateDefined(): boolean {
         if (this.dataTable) {
             if (this.emptyFolderTemplate) {
                 return true;
@@ -261,19 +261,19 @@ export class DocumentListComponent implements OnInit, OnChanges, AfterContentIni
         return false;
     }
 
-    isMobile(): boolean {
+    public isMobile(): boolean {
         return !!/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     }
 
-    isEmpty() {
+    public isEmpty(): boolean {
         return this.data.getRows().length === 0;
     }
 
-    isPaginationEnabled() {
+    public isPaginationEnabled(): boolean {
         return this.enablePagination && !this.isEmpty();
     }
 
-    getNodeActions(node: MinimalNodeEntity | any): ContentActionModel[] {
+    public getNodeActions(node: MinimalNodeEntity | any): ContentActionModel[] {
         let target = null;
 
         if (node && node.entry) {
@@ -287,9 +287,9 @@ export class DocumentListComponent implements OnInit, OnChanges, AfterContentIni
 
             if (target) {
                 let ltarget = target.toLowerCase();
-                let actionsByTarget = this.actions.filter(entry => {
+                let actionsByTarget = this.actions.filter((entry) => {
                     return entry.target.toLowerCase() === ltarget;
-                }).map(action => new ContentActionModel(action));
+                }).map((action) => new ContentActionModel(action));
 
                 actionsByTarget.forEach((action) => {
                     this.checkPermission(node, action);
@@ -302,11 +302,11 @@ export class DocumentListComponent implements OnInit, OnChanges, AfterContentIni
         return [];
     }
 
-    checkPermission(node: any, action: ContentActionModel): ContentActionModel {
+    public checkPermission(node: any, action: ContentActionModel): ContentActionModel {
         if (action.permission) {
             if (this.hasPermissions(node)) {
                 let permissions = node.entry.allowableOperations;
-                let findPermission = permissions.find(permission => permission === action.permission);
+                let findPermission = permissions.find((permission) => permission === action.permission);
                 if (!findPermission && action.disableWithNoPermission === true) {
                     action.disabled = true;
                 }
@@ -320,23 +320,21 @@ export class DocumentListComponent implements OnInit, OnChanges, AfterContentIni
     }
 
     @HostListener('contextmenu', ['$event'])
-    onShowContextMenu(e?: Event) {
-        if (e && this.contextMenuActions) {
-            e.preventDefault();
+    public onShowContextMenu(event?: Event): void {
+        if (event && this.contextMenuActions) {
+            event.preventDefault();
         }
     }
 
-    performNavigation(node: MinimalNodeEntity): boolean {
+    public performNavigation(node: MinimalNodeEntity): void {
         if (node && node.entry && node.entry.isFolder) {
             this.currentFolderId = node.entry.id;
             this.folderNode = node.entry;
             this.skipCount = 0;
-            this.currentNodeAllowableOperations = node.entry['allowableOperations'] ? node.entry['allowableOperations'] : [];
+            this.currentNodeAllowableOperations = node.entry.allowableOperations ? node.entry.allowableOperations : [];
             this.loadFolder();
             this.folderChange.emit(new NodeEntryEvent(node.entry));
-            return true;
         }
-        return false;
     }
 
     /**
@@ -344,43 +342,43 @@ export class DocumentListComponent implements OnInit, OnChanges, AfterContentIni
      * @param node Node to be the context of the execution.
      * @param action Action to be executed against the context.
      */
-    executeContentAction(node: MinimalNodeEntity, action: ContentActionModel) {
+    public executeContentAction(node: MinimalNodeEntity, action: ContentActionModel): void {
         if (node && node.entry && action) {
             action.handler(node, this, action.permission);
         }
     }
 
-    loadFolder() {
+    public loadFolder(): void {
         this.loading = true;
         let nodeId = this.folderNode ? this.folderNode.id : this.currentFolderId;
         if (nodeId) {
-            this.loadFolderNodesByFolderNodeId(nodeId, this.pageSize, this.skipCount).catch(err => this.error.emit(err));
+            this.loadFolderNodesByFolderNodeId(nodeId, this.pageSize, this.skipCount).catch((err) => this.error.emit(err));
         }
     }
 
     // gets folder node and its content
-    loadFolderByNodeId(nodeId: string) {
+    public loadFolderByNodeId(nodeId: string): void {
         this.loading = true;
-        this.documentListService.getFolderNode(nodeId).then(node => {
-            this.folderNode = node;
-            this.currentFolderId = node.id;
-            this.skipCount = 0;
-            this.currentNodeAllowableOperations = node['allowableOperations'] ? node['allowableOperations'] : [];
-            this.loadFolderNodesByFolderNodeId(node.id, this.pageSize, this.skipCount).catch(err => this.error.emit(err));
-        })
-            .catch(err => this.error.emit(err));
+        this.documentListService.getFolderNode(nodeId).then((node) => {
+                this.folderNode = node;
+                this.currentFolderId = node.id;
+                this.skipCount = 0;
+                this.currentNodeAllowableOperations = node.allowableOperations ? node.allowableOperations : [];
+                this.loadFolderNodesByFolderNodeId(node.id, this.pageSize, this.skipCount).catch((err) => this.error.emit(err));
+            })
+            .catch((err) => this.error.emit(err));
     }
 
-    loadFolderNodesByFolderNodeId(id: string, maxItems: number, skipCount: number): Promise<any> {
+    public loadFolderNodesByFolderNodeId(id: string, maxItems: number, skipCount: number): Promise<any> {
         return new Promise((resolve, reject) => {
             this.documentListService
                 .getFolder(null, {
-                    maxItems: maxItems,
-                    skipCount: skipCount,
+                    maxItems,
+                    skipCount,
                     rootFolderId: id
                 })
                 .subscribe(
-                    val => {
+                    (val) => {
                         if (this.isCurrentPageEmpty(val, skipCount)) {
                             this.updateSkipCount(skipCount - maxItems);
                             this.loadFolderNodesByFolderNodeId(id, maxItems, skipCount - maxItems).then(() => {
@@ -396,7 +394,7 @@ export class DocumentListComponent implements OnInit, OnChanges, AfterContentIni
                             resolve(true);
                         }
                     },
-                    error => {
+                    (error) => {
                         reject(error);
                     });
         });
@@ -418,7 +416,7 @@ export class DocumentListComponent implements OnInit, OnChanges, AfterContentIni
     /**
      * Creates a set of predefined columns.
      */
-    setupDefaultColumns(): void {
+    public setupDefaultColumns(): void {
         let colThumbnail = new ObjectDataColumn({
             type: 'image',
             key: '$thumbnail',
@@ -437,17 +435,17 @@ export class DocumentListComponent implements OnInit, OnChanges, AfterContentIni
         this.data.setColumns([colThumbnail, colName]);
     }
 
-    onPreviewFile(node: MinimalNodeEntity) {
+    public onPreviewFile(node: MinimalNodeEntity): void {
         if (node) {
             this.preview.emit(new NodeEntityEvent(node));
         }
     }
 
-    onNodeClick(node: MinimalNodeEntity) {
+    public onNodeClick(node: MinimalNodeEntity): void {
         const domEvent = new CustomEvent('node-click', {
             detail: {
                 sender: this,
-                node: node
+                node
             },
             bubbles: true
         });
@@ -471,16 +469,16 @@ export class DocumentListComponent implements OnInit, OnChanges, AfterContentIni
         }
     }
 
-    onRowClick(event: DataRowEvent) {
+    public onRowClick(event: DataRowEvent): void {
         let item = (<ShareDataRow> event.value).node;
         this.onNodeClick(item);
     }
 
-    onNodeDblClick(node: MinimalNodeEntity) {
+    public onNodeDblClick(node: MinimalNodeEntity): void {
         const domEvent = new CustomEvent('node-dblclick', {
             detail: {
                 sender: this,
-                node: node
+                node
             },
             bubbles: true
         });
@@ -504,12 +502,12 @@ export class DocumentListComponent implements OnInit, OnChanges, AfterContentIni
         }
     }
 
-    onRowDblClick(event?: DataRowEvent) {
+    public onRowDblClick(event?: DataRowEvent): void {
         let item = (<ShareDataRow> event.value).node;
         this.onNodeDblClick(item);
     }
 
-    onShowRowContextMenu(event: DataCellEvent) {
+    public onShowRowContextMenu(event: DataCellEvent): void {
         if (this.contextMenuActions) {
             let args = event.value;
             let node = (<ShareDataRow> args.row).node;
@@ -519,7 +517,7 @@ export class DocumentListComponent implements OnInit, OnChanges, AfterContentIni
         }
     }
 
-    onShowRowActionsMenu(event: DataCellEvent) {
+    public onShowRowActionsMenu(event: DataCellEvent): void {
         if (this.contentActions) {
             let args = event.value;
             let node = (<ShareDataRow> args.row).node;
@@ -529,7 +527,7 @@ export class DocumentListComponent implements OnInit, OnChanges, AfterContentIni
         }
     }
 
-    onExecuteRowAction(event: DataRowActionEvent) {
+    public onExecuteRowAction(event: DataRowActionEvent): void {
         if (this.contentActions) {
             let args = event.value;
             let node = (<ShareDataRow> args.row).node;
@@ -538,31 +536,31 @@ export class DocumentListComponent implements OnInit, OnChanges, AfterContentIni
         }
     }
 
-    onActionMenuError(event) {
+    public onActionMenuError(event): void {
         this.error.emit(event);
     }
 
-    onActionMenuSuccess(event) {
+    public onActionMenuSuccess(event): void {
         this.reload();
         this.success.emit(event);
     }
 
-    onChangePageSize(event: Pagination): void {
+    public onChangePageSize(event: Pagination): void {
         this.pageSize = event.maxItems;
         this.reload();
     }
 
-    onNextPage(event: Pagination): void {
+    public onNextPage(event: Pagination): void {
         this.skipCount = event.skipCount;
         this.reload();
     }
 
-    onPrevPage(event: Pagination): void {
+    public onPrevPage(event: Pagination): void {
         this.skipCount = event.skipCount;
         this.reload();
     }
 
-    onPermissionError(event) {
+    public onPermissionError(event): void {
         this.permissionError.emit(event);
     }
 
@@ -581,20 +579,20 @@ export class DocumentListComponent implements OnInit, OnChanges, AfterContentIni
         return defaultSorting;
     }
 
-    updateSkipCount(newSkipCount) {
+    public updateSkipCount(newSkipCount): void {
         this.skipCount = newSkipCount;
     }
 
-    hasCurrentNodePermission(permission: string): boolean {
+    public hasCurrentNodePermission(permission: string): boolean {
         let hasPermission: boolean = false;
         if (this.currentNodeAllowableOperations.length > 0) {
-            let permFound = this.currentNodeAllowableOperations.find(element => element === permission);
+            let permFound = this.currentNodeAllowableOperations.find((element) => element === permission);
             hasPermission = permFound ? true : false;
         }
         return hasPermission;
     }
 
-    hasCreatePermission() {
+    public hasCreatePermission(): boolean {
         return this.hasCurrentNodePermission(this.CREATE_PERMISSION);
     }
 

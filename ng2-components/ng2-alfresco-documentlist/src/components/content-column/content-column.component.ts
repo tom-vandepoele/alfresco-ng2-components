@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import { Component, OnInit, Input, ContentChild, TemplateRef, AfterContentInit } from '@angular/core';
+import { AfterContentInit, Component, ContentChild, Input, OnInit, TemplateRef } from '@angular/core';
 import { DataColumn } from 'ng2-alfresco-datatable';
 
 import { ContentColumnListComponent } from './content-column-list.component';
@@ -27,45 +27,46 @@ import { ContentColumnListComponent } from './content-column-list.component';
 export class ContentColumnComponent implements OnInit, AfterContentInit, DataColumn {
 
     @Input()
-    key: string;
+    public key: string;
 
     @Input()
-    type: string = 'text';
+    public type: string = 'text';
 
     @Input()
-    format: string;
+    public format: string;
 
     @Input()
-    sortable: boolean = false;
+    public sortable: boolean = false;
 
     @Input()
-    title: string = '';
+    public title: string = '';
 
     @ContentChild(TemplateRef)
-    template: any;
+    public template: any;
 
     /**
      * Title to be used for screen readers.
      */
     @Input('sr-title')
-    srTitle: string;
+    public srTitle: string;
 
     @Input('class')
-    cssClass: string;
+    public cssClass: string;
 
-    constructor(private list: ContentColumnListComponent) {}
+    constructor(private list: ContentColumnListComponent) {
+    }
 
-    ngOnInit() {
+    public ngOnInit(): void {
         if (!this.srTitle && this.key === '$thumbnail') {
             this.srTitle = 'Thumbnail';
         }
     }
 
-    ngAfterContentInit() {
+    public ngAfterContentInit(): void {
         this.register();
     }
 
-    register(): boolean {
+    public register(): boolean {
         if (this.list) {
             return this.list.registerColumn(this);
         }

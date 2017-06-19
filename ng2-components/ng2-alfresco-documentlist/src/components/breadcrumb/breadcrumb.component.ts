@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { MinimalNodeEntryEntity, PathElementEntity } from 'alfresco-js-api';
 import { DocumentListComponent } from '../document-list.component';
 
@@ -27,20 +27,20 @@ import { DocumentListComponent } from '../document-list.component';
 export class DocumentListBreadcrumbComponent implements OnChanges {
 
     @Input()
-    folderNode: MinimalNodeEntryEntity;
+    public folderNode: MinimalNodeEntryEntity;
 
     @Input()
-    target: DocumentListComponent;
+    public target: DocumentListComponent;
 
-    route: PathElementEntity[] = [];
+    public route: PathElementEntity[] = [];
 
     @Output()
-    navigate: EventEmitter<any> = new EventEmitter();
+    public navigate: EventEmitter<any> = new EventEmitter();
 
-    ngOnChanges(changes: SimpleChanges) {
-        if (changes['folderNode']) {
+    public ngOnChanges(changes: SimpleChanges): void {
+        if (changes.folderNode) {
 
-            let node: MinimalNodeEntryEntity = changes['folderNode'].currentValue;
+            let node: MinimalNodeEntryEntity = changes.folderNode.currentValue;
             if (node) {
                 // see https://github.com/Alfresco/alfresco-js-api/issues/139
                 let route = <PathElementEntity[]> (node.path.elements || []);
@@ -53,9 +53,9 @@ export class DocumentListBreadcrumbComponent implements OnChanges {
         }
     }
 
-    onRoutePathClick(route: PathElementEntity, e?: Event) {
-        if (e) {
-            e.preventDefault();
+    public onRoutePathClick(route: PathElementEntity, event?: Event): void {
+        if (event) {
+            event.preventDefault();
         }
 
         if (route) {

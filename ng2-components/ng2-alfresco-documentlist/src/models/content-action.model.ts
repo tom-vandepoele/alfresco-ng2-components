@@ -16,13 +16,13 @@
  */
 
 export class ContentActionModel {
-    icon: string;
-    title: string;
-    handler: ContentActionHandler;
-    target: string;
-    permission: string;
-    disableWithNoPermission: boolean = false;
-    disabled: boolean = false;
+    public icon: string;
+    public title: string;
+    public handler: ContentActionHandler;
+    public target: string;
+    public permission: string;
+    public disableWithNoPermission: boolean = false;
+    public disabled: boolean = false;
 
     constructor(obj?: any) {
         if (obj) {

@@ -17,8 +17,8 @@
 
 import { Component } from '@angular/core';
 
-import { DocumentListComponent } from './../document-list.component';
 import { ContentActionModel } from './../../models/content-action.model';
+import { DocumentListComponent } from './../document-list.component';
 
 @Component({
     selector: 'content-actions',
@@ -33,11 +33,14 @@ export class ContentActionListComponent {
      * Registers action handler within the parent document list component.
      * @param action Action model to register.
      */
-    registerAction(action: ContentActionModel): boolean {
+    public registerAction(action: ContentActionModel): boolean {
+        let registerAction = false;
+
         if (this.documentList && action) {
             this.documentList.actions.push(action);
-            return true;
+            registerAction = true;
         }
-        return false;
+
+        return registerAction;
     }
 }

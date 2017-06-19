@@ -91,7 +91,7 @@ export class TaskDetailsModel {
         this.taskDefinitionKey = obj && obj.taskDefinitionKey || null;
     }
 
-    getFullName(): string {
+    public getFullName(): string {
         if (this.assignee) {
             return this.assignee.firstName + ' ' + this.assignee.lastName;
         }

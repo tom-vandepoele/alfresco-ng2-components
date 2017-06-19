@@ -16,15 +16,15 @@
  */
 
 import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs/Rx';
 import { ContentActionHandler } from '../models/content-action.model';
 import { PermissionModel } from '../models/permissions.model';
 import { DocumentListService } from './document-list.service';
-import { Subject } from 'rxjs/Rx';
 
 @Injectable()
 export class FolderActionsService {
 
-    permissionEvent: Subject<PermissionModel> = new Subject<PermissionModel>();
+    public permissionEvent: Subject<PermissionModel> = new Subject<PermissionModel>();
 
     private handlers: { [id: string]: ContentActionHandler; } = {};
 
@@ -32,7 +32,7 @@ export class FolderActionsService {
         this.setupActionHandlers();
     }
 
-    getHandler(key: string): ContentActionHandler {
+    public getHandler(key: string): ContentActionHandler {
         if (key) {
             let lkey = key.toLowerCase();
             return this.handlers[lkey] || null;
@@ -40,7 +40,7 @@ export class FolderActionsService {
         return null;
     }
 
-    setHandler(key: string, handler: ContentActionHandler): boolean {
+    public setHandler(key: string, handler: ContentActionHandler): boolean {
         if (key) {
             let lkey = key.toLowerCase();
             this.handlers[lkey] = handler;
@@ -49,29 +49,29 @@ export class FolderActionsService {
         return false;
     }
 
-    canExecuteAction(obj: any): boolean {
+    public canExecuteAction(obj: any): boolean {
         return this.documentListService && obj && obj.entry.isFolder === true;
     }
 
-    private setupActionHandlers() {
-        this.handlers['delete'] = this.deleteNode.bind(this);
+    private setupActionHandlers(): void {
+        this.handlers.delete = this.deleteNode.bind(this);
 
         // TODO: for demo purposes only, will be removed during future revisions
-        this.handlers['system1'] = this.handleStandardAction1.bind(this);
-        this.handlers['system2'] = this.handleStandardAction2.bind(this);
+        this.handlers.system1 = this.handleStandardAction1.bind(this);
+        this.handlers.system2 = this.handleStandardAction2.bind(this);
     }
 
     // TODO: for demo purposes only, will be removed during future revisions
-    private handleStandardAction1(document: any) {
+    private handleStandardAction1(document: any): void {
         window.alert('standard folder action 1');
     }
 
     // TODO: for demo purposes only, will be removed during future revisions
-    private handleStandardAction2(document: any) {
+    private handleStandardAction2(document: any): void {
         window.alert('standard folder action 2');
     }
 
-    private deleteNode(obj: any, target?: any, permission?: string) {
+    private deleteNode(obj: any, target?: any, permission?: string): void {
         if (this.canExecuteAction(obj)) {
             if (this.hasPermission(obj.entry, permission)) {
                 this.documentListService.deleteNode(obj.entry.id).subscribe(() => {
@@ -80,16 +80,19 @@ export class FolderActionsService {
                     }
                 });
             } else {
-                this.permissionEvent.next(new PermissionModel({type: 'folder', action: 'delete', permission: permission}));
+                this.permissionEvent.next(new PermissionModel({type: 'folder', action: 'delete', permission}));
             }
         }
     }
 
     private hasPermission(node: any, permissionToCheck: string): boolean {
+        let hasPermission = false;
+
         if (this.hasPermissions(node)) {
-            return node.allowableOperations.find(permision => permision === permissionToCheck) ? true : false;
+            hasPermission = node.allowableOperations.find((permision) => permision === permissionToCheck) ? true : false;
         }
-        return false;
+
+        return hasPermission;
     }
 
     private hasPermissions(node: any): boolean {

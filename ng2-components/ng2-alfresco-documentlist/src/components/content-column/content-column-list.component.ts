@@ -33,7 +33,7 @@ export class ContentColumnListComponent {
      * Registers column model within the parent document list component.
      * @param column Column definition model to register.
      */
-    registerColumn(column: DataColumn): boolean {
+    public registerColumn(column: DataColumn): boolean {
         if (this.documentList && column) {
             let columns = this.documentList.data.getColumns();
             columns.push(column);

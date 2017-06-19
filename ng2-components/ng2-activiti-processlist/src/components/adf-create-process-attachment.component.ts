@@ -27,13 +27,13 @@ import { AlfrescoTranslationService } from 'ng2-alfresco-core';
 export class ActivitiCreateProcessAttachmentComponent implements OnChanges {
 
     @Input()
-    processInstanceId: string;
+    public processInstanceId: string;
 
     @Output()
-    creationError: EventEmitter<any> = new EventEmitter<any>();
+    public creationError: EventEmitter<any> = new EventEmitter<any>();
 
     @Output()
-    contentCreated: EventEmitter<any> = new EventEmitter<any>();
+    public contentCreated: EventEmitter<any> = new EventEmitter<any>();
 
     constructor(private translateService: AlfrescoTranslationService,
                 private activitiContentService: ActivitiContentService) {
@@ -43,13 +43,13 @@ export class ActivitiCreateProcessAttachmentComponent implements OnChanges {
         }
     }
 
-    ngOnChanges(changes: SimpleChanges) {
-        if (changes['processInstanceId'] && changes['processInstanceId'].currentValue) {
-            this.processInstanceId = changes['processInstanceId'].currentValue;
+    public  ngOnChanges(changes: SimpleChanges): void {
+        if (changes.processInstanceId && changes.processInstanceId.currentValue) {
+            this.processInstanceId = changes.processInstanceId.currentValue;
         }
     }
 
-    onFileUpload(event: any) {
+    public onFileUpload(event: any): void {
         let filesList: File[] = event.detail.files;
 
         for (let fileInfoObj of filesList) {

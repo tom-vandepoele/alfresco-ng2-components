@@ -15,13 +15,13 @@
  * limitations under the License.
  */
 
-import { Component, OnInit, OnChanges, Input, Output, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 
-import { ContentActionListComponent } from './content-action-list.component';
-import { ContentActionModel } from './../../models/content-action.model';
+import { ContentActionHandler } from '../../models/content-action.model';
 import { DocumentActionsService } from '../../services/document-actions.service';
 import { FolderActionsService } from '../../services/folder-actions.service';
-import { ContentActionHandler } from '../../models/content-action.model';
+import { ContentActionModel } from './../../models/content-action.model';
+import { ContentActionListComponent } from './content-action-list.component';
 
 @Component({
     selector: 'content-action',
@@ -30,42 +30,41 @@ import { ContentActionHandler } from '../../models/content-action.model';
 export class ContentActionComponent implements OnInit, OnChanges {
 
     @Input()
-    title: string = 'Action';
+    public title: string = 'Action';
 
     @Input()
-    icon: string;
+    public icon: string;
 
     @Input()
-    handler: string;
+    public handler: string;
 
     @Input()
-    target: string;
+    public target: string;
 
     @Input()
-    permission: string;
+    public permission: string;
 
     @Input()
-    disableWithNoPermission: boolean;
+    public disableWithNoPermission: boolean;
 
     @Input()
-    disabled: boolean = false;
+    public disabled: boolean = false;
 
     @Output()
-    execute = new EventEmitter();
+    public execute = new EventEmitter();
 
     @Output()
-    permissionEvent = new EventEmitter();
+    public permissionEvent = new EventEmitter();
 
-    model: ContentActionModel;
+    public model: ContentActionModel;
 
-    constructor(
-        private list: ContentActionListComponent,
-        private documentActions: DocumentActionsService,
-        private folderActions: FolderActionsService) {
+    constructor(private list: ContentActionListComponent,
+                private documentActions: DocumentActionsService,
+                private folderActions: FolderActionsService) {
         this.model = new ContentActionModel();
     }
 
-    ngOnInit() {
+    public ngOnInit(): void {
         this.model = new ContentActionModel({
             title: this.title,
             icon: this.icon,
@@ -88,19 +87,19 @@ export class ContentActionComponent implements OnInit, OnChanges {
         this.register();
     }
 
-    register(): boolean {
+    public register(): boolean {
         if (this.list) {
             return this.list.registerAction(this.model);
         }
         return false;
     }
 
-    ngOnChanges(changes) {
+    public ngOnChanges(changes): void {
         // update localizable properties
         this.model.title = this.title;
     }
 
-    getSystemHandler(target: string, name: string): ContentActionHandler {
+    public getSystemHandler(target: string, name: string): ContentActionHandler {
         if (target) {
             let ltarget = target.toLowerCase();
 
@@ -108,17 +107,13 @@ export class ContentActionComponent implements OnInit, OnChanges {
                 if (this.documentActions) {
                     return this.documentActions.getHandler(name);
                 }
-                return null;
-            }
-
-            if (ltarget === 'folder') {
+            } else if (ltarget === 'folder') {
                 if (this.folderActions) {
                     this.folderActions.permissionEvent.subscribe((permision) => {
                         this.permissionEvent.emit(permision);
                     });
                     return this.folderActions.getHandler(name);
                 }
-                return null;
             }
         }
         return null;

@@ -17,19 +17,19 @@
 
 import { DatePipe } from '@angular/common';
 import { ObjectUtils } from 'ng2-alfresco-core';
-import { DataTableAdapter, DataRow, DataColumn, DataSorting } from 'ng2-alfresco-datatable';
+import { DataColumn, DataRow, DataSorting, DataTableAdapter } from 'ng2-alfresco-datatable';
 
-import { NodePaging, NodeMinimalEntry } from './../models/document-library.model';
+import { NodeMinimalEntry, NodePaging } from './../models/document-library.model';
 import { DocumentListService } from './../services/document-list.service';
 
 declare var require: any;
 
 export class ShareDataTableAdapter implements DataTableAdapter {
 
-    ERR_ROW_NOT_FOUND: string = 'Row not found';
-    ERR_COL_NOT_FOUND: string = 'Column not found';
+    private ERR_ROW_NOT_FOUND: string = 'Row not found';
+    private ERR_COL_NOT_FOUND: string = 'Column not found';
 
-    DEFAULT_DATE_FORMAT: string = 'medium';
+    private DEFAULT_DATE_FORMAT: string = 'medium';
 
     private sorting: DataSorting;
     private rows: DataRow[];
@@ -39,8 +39,7 @@ export class ShareDataTableAdapter implements DataTableAdapter {
     private filter: RowFilter;
     private imageResolver: ImageResolver;
 
-    thumbnails: boolean = false;
-    selectedRow: DataRow;
+    private thumbnails: boolean = false;
 
     constructor(private documentListService: DocumentListService,
                 schema: DataColumn[] = [],
@@ -50,25 +49,25 @@ export class ShareDataTableAdapter implements DataTableAdapter {
         this.sorting = sorting;
     }
 
-    getRows(): Array<DataRow> {
+    public getRows(): DataRow[] {
         return this.rows;
     }
 
     // TODO: disable this api
-    setRows(rows: Array<DataRow>) {
+    public setRows(rows: DataRow[]): void {
         this.rows = rows || [];
         this.sort();
     }
 
-    getColumns(): Array<DataColumn> {
+    public getColumns(): DataColumn[] {
         return this.columns;
     }
 
-    setColumns(columns: Array<DataColumn>) {
+    public setColumns(columns: DataColumn[]): void {
         this.columns = columns || [];
     }
 
-    getValue(row: DataRow, col: DataColumn): any {
+    public getValue(row: DataRow, col: DataColumn): any {
         if (!row) {
             throw new Error(this.ERR_ROW_NOT_FOUND);
         }
@@ -137,16 +136,16 @@ export class ShareDataTableAdapter implements DataTableAdapter {
         return dataRow.cacheValue(col.key, value);
     }
 
-    getSorting(): DataSorting {
+    public getSorting(): DataSorting {
         return this.sorting;
     }
 
-    setSorting(sorting: DataSorting): void {
+    public setSorting(sorting: DataSorting): void {
         this.sorting = sorting;
         this.sortRows(this.rows, this.sorting);
     }
 
-    sort(key?: string, direction?: string): void {
+    public sort(key?: string, direction?: string): void {
         let sorting = this.sorting || new DataSorting();
         if (key) {
             sorting.key = key;
@@ -155,15 +154,15 @@ export class ShareDataTableAdapter implements DataTableAdapter {
         this.setSorting(sorting);
     }
 
-    setFilter(filter: RowFilter) {
+    public setFilter(filter: RowFilter): void {
         this.filter = filter;
     }
 
-    setImageResolver(resolver: ImageResolver) {
+    public setImageResolver(resolver: ImageResolver): void {
         this.imageResolver = resolver;
     }
 
-    private sortRows(rows: DataRow[], sorting: DataSorting) {
+    private sortRows(rows: DataRow[], sorting: DataSorting): any {
         if (sorting && sorting.key && rows && rows.length > 0) {
             rows.sort((a: ShareDataRow, b: ShareDataRow) => {
                 if (a.node.entry.isFolder !== b.node.entry.isFolder) {
@@ -191,7 +190,7 @@ export class ShareDataTableAdapter implements DataTableAdapter {
         }
     }
 
-    public loadPage(page: NodePaging) {
+    public loadPage(page: NodePaging): void {
         this.page = page;
 
         let rows = [];
@@ -199,7 +198,7 @@ export class ShareDataTableAdapter implements DataTableAdapter {
         if (page && page.list) {
             let data = page.list.entries;
             if (data && data.length > 0) {
-                rows = data.map(item => new ShareDataRow(item));
+                rows = data.map((item) => new ShareDataRow(item));
 
                 if (this.filter) {
                     rows = rows.filter(this.filter);
@@ -211,7 +210,7 @@ export class ShareDataTableAdapter implements DataTableAdapter {
                     if (sorting) {
                         this.sortRows(rows, sorting);
                     } else {
-                        let sortable = this.columns.filter(c => c.sortable);
+                        let sortable = this.columns.filter((c) => c.sortable);
                         if (sortable.length > 0) {
                             this.sort(sortable[0].key, 'asc');
                         } else {
@@ -225,20 +224,20 @@ export class ShareDataTableAdapter implements DataTableAdapter {
         this.rows = rows;
     }
 
-    getImagePath(id: string): any {
+    public getImagePath(id: string): any {
         return require('../assets/images/' + id);
     }
 }
 
 export class ShareDataRow implements DataRow {
 
-    static ERR_OBJECT_NOT_FOUND: string = 'Object source not found';
+    public static ERR_OBJECT_NOT_FOUND: string = 'Object source not found';
 
-    cache: { [key: string]: any } = {};
-    isSelected: boolean = false;
-    isDropTarget: boolean;
+    public cache: { [key: string]: any } = {};
+    public isSelected: boolean = false;
+    public isDropTarget: boolean;
 
-    get node(): NodeMinimalEntry {
+    public get node(): NodeMinimalEntry {
         return this.obj;
     }
 
@@ -250,40 +249,40 @@ export class ShareDataRow implements DataRow {
         this.isDropTarget = this.isFolderAndHasPermissionToUpload(obj);
     }
 
-    isFolderAndHasPermissionToUpload(obj: NodeMinimalEntry): boolean {
+    public isFolderAndHasPermissionToUpload(obj: NodeMinimalEntry): boolean {
         return this.isFolder(obj) && this.hasCreatePermission(obj);
     }
 
-    hasCreatePermission(obj: NodeMinimalEntry): boolean {
+    public hasCreatePermission(obj: NodeMinimalEntry): boolean {
         return this.hasPermission(obj, 'create');
     }
 
     private hasPermission(obj: NodeMinimalEntry, permission: string): boolean {
         let hasPermission: boolean = false;
-        if (obj.entry && obj.entry['allowableOperations']) {
-            let permFound = obj.entry['allowableOperations'].find(element => element === permission);
+        if (obj.entry && obj.entry.allowableOperations) {
+            let permFound = obj.entry.allowableOperations.find((element) => element === permission);
             hasPermission = permFound ? true : false;
         }
         return hasPermission;
     }
 
-    isFolder(obj: NodeMinimalEntry): boolean {
+    public isFolder(obj: NodeMinimalEntry): boolean {
         return obj.entry && obj.entry.isFolder;
     }
 
-    cacheValue(key: string, value: any): any {
+    public cacheValue(key: string, value: any): any {
         this.cache[key] = value;
         return value;
     }
 
-    getValue(key: string): any {
+    public getValue(key: string): any {
         if (this.cache[key] !== undefined) {
             return this.cache[key];
         }
         return ObjectUtils.getValue(this.obj.entry, key);
     }
 
-    hasValue(key: string): boolean {
+    public hasValue(key: string): boolean {
         return this.getValue(key) !== undefined;
     }
 }

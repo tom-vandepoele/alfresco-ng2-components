@@ -17,18 +17,19 @@
 
 import { Injectable } from '@angular/core';
 import { Response } from '@angular/http';
+import { MinimalNodeEntity, MinimalNodeEntryEntity, NodePaging } from 'alfresco-js-api';
+import { AlfrescoApiService, AlfrescoAuthenticationService, AlfrescoContentService, LogService } from 'ng2-alfresco-core';
+import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 import { Observable } from 'rxjs/Rx';
-import { NodePaging, MinimalNodeEntity, MinimalNodeEntryEntity } from 'alfresco-js-api';
-import { AlfrescoAuthenticationService, AlfrescoContentService, AlfrescoApiService, LogService } from 'ng2-alfresco-core';
 
 @Injectable()
 export class DocumentListService {
 
-    static DEFAULT_MIME_TYPE_ICON: string = 'ft_ic_miscellaneous.svg';
+    public static DEFAULT_MIME_TYPE_ICON: string = 'ft_ic_miscellaneous.svg';
 
-    static ROOT_ID = '-root-';
+    public static ROOT_ID = '-root-';
 
-    mimeTypeIcons: any = {
+    public mimeTypeIcons: any = {
         'image/png': 'ft_ic_raster_image.svg',
         'image/jpeg': 'ft_ic_raster_image.svg',
         'image/gif': 'ft_ic_raster_image.svg',
@@ -91,7 +92,7 @@ export class DocumentListService {
         return this.apiService.getInstance().nodes.getNodeChildren(rootNodeId, params);
     }
 
-    deleteNode(nodeId: string): Observable<any> {
+    public deleteNode(nodeId: string): Observable<any> {
         return Observable.fromPromise(this.apiService.getInstance().nodes.deleteNode(nodeId));
     }
 
@@ -101,9 +102,9 @@ export class DocumentListService {
      * @param parentId Parent folder ID
      * @returns {any}
      */
-    createFolder(name: string, parentId: string): Observable<MinimalNodeEntity> {
+    public createFolder(name: string, parentId: string): Observable<MinimalNodeEntity> {
         return Observable.fromPromise(this.apiService.getInstance().nodes.createFolder(name, '/', parentId))
-            .catch(err => this.handleError(err));
+            .catch((err) => this.handleError(err));
     }
 
     /**
@@ -112,13 +113,13 @@ export class DocumentListService {
      * @param opts Options.
      * @returns {Observable<NodePaging>} Folder entity.
      */
-    getFolder(folder: string, opts?: any) {
+    public getFolder(folder: string, opts?: any): Observable<NodePaging> {
         return Observable.fromPromise(this.getNodesPromise(folder, opts))
-            .map(res => <NodePaging> res)
-            .catch(err => this.handleError(err));
+            .map((res) => <NodePaging> res)
+            .catch((err) => this.handleError(err));
     }
 
-    getFolderNode(nodeId: string): Promise<MinimalNodeEntryEntity> {
+    public getFolderNode(nodeId: string): Promise<MinimalNodeEntryEntity> {
         let opts: any = {
             includeSource: true,
             include: ['path', 'properties', 'allowableOperations']
@@ -133,21 +134,24 @@ export class DocumentListService {
      * @param node Node to get URL for.
      * @returns {string} URL address.
      */
-    getDocumentThumbnailUrl(node: MinimalNodeEntity) {
+    public getDocumentThumbnailUrl(node: MinimalNodeEntity): string {
         if (node && this.contentService) {
             return this.contentService.getDocumentThumbnailUrl(node);
         }
         return null;
     }
 
-    getMimeTypeIcon(mimeType: string): string {
+    public getMimeTypeIcon(mimeType: string): string {
         let icon = this.mimeTypeIcons[mimeType];
         return icon || DocumentListService.DEFAULT_MIME_TYPE_ICON;
     }
 
-    private handleError(error: Response) {
-        // in a real world app, we may send the error to some remote logging infrastructure
-        // instead of just logging it to the console
+    /**
+     * Throw the error
+     * @param error
+     * @returns {ErrorObservable}
+     */
+    private handleError(error: Response): ErrorObservable<string | Response> {
         this.logService.error(error);
         return Observable.throw(error || 'Server error');
     }
