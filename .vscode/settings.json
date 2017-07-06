@@ -8,6 +8,5 @@
         "**/coverage": true,
         "**/.happypack": true
     },
-    "editor.renderIndentGuides": true,
     "tslint.configFile": "ng2-components/tslint.json"
 }
