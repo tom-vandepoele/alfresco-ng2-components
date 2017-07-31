@@ -21,7 +21,7 @@ import { MinimalNodeEntryEntity } from 'alfresco-js-api';
 import { AlfrescoContentService, AlfrescoTranslationService } from 'ng2-alfresco-core';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Rx';
-import { ContentNodeSelectorComponent } from '../components/content-node-selector/content-node-selector.component';
+import { ContentNodeSelectorComponent, ContentNodeSelectorComponentData } from '../components/content-node-selector/content-node-selector.component';
 import { DocumentListService } from './document-list.service';
 
 @Injectable()
@@ -88,16 +88,15 @@ export class NodeActionsService {
         const observable: Subject<string> = new Subject<string>();
 
         if (this.contentService.hasPermission(contentEntry, permission)) {
-            const title = `${action} ${contentEntry.name} to ...`,
-                select: EventEmitter<MinimalNodeEntryEntity> = new EventEmitter<MinimalNodeEntryEntity>();
+            const data: ContentNodeSelectorComponentData = {
+                title: `${action} ${contentEntry.name} to ...`,
+                currentFolderId: contentEntry.parentId,
+                select: new EventEmitter<MinimalNodeEntryEntity>()
+            };
 
-            this.dialog.open(ContentNodeSelectorComponent, {
-                data: { title, select },
-                panelClass: 'adf-content-node-selector-dialog',
-                width: '576px'
-            });
+            this.dialog.open(ContentNodeSelectorComponent, { data, panelClass: 'adf-content-node-selector-dialog', width: '576px' });
 
-            select.subscribe((parent: MinimalNodeEntryEntity) => {
+            data.select.subscribe((parent: MinimalNodeEntryEntity) => {
                 this.documentListService[`${action}Node`].call(this.documentListService, contentEntry.id, parent.id)
                     .subscribe(
                         () => {
